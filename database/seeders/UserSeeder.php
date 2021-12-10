@@ -22,7 +22,7 @@ class UserSeeder extends Seeder
             'name' => 'Admin',
             'email' => 'admin@mail.com',
             'password' => Hash::make('password'),
-            'email_verified_at' => date('Y-m-d H:i:s')
+            'email_verified_at' => date('Y-m-d H:i:s'),
         ]);
     }
 }
