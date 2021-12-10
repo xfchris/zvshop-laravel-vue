@@ -7,12 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     *
-     * @return void
-     */
-    public function run()
+    public function run(): void
     {
         $this->setFKCheckOff();
         $this->call([
@@ -21,7 +16,7 @@ class DatabaseSeeder extends Seeder
         $this->setFKCheckOn();
     }
 
-    private function setFKCheckOff()
+    private function setFKCheckOff(): void
     {
         switch (DB::getDriverName()) {
             case 'mysql':
@@ -34,7 +29,7 @@ class DatabaseSeeder extends Seeder
         }
     }
 
-    private function setFKCheckOn()
+    private function setFKCheckOn(): void
     {
         switch (DB::getDriverName()) {
             case 'mysql':
