@@ -10,9 +10,18 @@
         "production": "mix --production"
     },
     "devDependencies": {
+        "@popperjs/core": "^2.5.3",
+        "@tailwindcss/forms": "^0.2.1",
+        "alpinejs": "^3.2.6",
+        "autoprefixer": "^10.1.0",
         "axios": "^0.21",
+        "bootstrap": "^5.1.0",
         "laravel-mix": "^6.0.6",
         "lodash": "^4.17.19",
-        "postcss": "^8.1.14"
+        "postcss": "^8.2.1",
+        "postcss-import": "^12.0.1",
+        "resolve-url-loader": "^4.0.0",
+        "sass": "^1.44.0",
+        "sass-loader": "^12.4.0"
     }
 }
