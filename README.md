@@ -13,7 +13,7 @@
 - mysql >= 8.0
 - redis
 - Composer >= 2.0
-- node >= 16.13
+- node >= 12.0
 
 
 ### Instalación con Laravel Sail 🔧
