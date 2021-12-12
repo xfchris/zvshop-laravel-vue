@@ -11387,3 +11387,7 @@ textarea.form-control-lg {
 .small {
   font-size: 0.875rem !important;
 }
+
+.mw-400px {
+  max-width: 400px;
+}
