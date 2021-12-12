@@ -17,18 +17,22 @@
         <script src="{{ asset('js/app.js') }}" defer></script>
     </head>
     <body class="font-sans antialiased bg-light">
-        @include('layouts.navigation')
 
-        <!-- Page Heading -->
-        <header class="d-flex py-3 bg-white shadow-sm border-bottom">
-            <div class="container">
-                {{ $header }}
-            </div>
-        </header>
+        <div id="app">
+            @include('layouts.navigation')
 
-        <!-- Page Content -->
-        <main class="container my-5">
-            {{ $slot }}
-        </main>
+            <!-- Page Heading -->
+            <header class="d-flex py-3 bg-white shadow-sm border-bottom">
+                <div class="container">
+                    {{ $header }}
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <main class="container my-5">
+                {{ $slot }}
+            </main>
+        </div>
+        
     </body>
 </html>

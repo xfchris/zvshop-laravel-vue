@@ -39,7 +39,13 @@
                             </form>
                         </x-slot>
                     </x-dropdown>
-                @endauth
+                @else
+                    <a href="{{ route('login') }}" class="text-muted">Log in</a>
+
+                    @if (Route::has('register'))
+                        <a href="{{ route('register') }}" class="ms-4 text-muted">Register</a>
+                    @endif
+                @endif
             </ul>
         </div>
     </div>
