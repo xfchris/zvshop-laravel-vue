@@ -60,12 +60,6 @@ jobs:
           DB_DATABASE: database/database.sqlite
         run: composer run-script testdox
 
-      - name: Save results
-        uses: actions/upload-artifact@v2
-        with:
-          name: results
-          path: results
-
       - name: Execute javaScript tests
         run: npm test
 
@@ -78,12 +72,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-
-      - name: Download results
-        uses: actions/download-artifact@v2
-        with:
-          name: results
-          path: results
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
