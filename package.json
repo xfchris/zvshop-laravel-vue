@@ -39,5 +39,11 @@
         "vue-loader": "^16.8.3",
         "vue-spinner": "^1.0.4",
         "vue3-jest": "^27.0.0-alpha.1"
+    },
+    "dependencies": {
+        "@fortawesome/fontawesome-free": "^5.15.4",
+        "datatables.net": "^1.11.3",
+        "datatables.net-bs5": "^1.11.3",
+        "sweetalert2": "^11.3.0"
     }
 }

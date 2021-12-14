@@ -2,10 +2,9 @@
 
 namespace Tests\Feature\Http\Controllers;
 
-use App\Http\Controllers\UserController;
 use App\Models\User;
-use Illuminate\Support\Str;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class UserControllerTest extends TestCase
@@ -38,7 +37,6 @@ class UserControllerTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('User update');
     }
-
 
     public function test_it_can_update_a_user(): void
     {

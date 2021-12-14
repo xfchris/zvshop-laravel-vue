@@ -4,7 +4,6 @@ namespace Tests\Feature\Http\Controllers\Api;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class ApiUserControllerTest extends TestCase
@@ -17,7 +16,7 @@ class ApiUserControllerTest extends TestCase
 
         $response = $this->actingAs($user)->get(route('api.users'));
         $response->assertStatus(200);
-        $response->assertJsonFragment(["recordsTotal" => 1]);
+        $response->assertJsonFragment(['recordsTotal' => 1]);
         $response->assertSee($user->name);
     }
 }
