@@ -7,5 +7,22 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
+@import '~datatables.net-bs5/css/dataTables.bootstrap5.css';
+
 // Custom
 @import "custom";
+
+$fa-font-path: "../webfonts";
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+@import "~@fortawesome/fontawesome-free/scss/solid";
+@import "~@fortawesome/fontawesome-free/scss/brands";
+@import "~@fortawesome/fontawesome-free/scss/regular";
+
+.mw-400px {
+    max-width: 400px;
+}
+
+body {
+    background: linear-gradient(
+        90deg,#63a9d0,hsl(227deg 100% 97%));
+}

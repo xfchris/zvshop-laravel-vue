@@ -1,7 +1,11 @@
-require('./bootstrap');
+import { createApp } from 'vue'
+import global from './store/global'
 
-import Alpine from 'alpinejs';
+const app = createApp({
+  provide: {
+    global
+  }
+})
+app.mount('#app')
 
-window.Alpine = Alpine;
-
-Alpine.start();
+require('./bootstrap')
