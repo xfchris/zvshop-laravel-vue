@@ -66,9 +66,6 @@ jobs:
           name: reports
           path: reports
 
-      - name: Upload coverage
-        run: bash <(curl -s https://codecov.io/bash)
-
       - name: Execute javaScript tests
         run: npm test
 
