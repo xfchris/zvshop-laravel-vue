@@ -66,13 +66,14 @@ jobs:
       - name: Execute javaScript tests
         run: npm test
 
-      - name: Upload coverage
-        run: bash <(curl -s https://codecov.io/bash)
+      #- name: Upload coverage
+      #  run: bash <(curl -s https://codecov.io/bash)
 
       - name: Prepare paths for SonarQube analysis
         run: |
           sed -i "s|$GITHUB_WORKSPACE|/github/workspace|g" phpunit.report.xml
           sed -i "s|$GITHUB_WORKSPACE|/github/workspace|g" coverage.xml
+          sed -i "s|$GITHUB_WORKSPACE|/github/workspace|g" build/jest/coverage/lcov.info
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
