@@ -63,8 +63,8 @@ jobs:
       - name: Save results
         uses: actions/upload-artifact@v2
         with:
-          name: reports
-          path: reports
+          name: results
+          path: results
 
       - name: Execute javaScript tests
         run: npm test
@@ -79,11 +79,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Download reports
+      - name: Download results
         uses: actions/download-artifact@v2
         with:
-          name: reports
-          path: reports
+          name: results
+          path: results
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
