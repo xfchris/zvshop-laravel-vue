@@ -54,7 +54,7 @@
         ],
         "phpcs": "vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php",
         "phpcs-validate": "vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php -v --dry-run --stop-on-violation --using-cache=no",
-        "testdox": "XDEBUG_MODE=coverage vendor/bin/phpunit --testdox --coverage-clover coverage.xml",
+        "testdox": "XDEBUG_MODE=coverage vendor/bin/phpunit --testdox --coverage-clover ./reports/coverage.xml",
         "test-html": "XDEBUG_MODE=coverage vendor/bin/phpunit --testdox --coverage-html build/coverage",
         "test": "vendor/bin/phpunit --testdox"
     },
