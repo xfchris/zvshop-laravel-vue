@@ -13,8 +13,6 @@ class UserControllerTest extends TestCase
 
     public function test_it_redirect_to_login(): void
     {
-        $user = User::factory()->create();
-
         $response = $this->get(route('admin.users.index'));
         $response->assertStatus(302);
         $response->assertRedirect(route('login'));
@@ -57,7 +55,6 @@ class UserControllerTest extends TestCase
      */
     public function test_it_show_errors_when_data_is_incorrect_in_update_user(string $field, $value = null): void
     {
-        // Arrange
         $user = User::factory()->create();
         $data = [];
         $data[$field] = $value;

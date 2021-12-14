@@ -15,7 +15,10 @@ jobs:
       - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
         with:
           php-version: '8.0'
-      - uses: actions/checkout@v1
+
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - name: Validate composer.json and composer.lock
         run: composer validate
@@ -60,30 +63,16 @@ jobs:
           DB_DATABASE: database/database.sqlite
         run: composer run-script testdox
 
-      - name: Save results
-        uses: actions/upload-artifact@v2
-        with:
-          name: results
-          path: results
-
       - name: Execute javaScript tests
         run: npm test
 
+      - name: Upload coverage
+        run: bash <(curl -s https://codecov.io/bash)
 
-  sonarcloud:
-    needs: laravel-tests
-    name: SonarCloud
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-
-      - name: Download results
-        uses: actions/download-artifact@v2
-        with:
-          name: results
-          path: results
+      - name: Prepare paths for SonarQube analysis
+        run: |
+          sed -i "s|$GITHUB_WORKSPACE|/github/workspace|g" phpunit.report.xml
+          sed -i "s|$GITHUB_WORKSPACE|/github/workspace|g" coverage.xml
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
