@@ -15,7 +15,10 @@ jobs:
       - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
         with:
           php-version: '8.0'
-      - uses: actions/checkout@v1
+          
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - name: Validate composer.json and composer.lock
         run: composer validate
@@ -25,23 +28,6 @@ jobs:
 
       - name: Install Dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --no-suggest
-
-      - name: Check code style
-        run: composer run-script phpcs-validate
-
-      - name: Set up Node
-        uses: actions/setup-node@v1
-        with:
-          node-version: '12.x'
-
-      - name: Install NPM dependencies
-        run: npm install
-
-      - name: Compile assets for production
-        run: npm run production
-
-      - name: Check javaScript code style
-        run: npm run eslint-ci
 
       - name: Generate key
         run: php artisan key:generate
@@ -60,14 +46,15 @@ jobs:
           DB_DATABASE: database/database.sqlite
         run: composer run-script testdox
 
-      - name: Execute javaScript tests
-        run: npm test
 
 
 
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+
+
+      - name: Prepare paths for SonarQube analysis
+        run: |
+          sed -i "s|$GITHUB_WORKSPACE|/github/workspace|g" phpunit.coverage-clover.xml
+          sed -i "s|$GITHUB_WORKSPACE|/github/workspace|g" phpunit.report-junit.xml
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
