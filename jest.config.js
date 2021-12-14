@@ -1,5 +1,5 @@
 module.exports = {
-  testRegex: 'resources/js/.*.spec.js$',
+  testRegex: 'tests/Jest/.*.spec.js$',
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/resources/js/$1'
   },
@@ -12,6 +12,7 @@ module.exports = {
     'resources/js/**/*.{js,jsx,ts,tsx,vue}',
     '!resources/js/app.js',
     '!resources/js/bootstrap.js',
+    '!resources/js/functions.js',
     '!**/node_modules/**'
   ],
   collectCoverage: true,
