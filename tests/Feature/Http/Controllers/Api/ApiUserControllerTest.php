@@ -12,9 +12,9 @@ class ApiUserControllerTest extends TestCase
 
     public function test_it_show_the_user_list(): void
     {
-        $user = User::factory()->create();
-
+        $user = User::find(1);
         $response = $this->actingAs($user)->get(route('api.users'));
+
         $response->assertStatus(200);
         $response->assertJsonFragment(['recordsTotal' => 1]);
         $response->assertSee($user->name);

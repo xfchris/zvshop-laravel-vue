@@ -8,9 +8,9 @@ use Yajra\Datatables\Datatables;
 
 class ApiUserController extends Controller
 {
-    public function index()
+    public function index(): mixed
     {
-        $users = User::select(['id', 'name', 'email', 'email_verified_at', 'created_at', 'status']);
+        $users = User::with('roles:id,name')->select(['id', 'name', 'email', 'email_verified_at', 'created_at', 'status']);
 
         return Datatables::of($users)
             ->addColumn('action', function ($user) {
@@ -18,6 +18,12 @@ class ApiUserController extends Controller
             })
             ->addColumn('verified', function ($user) {
                 return $user->status ? 'Active' : 'Inactive';
+            })
+            ->addColumn('roles', function ($user) {
+                return array_reduce($user->roles->toArray(), function ($res, $item) {
+                    $res .= $item['name'] . ',';
+                    return trim($res, ',');
+                });
             })
             ->editColumn('created_at', function ($user) {
                 return $user->created_at->format('d/m/Y');
