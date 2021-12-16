@@ -11,6 +11,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->setFKCheckOff();
         $this->call([
+            RolesAndPermissionSeeder::class,
             UserSeeder::class,
         ]);
         $this->setFKCheckOn();
@@ -23,7 +24,7 @@ class DatabaseSeeder extends Seeder
                 DB::statement('SET FOREIGN_KEY_CHECKS=0');
                 break;
             case 'sqlite':
-                DB::statement('PRAGMA foreign_keys = OFF');
+                DB::statement('PRAGMA foreign_keys=OFF');
                 break;
             default:
         }
@@ -36,7 +37,7 @@ class DatabaseSeeder extends Seeder
                 DB::statement('SET FOREIGN_KEY_CHECKS=1');
                 break;
             case 'sqlite':
-                DB::statement('PRAGMA foreign_keys = ON');
+                DB::statement('PRAGMA foreign_keys=ON');
                 break;
             default:
         }

@@ -18,13 +18,14 @@
         <div class="card-body">
 
             <table class="table table-bordered table-striped ajax-datatables" aria-describedby="Users table"
-                data-url="{!! route('api.users') !!}" data-url-columns="id,name,email,verified,created_at,action">
+                data-url="{!! route('api.users') !!}" data-url-columns="id,name,email,verified,roles,created_at,action">
                 <thead class="table-dark">
                     <tr>
                         <th scope="col" style="width:5%">Id</th>
                         <th scope="col" style="width:30%">Full name</th>
                         <th scope="col" style="width:20%">Email</th>
                         <th scope="col" style="width:10%">Status</th>
+                        <th scope="col" style="width:10%">Roles</th>
                         <th scope="col" style="width:20%">Date</th>
                         <th scope="col" style="width:10%">Options</th>
                     </tr>
