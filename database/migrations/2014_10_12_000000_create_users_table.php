@@ -14,7 +14,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->boolean('status')->default(true)->nullable()->comment('1: active, 0: inactive');
+            $table->timestamp('banned_until')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

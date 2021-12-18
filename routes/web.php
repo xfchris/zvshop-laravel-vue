@@ -26,7 +26,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
 });
 
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('api')->name('api.')->group(function () {
-    Route::get('users', [App\Http\Controllers\Api\ApiUserController::class, 'index'])->name('users');
+    Route::post('users/activate-inactivate-user/{user}', [App\Http\Controllers\Api\ApiUserController::class, 'activateInactivateUser'])->name('users.activateInactivateUser');
 });
 
 require __DIR__ . '/auth.php';
