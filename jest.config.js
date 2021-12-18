@@ -11,11 +11,13 @@ module.exports = {
   collectCoverageFrom: [
     'resources/js/**/*.{js,jsx,ts,tsx,vue}',
     '!resources/js/app.js',
+    '!resources/js/api.js',
     '!resources/js/bootstrap.js',
     '!resources/js/functions.js',
     '!**/node_modules/**'
   ],
   collectCoverage: true,
   coverageReporters: ['html', 'lcov', 'text-summary'],
-  coverageDirectory: '<rootDir>/build/jest/coverage'
+  coverageDirectory: '<rootDir>/build/jest/coverage',
+  testEnvironment: 'jsdom'
 }

@@ -42,4 +42,17 @@ class AuthenticationTest extends TestCase
 
         $this->assertGuest();
     }
+
+    public function test_inactive_users_can_not_authenticate()
+    {
+        $user = User::factory()->create();
+        $user->banned_until = now()->addDays(5)->addHours(2);
+        $user->save();
+
+        $response = $this->followingRedirects()->post('/login', [
+            'email' => $user->email,
+            'password' => 'password',
+        ]);
+        $response->assertSee('Your account has been suspended for 5 days. Please contact administrator');
+    }
 }

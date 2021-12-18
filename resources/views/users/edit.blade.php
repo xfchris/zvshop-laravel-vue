@@ -40,16 +40,6 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label for="exampleSelect1" class="form-label mt-4">Status</label>
-                            <div>
-                                <input class="form-check-input  mx-1" type="checkbox" value="1" id="status" name="status"
-                                    {{ $user->status ? 'checked' : '' }}>
-                                <label class="form-check-label" for="status"> Active user</label>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <a class="btn btn-secondary mt-4 me-2 btn-wait-submit text-light" href="{{ route('admin.users.index')}}" data-wait="Wait...">Cancel</a>

@@ -7,6 +7,11 @@
         </x-slot>
 
         <div class="card-body">
+
+            @if (session('error'))
+                <div class="alert alert-danger">{{ session('error') }}</div>
+            @endif
+
             <!-- Session Status -->
             <x-auth-session-status class="mb-3" :status="session('status')" />
 
