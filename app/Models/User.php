@@ -37,4 +37,16 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $dates = [
         'banned_until',
     ];
+
+    protected $appends = [
+        'check_banned_until',
+    ];
+
+    public function getCheckBannedUntilAttribute(): ?string
+    {
+        if ($this->banned_until && now()->lessThan($this->banned_until)) {
+            return $this->banned_until ? $this->banned_until->format('d/m/Y') : '';
+        }
+        return null;
+    }
 }

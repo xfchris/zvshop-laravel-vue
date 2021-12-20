@@ -37,7 +37,7 @@
                             <td>{{ $user->name }}</td>
                             <td>{{ $user->email }}</td>
                             <td>
-                                <small>{{ $user->banned_until ? $user->banned_until->format('d/m/Y') : '' }}</small>
+                                <small>{{ $user->check_banned_until }}</small>
                             </td>
                             <td>
                                 @foreach ($user->roles as $role)
@@ -52,8 +52,8 @@
                                         <i class="fas fa-edit"></i> <span class="ms-1">Edit</span>
                                     </a>
                                     <btn-block-user link="{{ route('api.users.activateInactivateUser', $user->id) }}"
-                                        banned_until="{{ $user->banned_until }}">
-                                        {{ $user->banned_until ? 'Unblock' : 'Block' }} user
+                                        banned_until="{{ $user->check_banned_until }}">
+                                        {{ $user->check_banned_until ? 'Unblock' : 'Block' }} user
                                     </btn-block-user>
                                 </div>
                             </td>

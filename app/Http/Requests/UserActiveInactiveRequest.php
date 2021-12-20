@@ -27,13 +27,13 @@ class UserActiveInactiveRequest extends FormRequest
     public function rules()
     {
         return [
-            'banned_until' => 'present|nullable|integer',
+            'banned_until' => 'present|nullable|integer|between:5,3650', // 10 years
         ];
     }
 
     protected function failedValidation(Validator $validator): void
     {
-        $response = new JsonResponse(['status' => 'error'], 422);
+        $response = new JsonResponse(['status' => 'error', 'errors' => $validator->errors()], 422);
         throw new ValidationException($validator, $response);
     }
 }

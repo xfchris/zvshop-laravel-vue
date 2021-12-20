@@ -17,9 +17,9 @@ class UserController extends Controller
 
     public function index(): View
     {
-        $users = User::with('roles:id,name')->select(['id', 'name', 'email', 'email_verified_at', 'created_at', 'banned_until'])
-        ->paginate(config('constants.num_rows_per_table'));
-        return view('users.index', compact('users'));
+        return view('users.index', [
+            'users' => $this->userService->getUsersPerPage(),
+        ]);
     }
 
     public function edit(User $user): View

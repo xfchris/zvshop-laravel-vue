@@ -8,8 +8,8 @@
         "hot": "mix watch --hot",
         "prod": "npm run production",
         "production": "mix --production",
-        "eslint": "./node_modules/.bin/eslint resources/js/ --ext .js,.vue --fix",
-        "eslint-ci": "./node_modules/.bin/eslint resources/js/ --ext .js,.vue",
+        "eslint": "./node_modules/.bin/eslint resources/js/ tests/Jest/ --ext .js,.vue --fix",
+        "eslint-ci": "./node_modules/.bin/eslint resources/js/ tests/Jest/ --ext .js,.vue",
         "test": "jest"
     },
     "devDependencies": {

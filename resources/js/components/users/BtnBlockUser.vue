@@ -18,42 +18,55 @@
 
 <script>
 import Swal from 'sweetalert2'
-import { activeInactiveUserApi } from '../../api'
+import { postApi } from '../../api'
 import { reloadPage } from '../../functions'
+import { ref } from '@vue/reactivity'
 
 export default {
   props: ['link', 'banned_until'],
 
   setup (props) {
+    const showSwal = ref(false)
+
     const activeInactiveUser = () => {
+      showSwal.value = true
+
       if (props.banned_until) {
-        Swal.fire({
-          title: 'Are you sure?',
-          text: 'Are you sure of activate user?',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Yes'
-        }).then((result) => {
+        modalActiveUser().then((result) => {
+          showSwal.value = false
           if (result.isConfirmed) {
             setUserBlock(props.link, null)
           }
         })
       } else {
-        inactiveUser(props.link)
+        modalInactiveUser(props.link).then(() => {
+          showSwal.value = false
+        })
       }
     }
 
     return {
       activeInactiveUser,
-      props
+      props,
+      showSwal
     }
   }
 }
 
-const inactiveUser = (link) => {
-  Swal.fire({
+const modalActiveUser = () => {
+  return Swal.fire({
+    title: 'Are you sure?',
+    text: 'Are you sure of activate user?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes'
+  })
+}
+
+const modalInactiveUser = (link) => {
+  return Swal.fire({
     title: 'Inactivate a user',
     input: 'select',
     inputOptions: {
@@ -74,6 +87,7 @@ const inactiveUser = (link) => {
         3650: '10 years'
       }
     },
+    inputValue: 5,
     inputPlaceholder: 'Select a option',
     showCancelButton: true,
 
@@ -91,15 +105,14 @@ const inactiveUser = (link) => {
 }
 
 const setUserBlock = (link, value) => {
-  activeInactiveUserApi(link, { banned_until: value }).then(res => {
+  postApi(link, { banned_until: value }).then(res => {
     if (res.data.status === 'success') {
-      Swal.fire('User ' + ((value === null) ? 'Activated' : 'Inactivated'))
-        .then(() => {
-          reloadPage()
-        })
+      Swal.fire('User ' + ((value === null) ? 'Activated' : 'Inactivated')).then(reloadPage)
     } else {
-      Swal.fire('Error', res?.data?.message)
+      Swal.fire('Error', res.data.message)
     }
+  }).catch(() => {
+    Swal.fire('Operation cancelled')
   })
 }
 </script>

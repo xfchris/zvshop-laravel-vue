@@ -13,7 +13,7 @@ class CheckBanned
 {
     public function handle(Request $request, Closure $next): Response|RedirectResponse|JsonResponse
     {
-        if (Auth::check() && Auth::user()->banned_until && now()->lessThan(Auth::user()->banned_until)) {
+        if (Auth::check() && Auth::user()->check_banned_until) {
             $bannedDays = now()->diffInDays(Auth::user()->banned_until);
             Auth::logout();
 
