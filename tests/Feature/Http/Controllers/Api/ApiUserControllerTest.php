@@ -22,10 +22,24 @@ class ApiUserControllerTest extends TestCase
         $this->assertSame(now()->addDays(5)->format('d/m/Y'), User::find($user->id)->banned_until->format('d/m/Y'));
     }
 
-    public function test_it_can_not_inactive_a_user_with_admin_role(): void
+    public function test_it_can_not_inactive_an_user_with_admin_role(): void
     {
         $response = $this->executeAdminTest(['banned_until' => 5]);
         $response->assertStatus(200);
+    }
+
+    public function test_it_can_activate_an_user(): void
+    {
+        $user = $this->userClientCreate();
+        $user->banned_until = now()->addDays(5);
+        $user->save();
+
+        $userAdmin = User::find(1);
+        $response = $this->actingAs($userAdmin)->post(route('api.users.activateInactivateUser', $user->id), ['banned_until' => null]);
+
+        $response->assertStatus(200);
+        $response->assertJson(['status' => 'success']);
+        $this->assertNull(User::find($user->id)->check_banned_until);
     }
 
     public function test_it_show_errors_when_is_invalid_the_post_data(): void

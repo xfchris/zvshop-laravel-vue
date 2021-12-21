@@ -3,6 +3,7 @@
 namespace App\Services\User;
 
 use App\Models\User;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class UserService
 {
@@ -19,5 +20,13 @@ class UserService
             return (bool)$user->save();
         }
         return false;
+    }
+
+    public function getUsersPerPage(): LengthAwarePaginator
+    {
+        return User::with('roles:id,name')
+                ->select(['id', 'name', 'email', 'email_verified_at', 'created_at', 'banned_until'])
+                ->orderBy('created_at', 'DESC')
+                ->paginate(config('constants.num_rows_per_table'));
     }
 }

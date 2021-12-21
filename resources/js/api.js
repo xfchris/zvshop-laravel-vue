@@ -1,8 +1,8 @@
-import Axios from 'axios'
+import axios from 'axios'
 
-export async function activeInactiveUserApi (url, data) {
+export async function postApi (url, data) {
   try {
-    return await Axios.post(url, data)
+    return await axios.post(url, data)
   } catch (error) {
     return error
   }

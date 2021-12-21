@@ -22401,41 +22401,56 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../api */ "./resources/js/api.js");
 /* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../functions */ "./resources/js/functions.js");
+/* harmony import */ var _vue_reactivity__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @vue/reactivity */ "./node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js");
+
 
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['link', 'banned_until'],
   setup: function setup(props) {
+    var showSwal = (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_3__.ref)(false);
+
     var activeInactiveUser = function activeInactiveUser() {
+      showSwal.value = true;
+
       if (props.banned_until) {
-        sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire({
-          title: 'Are you sure?',
-          text: 'Are you sure of activate user?',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Yes'
-        }).then(function (result) {
+        modalActiveUser().then(function (result) {
+          showSwal.value = false;
+
           if (result.isConfirmed) {
             setUserBlock(props.link, null);
           }
         });
       } else {
-        inactiveUser(props.link);
+        modalInactiveUser(props.link).then(function () {
+          showSwal.value = false;
+        });
       }
     };
 
     return {
       activeInactiveUser: activeInactiveUser,
-      props: props
+      props: props,
+      showSwal: showSwal
     };
   }
 });
 
-var inactiveUser = function inactiveUser(link) {
-  sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire({
+var modalActiveUser = function modalActiveUser() {
+  return sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire({
+    title: 'Are you sure?',
+    text: 'Are you sure of activate user?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes'
+  });
+};
+
+var modalInactiveUser = function modalInactiveUser(link) {
+  return sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire({
     title: 'Inactivate a user',
     input: 'select',
     inputOptions: {
@@ -22456,6 +22471,7 @@ var inactiveUser = function inactiveUser(link) {
         3650: '10 years'
       }
     },
+    inputValue: 5,
     inputPlaceholder: 'Select a option',
     showCancelButton: true,
     inputValidator: function inputValidator(value) {
@@ -22472,18 +22488,16 @@ var inactiveUser = function inactiveUser(link) {
 };
 
 var setUserBlock = function setUserBlock(link, value) {
-  (0,_api__WEBPACK_IMPORTED_MODULE_1__.activeInactiveUserApi)(link, {
+  (0,_api__WEBPACK_IMPORTED_MODULE_1__.postApi)(link, {
     banned_until: value
   }).then(function (res) {
     if (res.data.status === 'success') {
-      sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire('User ' + (value === null ? 'Activated' : 'Inactivated')).then(function () {
-        (0,_functions__WEBPACK_IMPORTED_MODULE_2__.reloadPage)();
-      });
+      sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire('User ' + (value === null ? 'Activated' : 'Inactivated')).then(_functions__WEBPACK_IMPORTED_MODULE_2__.reloadPage);
     } else {
-      var _res$data;
-
-      sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire('Error', res === null || res === void 0 ? void 0 : (_res$data = res.data) === null || _res$data === void 0 ? void 0 : _res$data.message);
+      sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire('Error', res.data.message);
     }
+  })["catch"](function () {
+    sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire('Connection error');
   });
 };
 
@@ -22522,7 +22536,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "activeInactiveUserApi": () => (/* binding */ activeInactiveUserApi)
+/* harmony export */   "postApi": () => (/* binding */ postApi)
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
@@ -22535,12 +22549,12 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 
-function activeInactiveUserApi(_x, _x2) {
-  return _activeInactiveUserApi.apply(this, arguments);
+function postApi(_x, _x2) {
+  return _postApi.apply(this, arguments);
 }
 
-function _activeInactiveUserApi() {
-  _activeInactiveUserApi = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(url, data) {
+function _postApi() {
+  _postApi = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(url, data) {
     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -22564,7 +22578,7 @@ function _activeInactiveUserApi() {
       }
     }, _callee, null, [[0, 6]]);
   }));
-  return _activeInactiveUserApi.apply(this, arguments);
+  return _postApi.apply(this, arguments);
 }
 
 /***/ }),
@@ -22612,6 +22626,7 @@ window.bootstrap = __webpack_require__(/*! bootstrap */ "./node_modules/bootstra
 (0,_functions__WEBPACK_IMPORTED_MODULE_0__.btnWaitSubmit)();
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
 
 /***/ }),
 
