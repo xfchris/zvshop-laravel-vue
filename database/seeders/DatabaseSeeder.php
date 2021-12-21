@@ -3,16 +3,43 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     *
-     * @return void
-     */
-    public function run()
+    public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
+        $this->setFKCheckOff();
+        $this->call([
+            RolesAndPermissionSeeder::class,
+            UserSeeder::class,
+        ]);
+        $this->setFKCheckOn();
+    }
+
+    private function setFKCheckOff(): void
+    {
+        switch (DB::getDriverName()) {
+            case 'mysql':
+                DB::statement('SET FOREIGN_KEY_CHECKS=0');
+                break;
+            case 'sqlite':
+                DB::statement('PRAGMA foreign_keys=OFF');
+                break;
+            default:
+        }
+    }
+
+    private function setFKCheckOn(): void
+    {
+        switch (DB::getDriverName()) {
+            case 'mysql':
+                DB::statement('SET FOREIGN_KEY_CHECKS=1');
+                break;
+            case 'sqlite':
+                DB::statement('PRAGMA foreign_keys=ON');
+                break;
+            default:
+        }
     }
 }
