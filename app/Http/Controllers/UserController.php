@@ -29,7 +29,7 @@ class UserController extends Controller
 
     public function update(UserUpdateRequest $request, User $user): RedirectResponse
     {
-        $this->userService->updateUser($request->all(), $user);
+        $this->userService->updateUser($request, $user);
         return redirect()->route('admin.users.index')->with('success', 'User update!');
     }
 }

@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="d-flex">
             <h2 class="h4 font-weight-bold mb-0">
-                {{ __('User Management') }}
+                {{ __('app.user_management.title') }}
             </h2>
         </div>
     </x-slot>

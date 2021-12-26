@@ -2,22 +2,29 @@
 
 namespace App\Services\User;
 
+use App\Events\BanUnbanUserEvent;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Http\Request;
 
 class UserService
 {
-    public function updateUser(array $data, User $user): User
+    public function updateUser(Request $request, User $user): User
     {
-        $user->fill($data)->save();
+        $user->fill($request->validated())->save();
         return $user;
     }
 
-    public function setBanned(array $data, User $user): Bool
+    public function setBanned(Request $request, User $user): Bool
     {
+        $data = $request->validated();
         if (!$user->hasRole(config('permission.roles.admin.name'))) {
             $user->banned_until = ($data['banned_until']) ? now()->addDays($data['banned_until']) : null;
-            return (bool)$user->save();
+
+            if ($user->save()) {
+                BanUnbanUserEvent::dispatch($user);
+                return true;
+            }
         }
         return false;
     }

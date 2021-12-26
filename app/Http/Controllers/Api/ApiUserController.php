@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Events\BanUnbanUserEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserActiveInactiveRequest;
 use App\Models\User;
@@ -21,10 +20,9 @@ class ApiUserController extends Controller
         $status = 'error';
         $message = 'The account role is admin';
 
-        if ($this->userService->setBanned($request->all(), $user)) {
+        if ($this->userService->setBanned($request, $user)) {
             $status = 'success';
             $message = '';
-            BanUnbanUserEvent::dispatch($user);
         }
 
         return response()->json([

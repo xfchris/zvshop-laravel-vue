@@ -20,8 +20,8 @@ class CheckBanned
             $request->session()->invalidate();
             $request->session()->regenerateToken();
 
-            $days = ($bannedDays <= 28 && $bannedDays >= 2) ? ' for ' . $bannedDays . ' days' : '';
-            $message = 'Your account has been suspended' . $days . '. Please contact administrator.';
+            $days = ($bannedDays <= 28 && $bannedDays >= 2) ? ' ' . trans('auth.suspended_days', ['days' => $bannedDays]) : '';
+            $message = trans('auth.account_suspended') . $days . '. ' . trans('auth.contact_administrator');
 
             return redirect()->route('login')->with('error', $message);
         }

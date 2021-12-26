@@ -23,6 +23,9 @@ Route::get('/dashboard', function () {
 
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('users', App\Http\Controllers\UserController::class);
+    Route::resource('products', App\Http\Controllers\ProductController::class);
+    Route::get('product/{product}/disable', [App\Http\Controllers\ProductController::class, 'disable'])->name('products.disable');
+    Route::get('product/{product}/enable', [App\Http\Controllers\ProductController::class, 'enable'])->name('products.enable');
 });
 
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('api')->name('api.')->group(function () {

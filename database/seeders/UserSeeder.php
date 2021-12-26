@@ -10,8 +10,9 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        User::truncate();
-
+        if (User::count()) {
+            return;
+        }
         User::factory()->create([
             'name' => 'Admin',
             'email' => 'admin@mail.com',

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -48,5 +49,10 @@ class User extends Authenticatable implements MustVerifyEmail
             return $this->banned_until ? $this->banned_until->format('d/m/Y') : '';
         }
         return null;
+    }
+
+    public function image(): MorphOne
+    {
+        return $this->morphOne('App\Models\Image', 'imageable');
     }
 }

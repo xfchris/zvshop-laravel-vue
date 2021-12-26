@@ -25,6 +25,30 @@ class EmailVerificationTest extends TestCase
         $response->assertStatus(200);
     }
 
+    public function test_email_verification_screen_can_be_rendered_with_user_verified()
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->get('/verify-email');
+
+        $response->assertRedirect(RouteServiceProvider::HOME);
+    }
+
+    public function test_email_can_be_verified_with_user_verified()
+    {
+        $user = User::factory()->create();
+
+        $verificationUrl = URL::temporarySignedRoute(
+            'verification.verify',
+            now()->addMinutes(60),
+            ['id' => $user->id, 'hash' => sha1($user->email)]
+        );
+
+        $response = $this->actingAs($user)->get($verificationUrl);
+
+        $response->assertRedirect(RouteServiceProvider::HOME . '?verified=1');
+    }
+
     public function test_email_can_be_verified()
     {
         $user = User::factory()->create([
@@ -61,5 +85,27 @@ class EmailVerificationTest extends TestCase
         $this->actingAs($user)->get($verificationUrl);
 
         $this->assertFalse($user->fresh()->hasVerifiedEmail());
+    }
+
+    public function test_it_can_resend_verification_email()
+    {
+        $user = User::factory()->create([
+            'email_verified_at' => null,
+        ]);
+
+        $response = $this->actingAs($user)->post(route('verification.send'));
+
+        $response->assertSessionHas([
+            'status' => 'verification-link-sent',
+        ]);
+    }
+
+    public function test_it_can_resend_verification_email_with_user_verified()
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->post(route('verification.send'));
+
+        $response->assertRedirect(RouteServiceProvider::HOME);
     }
 }
