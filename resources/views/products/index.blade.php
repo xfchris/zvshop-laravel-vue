@@ -6,7 +6,7 @@
             </h2>
             <a href="{{ route('admin.products.create') }}"
                 class="btn btn-xs btn-primary text-light py-0 d-flex align-items-center">
-                <i class="fas fa-plus-circle"></i> <span class="ms-1">@lang('app.product_management.new_product')</span>
+                <i class="fas fa-plus-circle"></i> <span class="ms-1">@lang('app.product_management.create_product')</span>
             </a>
         </div>
     </x-slot>
@@ -29,7 +29,7 @@
                         <th scope="col" style="width:20%">Category</th>
                         <th scope="col" style="width:15%">Price</th>
                         <th scope="col" style="width:15%">Status</th>
-                        <th scope="col" style="width:10%">Quantitly</th>
+                        <th scope="col" style="width:10%">quantity</th>
                         <th scope="col" style="width:10%">Created</th>
                         <th scope="col" style="width:15%">Options</th>
                     </tr>
@@ -49,7 +49,7 @@
                                     <span class="badge bg-success">{{ _('Enabled') }}</span>
                                 @endif
                             </td>
-                            <td>{{ $product->quantitly }}</td>
+                            <td>{{ $product->quantity }}</td>
                             <td>{{ $product->created_at->format('d/m/Y') }}</td>
                             <td>
                                 <div class="d-flex">

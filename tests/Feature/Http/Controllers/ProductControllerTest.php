@@ -40,4 +40,23 @@ class ProductControllerTest extends TestCase
         $response->assertRedirect();
         $response->assertSessionHas('success', trans('app.product_management.alert_enabled'));
     }
+
+    public function test_it_show_the_edit_form_product(): void
+    {
+        $user = $this->userAdminCreate();
+        $product = Product::factory()->create();
+        $response = $this->actingAs($user)->get(route('admin.products.edit', $product->id));
+
+        $response->assertStatus(200);
+        $response->assertSee(trans('app.product_management.edit_product'));
+    }
+
+    public function test_it_show_the_create_form_product(): void
+    {
+        $user = $this->userAdminCreate();
+        $response = $this->actingAs($user)->get(route('admin.products.create'));
+
+        $response->assertStatus(200);
+        $response->assertSee(trans('app.product_management.create_product'));
+    }
 }

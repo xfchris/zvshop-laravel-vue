@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductCreateRequest;
+use App\Http\Requests\ProductUpdateRequest;
 use App\Models\Category;
 use App\Models\Product;
 use App\Services\Product\ProductService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Lang;
 
 class ProductController extends Controller
 {
@@ -19,18 +19,22 @@ class ProductController extends Controller
 
     public function index(): View
     {
-        $products = Product::with('category:id,name')->withTrashed()->paginate(config('constants.num_rows_per_table'));
-        $categories = Category::get();
-        return view('products.index', ['products' => $products, 'categories' => $categories]);
+        return view(
+            'products.index',
+            [
+                'products' => $this->productService->getProductsPerPage(),
+                'categories' => Category::get(),
+            ]
+        );
     }
 
-    public function create(): View
+    public function create(Product $product): View
     {
         $categories = Category::get();
-        return view('products.create', ['categories' => $categories]);
+        return view('products.create', ['categories' => $categories, 'product' => $product]);
     }
 
-    public function store(Request $request, Product $product): RedirectResponse
+    public function store(ProductCreateRequest $request, Product $product): RedirectResponse
     {
         $this->productService->createProduct($request, $product);
         return back()->with('success', 'Product create!');
@@ -39,30 +43,33 @@ class ProductController extends Controller
     //puede verlo cualquiera
     public function show(Product $product): View
     {
-        return view('products.show', ['product' => $product]);
+        $categories = Category::select('id,name')->get();
+        return view('products.show', ['product' => $product, 'categories' => $categories]);
     }
 
-    public function edit(Product $product): View
+    public function edit(int $id): View
     {
-        return view('products.edit', compact('product'));
+        $product = Product::with('images', 'category:id,name')->withTrashed()->find($id);
+        $categories = Category::select('id', 'name')->get();
+        return view('products.edit', ['product' => $product, 'categories' => $categories]);
     }
 
-    public function update(Request $request, Product $product): RedirectResponse
+    public function update(ProductUpdateRequest $request, int $id): RedirectResponse
     {
-        $this->productService->updateProduct($request, $product);
+        $this->productService->updateProduct($request, $id);
         return redirect()->route('admin.products.index')->with('success', 'Product update!');
     }
 
     public function disable(int $id): RedirectResponse
     {
         $this->productService->disableProduct($id);
-        return back()->with('success', Lang::get('app.product_management.alert_disabled'));
+        return back()->with('success', trans('app.product_management.alert_disabled'));
     }
 
     public function enable(int $id): RedirectResponse
     {
         $this->productService->enableProduct($id);
-        return back()->with('success', Lang::get('app.product_management.alert_enabled'));
+        return back()->with('success', trans('app.product_management.alert_enabled'));
     }
 
     public function destroy(Product $product): RedirectResponse
@@ -75,9 +82,7 @@ class ProductController extends Controller
 /**
  * Falta:
  * FormRequest
- * Vistas
- * Ejecutar migraciones
- * Testing.
+ * Vistas.
  *
  * https://github.com/juancolo/MercaTodoSV/blob/develop/app/Http/Requests/ProductRequest.php
  */

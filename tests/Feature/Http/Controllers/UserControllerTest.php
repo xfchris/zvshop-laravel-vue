@@ -4,7 +4,6 @@ namespace Tests\Feature\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
@@ -33,7 +32,7 @@ class UserControllerTest extends TestCase
         $response = $this->actingAs($user)->get(route('admin.users.index'));
 
         $response->assertStatus(200);
-        $response->assertSee(Lang::get('app.user_management.title'));
+        $response->assertSee(trans('app.user_management.title'));
     }
 
     public function test_it_show_the_edit_form(): void
@@ -42,7 +41,7 @@ class UserControllerTest extends TestCase
         $response = $this->actingAs($user)->get(route('admin.users.edit', $user->id));
 
         $response->assertStatus(200);
-        $response->assertSee(Lang::get('app.user_management.user_update'));
+        $response->assertSee(trans('app.user_management.edit_user'));
     }
 
     public function test_it_can_update_a_user(): void
