@@ -5,6 +5,8 @@ return [
         'title' => 'Product management',
         'create_product' => 'Create product',
         'edit_product' => 'Edit product',
+        'product_create' => 'Product create!',
+        'product_update' => 'Product update!',
         'alert_enabled' => 'Product enabled!',
         'alert_disabled' => 'Product disabled!',
     ],

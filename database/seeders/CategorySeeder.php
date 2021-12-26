@@ -9,15 +9,14 @@ class CategorySeeder extends Seeder
 {
     public function run(): void
     {
-        if (Category::count()) {
-            return;
-        }
+        Category::truncate();
+
         Category::insert([
             ['name' => 'Phones', 'slug' => 'phones'],
             ['name' => 'Tablets', 'slug' => 'tablets'],
             ['name' => 'Laptops', 'slug' => 'laptos'],
-            ['name' => 'Smartwatch', 'slug' => 'smartwatch'],
-            ['name' => 'SmartTV', 'slug' => 'smartv'],
+            ['name' => 'Smart Watch', 'slug' => 'smartwatch'],
+            ['name' => 'Smart TV', 'slug' => 'smartv'],
             ['name' => 'Others products', 'slug' => 'others-products'],
         ]);
     }

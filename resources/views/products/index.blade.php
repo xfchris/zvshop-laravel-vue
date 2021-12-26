@@ -27,9 +27,9 @@
                         <th scope="col" style="width:5%">Id</th>
                         <th scope="col" style="width:25%">Name</th>
                         <th scope="col" style="width:20%">Category</th>
-                        <th scope="col" style="width:15%">Price</th>
+                        <th scope="col" style="width:15%">Price ({{ config('constants.currency') }})</th>
                         <th scope="col" style="width:15%">Status</th>
-                        <th scope="col" style="width:10%">quantity</th>
+                        <th scope="col" style="width:10%">Quantity</th>
                         <th scope="col" style="width:10%">Created</th>
                         <th scope="col" style="width:15%">Options</th>
                     </tr>
@@ -41,7 +41,7 @@
                             <td>{{ $product->id }}</td>
                             <td>{{ $product->name }}</td>
                             <td><span class="badge bg-info">{{ $product->category->name }}</span></td>
-                            <td>{{ $product->price }}</td>
+                            <td>@money($product->price)</td>
                             <td>
                                 @if ($product->trashed())
                                     <span class="badge bg-danger">{{ _('Disabled') }}</span>

@@ -49,7 +49,7 @@
                 <div class="form-group">
                     <label for="name" class="form-label mt-2">Description</label>
                     <textarea rows="5" class="form-control" required name="description"
-                        maxlength="500">{{ $product->description }}</textarea>
+                        maxlength="2000">{{ $product->description }}</textarea>
                 </div>
             </div>
         </div>
@@ -63,8 +63,9 @@
             </div>
             @foreach ([1, 2, 3] as $fileAID)
                 <div class="mb-2">
-                    <label for="images_alt{{ $fileAID }}" class="form-label mt-2">Alternative photo
-                        {{ $fileAID }}</label>
+                    <label for="images_alt{{ $fileAID }}" class="form-label mt-2">
+                        Alternative photo {{ $fileAID }}
+                    </label>
                     <input class="form-control" type="file" id="images_alt{{ $fileAID }}" name="images_alt[]"
                         name="file{{ $fileAID }}">
                 </div>

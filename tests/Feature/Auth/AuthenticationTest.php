@@ -55,23 +55,24 @@ class AuthenticationTest extends TestCase
             ]);
         }
 
-        $response->assertSessionHasErrors([
-            'email' => trans('auth.throttle', ['seconds' => 60]),
-        ]);
+        $response->assertSessionHasErrors(['email']); //trans('auth.throttle', ['seconds' => 60])
         $this->assertGuest();
     }
 
     public function test_inactive_users_can_not_authenticate()
     {
+        $days = 5;
         $user = User::factory()->create();
-        $user->banned_until = now()->addDays(5)->addHours(2);
+        $user->banned_until = now()->addDays($days)->addHour();
         $user->save();
 
         $response = $this->followingRedirects()->post('/login', [
             'email' => $user->email,
             'password' => 'password',
         ]);
-        $response->assertSee('Your account has been suspended for 5 days. Please contact administrator');
+
+        $message = trans('auth.account_suspended') . ' ' . trans('auth.suspended_days', ['days' => $days]) . '. ' . trans('auth.contact_administrator');
+        $response->assertSee($message);
     }
 
     public function test_inactive_users_can_logout()

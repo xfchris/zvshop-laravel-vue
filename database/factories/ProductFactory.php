@@ -22,7 +22,7 @@ class ProductFactory extends Factory
 
     public function deleted(): Factory
     {
-        return $this->state(function (array $attributes) {
+        return $this->state(function () {
             return [
                 'deleted_at' => now(),
             ];

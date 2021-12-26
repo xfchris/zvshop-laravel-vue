@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProductCreateRequest;
+use App\Http\Requests\ProductStoreRequest;
 use App\Http\Requests\ProductUpdateRequest;
 use App\Models\Category;
 use App\Models\Product;
@@ -34,10 +34,10 @@ class ProductController extends Controller
         return view('products.create', ['categories' => $categories, 'product' => $product]);
     }
 
-    public function store(ProductCreateRequest $request, Product $product): RedirectResponse
+    public function store(ProductStoreRequest $request, Product $product): RedirectResponse
     {
         $this->productService->createProduct($request, $product);
-        return back()->with('success', 'Product create!');
+        return redirect()->route('admin.products.index')->with('success', trans('app.product_management.product_create'));
     }
 
     //puede verlo cualquiera
@@ -57,7 +57,7 @@ class ProductController extends Controller
     public function update(ProductUpdateRequest $request, int $id): RedirectResponse
     {
         $this->productService->updateProduct($request, $id);
-        return redirect()->route('admin.products.index')->with('success', 'Product update!');
+        return redirect()->route('admin.products.index')->with('success', trans('app.product_management.product_update'));
     }
 
     public function disable(int $id): RedirectResponse
@@ -71,18 +71,4 @@ class ProductController extends Controller
         $this->productService->enableProduct($id);
         return back()->with('success', trans('app.product_management.alert_enabled'));
     }
-
-    public function destroy(Product $product): RedirectResponse
-    {
-        $product->delete();
-        return back();
-    }
 }
-
-/**
- * Falta:
- * FormRequest
- * Vistas.
- *
- * https://github.com/juancolo/MercaTodoSV/blob/develop/app/Http/Requests/ProductRequest.php
- */

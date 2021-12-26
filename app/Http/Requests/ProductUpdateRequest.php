@@ -2,25 +2,18 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class ProductUpdateRequest extends FormRequest
+class ProductUpdateRequest extends ProductStoreRequest
 {
-    public function authorize(): bool
-    {
-        return true;
-    }
-
     public function rules(): array
     {
-        return [
-            'name' => 'required|max:120',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'images_alt.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'category_id' => 'required',
-            'quantity' => 'required|numeric',
-            'price' => 'required|numeric',
-            'description' => 'required|string',
-        ];
+        $rules = parent::rules();
+        array_walk($rules, function (&$item) {
+            if ($item[0] == 'required') {
+                $item[0] = 'filled';
+            }
+            return $item;
+        });
+
+        return $rules;
     }
 }
