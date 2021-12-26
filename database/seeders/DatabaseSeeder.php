@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RolesAndPermissionSeeder::class,
             UserSeeder::class,
+            CategorySeeder::class,
         ]);
         $this->setFKCheckOn();
     }

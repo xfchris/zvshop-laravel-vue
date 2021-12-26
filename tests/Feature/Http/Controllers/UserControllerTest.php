@@ -4,6 +4,7 @@ namespace Tests\Feature\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
@@ -19,13 +20,20 @@ class UserControllerTest extends TestCase
         $response->assertRedirect(route('login'));
     }
 
+    public function test_it_can_not_redirect_to_login_in_json_requests(): void
+    {
+        $response = $this->getJson(route('admin.users.index'));
+
+        $response->assertStatus(401);
+    }
+
     public function test_it_show_the_user_management(): void
     {
         $user = $this->userAdminCreate();
         $response = $this->actingAs($user)->get(route('admin.users.index'));
 
         $response->assertStatus(200);
-        $response->assertSee('User Management');
+        $response->assertSee(Lang::get('app.user_management.title'));
     }
 
     public function test_it_show_the_edit_form(): void
@@ -34,7 +42,7 @@ class UserControllerTest extends TestCase
         $response = $this->actingAs($user)->get(route('admin.users.edit', $user->id));
 
         $response->assertStatus(200);
-        $response->assertSee('User update');
+        $response->assertSee(Lang::get('app.user_management.user_update'));
     }
 
     public function test_it_can_update_a_user(): void
@@ -70,12 +78,5 @@ class UserControllerTest extends TestCase
             'Test the name is required' => ['name', null],
             'Test the name is too long' => ['name', Str::random(81)],
         ];
-    }
-
-    private function userAdminCreate(): User
-    {
-        $user = User::factory()->create();
-        $user->assignRole(config('permission.roles.admin.name'));
-        return $user;
     }
 }
