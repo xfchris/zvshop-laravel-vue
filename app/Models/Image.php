@@ -14,6 +14,11 @@ class Image extends Model
         'url',
         'imageable_id',
         'imageable_type',
+        'data',
+    ];
+
+    protected $casts = [
+        'data' => 'array',
     ];
 
     public function imageable(): MorphTo

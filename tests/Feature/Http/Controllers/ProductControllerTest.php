@@ -93,7 +93,7 @@ class ProductControllerTest extends TestCase
         $productCheck = Product::find($product->id);
         $response->assertSessionHasNoErrors();
         $this->assertSame($productCheck->name, $data['name']);
-        $response->assertRedirect(route('admin.products.index'));
+        $response->assertRedirect(route('admin.products.edit', $product->id));
     }
 
     /**

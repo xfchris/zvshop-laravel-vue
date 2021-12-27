@@ -4,14 +4,19 @@ namespace App\Services\User;
 
 use App\Events\BanUnbanUserEvent;
 use App\Models\User;
+use App\Services\Trait\NotifyLog;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 
 class UserService
 {
+    use NotifyLog;
+
     public function updateUser(Request $request, User $user): User
     {
         $user->fill($request->validated())->save();
+        $this->notifyLog('User', $user->id, 'created');
+
         return $user;
     }
 
@@ -23,6 +28,8 @@ class UserService
 
             if ($user->save()) {
                 BanUnbanUserEvent::dispatch($user);
+                $this->notifyLog('User', $user->id, $user->banned_until ? 'banned' : 'unbanned');
+
                 return true;
             }
         }

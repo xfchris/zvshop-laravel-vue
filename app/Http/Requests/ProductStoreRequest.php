@@ -15,8 +15,8 @@ class ProductStoreRequest extends FormRequest
     {
         return [
             'name' => ['required', 'max:120'],
-            'image' => ['image', 'mimes:jpeg,png,jpg,gif', 'max:' . config('constants.image_max_size')],
-            'images_alt.*' => ['mimes:jpeg,png,jpg,gif', 'max:' . config('constants.image_max_size')],
+            'images.*' => ['mimes:jpeg,png,jpg,gif', 'max:' . config('constants.image_max_size')],
+            'images' => ['max:5'],
             'category_id' => ['required', 'exists:categories,id'],
             'quantity' => ['required', 'numeric', 'min:0'],
             'price' => ['required', 'numeric', 'min:0'],

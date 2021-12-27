@@ -30,6 +30,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
 
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('api')->name('api.')->group(function () {
     Route::post('users/activate-inactivate-user/{user}', [App\Http\Controllers\Api\ApiUserController::class, 'activateInactivateUser'])->name('users.activateInactivateUser');
+    Route::delete('images/{image}', [App\Http\Controllers\Api\ApiProductController::class, 'removeImage'])->name('images.destroy');
 });
 
 require __DIR__ . '/auth.php';

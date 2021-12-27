@@ -9,6 +9,7 @@ return [
         'product_update' => 'Product update!',
         'alert_enabled' => 'Product enabled!',
         'alert_disabled' => 'Product disabled!',
+        'remove_image' => 'Remove',
     ],
     'user_management' => [
         'title' => 'User management',

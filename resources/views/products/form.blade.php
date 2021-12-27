@@ -57,19 +57,34 @@
 
     <div class="col-md-6">
         <div class="col-md-8">
-            <div class="mb-5">
-                <label for="image" class="form-label mt-2">Principal Photo</label>
-                <input class="form-control" type="file" id="image" name="image" required>
+            <div class="mb-2">
+                <label for="images" class="form-label mt-2">
+                    Add Photos
+                </label>
+                <input class="form-control" type="file" id="images" name="images[]" max="2" multiple>
             </div>
-            @foreach ([1, 2, 3] as $fileAID)
-                <div class="mb-2">
-                    <label for="images_alt{{ $fileAID }}" class="form-label mt-2">
-                        Alternative photo {{ $fileAID }}
-                    </label>
-                    <input class="form-control" type="file" id="images_alt{{ $fileAID }}" name="images_alt[]"
-                        name="file{{ $fileAID }}">
-                </div>
-            @endforeach
+        </div>
+
+        <div class="col-md-12">
+
+            <label for="images" class="form-label mt-2">
+                Photos
+            </label>
+            <div class="row">
+                @foreach ($product->images as $image)
+
+                    <div id="col_id_{{ $image->id }}" class="col-md-3 my-3 mt-0">
+                        <tumbnail-product
+                            linkdelete="{{ route('api.images.destroy', $image->id) }}"
+                            textbuttondelete="@lang('app.product_management.remove_image')"
+                            linkImg="{{ $image->url }}"
+                            linkTumbnail="{{ $contextImage->getSize($image->url, 'b') }}"
+                            id="{{ $image->id }}" />
+                    </div>
+
+                @endforeach
+            </div>
+
         </div>
     </div>
 </div>

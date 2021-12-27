@@ -7,6 +7,7 @@ use App\Http\Requests\ProductUpdateRequest;
 use App\Models\Category;
 use App\Models\Product;
 use App\Services\Product\ProductService;
+use App\Strategies\GstImages\ContextImage;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 
@@ -47,17 +48,18 @@ class ProductController extends Controller
         return view('products.show', ['product' => $product, 'categories' => $categories]);
     }
 
-    public function edit(int $id): View
+    public function edit(int $id, ContextImage $contextImage): View
     {
         $product = Product::with('images', 'category:id,name')->withTrashed()->find($id);
         $categories = Category::select('id', 'name')->get();
-        return view('products.edit', ['product' => $product, 'categories' => $categories]);
+        return view('products.edit', ['product' => $product, 'categories' => $categories, 'contextImage' => $contextImage]);
     }
 
     public function update(ProductUpdateRequest $request, int $id): RedirectResponse
     {
         $this->productService->updateProduct($request, $id);
-        return redirect()->route('admin.products.index')->with('success', trans('app.product_management.product_update'));
+
+        return redirect()->route('admin.products.edit', $id)->with('success', trans('app.product_management.product_update'));
     }
 
     public function disable(int $id): RedirectResponse
