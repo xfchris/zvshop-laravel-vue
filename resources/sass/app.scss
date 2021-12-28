@@ -1,13 +1,11 @@
 // Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+@import url("https://fonts.googleapis.com/css?family=Nunito");
 
 // Variables
-@import 'variables';
+@import "variables";
 
 // Bootstrap
-@import '~bootstrap/scss/bootstrap';
-
-@import '~datatables.net-bs5/css/dataTables.bootstrap5.css';
+@import "~bootstrap/scss/bootstrap";
 
 // Custom
 @import "custom";
@@ -23,6 +21,20 @@ $fa-font-path: "../webfonts";
 }
 
 body {
-    background: linear-gradient(
-        90deg,#63a9d0,hsl(227deg 100% 97%));
+    background: linear-gradient(90deg, #63a9d0, hsl(227deg 100% 97%));
+
+    .cursor-pointer {
+        cursor: pointer;
+    }
+
+    .card_product {
+        border: 1px solid #ccc;
+        .prices {
+            margin-top: -23px;
+        }
+        img {
+            height: 177px;
+            object-fit: cover;
+        }
+    }
 }

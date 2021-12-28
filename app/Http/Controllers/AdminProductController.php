@@ -41,13 +41,6 @@ class AdminProductController extends Controller
         return redirect()->route('admin.products.index')->with('success', trans('app.product_management.product_create'));
     }
 
-    //puede verlo cualquiera
-    public function show(Product $product): View
-    {
-        $categories = Category::select('id,name')->get();
-        return view('products.show', ['product' => $product, 'categories' => $categories]);
-    }
-
     public function edit(int $id, ContextImage $contextImage): View
     {
         $product = Product::with('images', 'category:id,name')->withTrashed()->find($id);

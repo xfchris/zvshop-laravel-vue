@@ -9,7 +9,7 @@ trait CreateUsers
     protected function userClientCreate(array $attributes = []): User
     {
         $user = User::factory()->create($attributes);
-        $user->assignRole(config('permission.roles.client.name'));
+        $user->assignRole(config('permission.roles.clients.name'));
         return $user;
     }
 

@@ -164,7 +164,6 @@ return [
         'users_create_users' => 'users_create_users',
         'users_update_users' => 'users_update_users',
         'users_delete_users' => 'users_delete_users',
-
         'store_show_products' => 'store_show_products',
     ],
 
