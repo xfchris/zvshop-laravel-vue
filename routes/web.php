@@ -23,4 +23,9 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('api')->name('api.
     Route::delete('images/{image}', [App\Http\Controllers\Api\ApiProductController::class, 'removeImage'])->name('images.destroy');
 });
 
+Route::middleware(['auth', 'role:admin|clients'])->prefix('store')->name('store.')->group(function () {
+    Route::get('{category?}', [App\Http\Controllers\StoreProductController::class, 'index'])->name('products.index');
+    Route::get('product/{product}', [App\Http\Controllers\StoreProductController::class, 'show'])->name('products.show');
+});
+
 require __DIR__ . '/auth.php';

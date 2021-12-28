@@ -22642,7 +22642,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
-const _hoisted_1 = ["href", "data-bs-target"];
+const _hoisted_1 = ["data-bs-target"];
 const _hoisted_2 = ["src"];
 const _hoisted_3 = ["disabled"];
 
@@ -22670,7 +22670,7 @@ const _hoisted_10 = {
 const _hoisted_11 = ["src"];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
-    href: $props.linkimg,
+    class: "cursor-pointer",
     target: "_blank",
     "data-bs-toggle": "modal",
     "data-bs-target": '#showImg' + $props.id

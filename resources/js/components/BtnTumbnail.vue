@@ -1,5 +1,5 @@
 <template>
-  <a :href="linkimg" target="_blank" data-bs-toggle="modal" :data-bs-target="'#showImg' + id">
+  <a class="cursor-pointer" target="_blank" data-bs-toggle="modal" :data-bs-target="'#showImg' + id">
       <img :src="linktumbnail" class="img-thumbnail" alt="img">
   </a>
 

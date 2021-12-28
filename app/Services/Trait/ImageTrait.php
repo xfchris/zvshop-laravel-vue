@@ -35,6 +35,6 @@ trait ImageTrait
         if ($this->contextImage->remove(new ResponseImage($image->id, $image->url, $image->data))) {
             return $image->delete();
         }
-        return true;
+        return false;
     }
 }

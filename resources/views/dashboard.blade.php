@@ -42,7 +42,7 @@
 
                     @if (Auth::user()->hasAnyPermission([config('permission.names.store_show_products')]))
                         <div class="col-sm-3">
-                            <a href="#" class="btn btn-lg btn-outline-success text-lightx w-100">
+                            <a href="{{ route('store.products.index') }}" class="btn btn-lg btn-outline-success text-lightx w-100">
                                 <i class="fas fa-cart-plus"></i>
                                 <div>@lang('app.online_store.title')</div>
                             </a>
