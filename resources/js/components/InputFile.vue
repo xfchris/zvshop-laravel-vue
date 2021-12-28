@@ -1,18 +1,17 @@
 <template>
     <input ref="inputRef" @change="handleFiles" class="form-control" type="file" :id="id" :name="name" :accept="accept" v-bind:multiple="multiple">
-    <div class="mt-1"><span class="text-muted">(Number of photos allowed: {{ allowed }})</span></div>
+    <div class="mt-1"><span class="text-muted">Number of photos allowed: {{ allowed }}</span></div>
 </template>
 
 <script>
 import Swal from 'sweetalert2'
 import { computed, ref } from '@vue/reactivity'
-import { inject } from '@vue/runtime-core'
+import global from '../store/global'
 
 export default {
   props: ['id', 'name', 'maxfiles', 'numfiles', 'multiple', 'accept'],
 
   setup (props) {
-    const global = inject('global')
     global.setState('numfiles', props.numfiles ?? 0)
 
     const showSwal = ref(false)
@@ -36,10 +35,8 @@ export default {
       inputRef,
       props,
       showSwal,
-      global,
       allowed
     }
   }
 }
-
 </script>

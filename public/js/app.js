@@ -22389,8 +22389,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../api */ "./resources/js/api.js");
-/* harmony import */ var _vue_reactivity__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @vue/reactivity */ "./node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js");
-/* harmony import */ var _vue_runtime_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @vue/runtime-core */ "./node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js");
+/* harmony import */ var _vue_reactivity__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @vue/reactivity */ "./node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js");
+/* harmony import */ var _store_global__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../store/global */ "./resources/js/store/global.js");
 
 
 
@@ -22399,10 +22399,9 @@ __webpack_require__.r(__webpack_exports__);
   props: ['linkdelete', 'textbuttondelete', 'linkimg', 'linktumbnail', 'id'],
 
   setup(props) {
-    const showSwal = (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_2__.ref)(false);
-    const textButtonDelete = (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_2__.ref)(props.textbuttondelete);
-    const buttonDeleteDisabled = (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_2__.ref)(false);
-    const global = (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_3__.inject)('global');
+    const showSwal = (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_3__.ref)(false);
+    const textButtonDelete = (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_3__.ref)(props.textbuttondelete);
+    const buttonDeleteDisabled = (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_3__.ref)(false);
 
     const removeImg = () => {
       showSwal.value = true;
@@ -22412,7 +22411,7 @@ __webpack_require__.r(__webpack_exports__);
         if (result.isConfirmed) {
           textButtonDelete.value = 'Wait...';
           buttonDeleteDisabled.value = true;
-          removeImgServer(props.linkdelete, props.id, global).finally(r => {
+          removeImgServer(props.linkdelete, props.id).finally(r => {
             textButtonDelete.value = props.textbuttondelete;
             buttonDeleteDisabled.value = false;
           });
@@ -22443,8 +22442,8 @@ const showModalConfirm = () => {
   });
 };
 
-const removeImgServer = (link, id, global) => {
-  global.setState('numfiles', global.state.numfiles - 1);
+const removeImgServer = (link, id) => {
+  _store_global__WEBPACK_IMPORTED_MODULE_2__["default"].setState('numfiles', _store_global__WEBPACK_IMPORTED_MODULE_2__["default"].state.numfiles - 1);
   return (0,_api__WEBPACK_IMPORTED_MODULE_1__.deleteApi)(link).then(res => {
     if (res.data.status === 'success') {
       sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire(res.data.message);
@@ -22473,7 +22472,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _vue_reactivity__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @vue/reactivity */ "./node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js");
-/* harmony import */ var _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @vue/runtime-core */ "./node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js");
+/* harmony import */ var _store_global__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../store/global */ "./resources/js/store/global.js");
 
 
 
@@ -22481,16 +22480,15 @@ __webpack_require__.r(__webpack_exports__);
   props: ['id', 'name', 'maxfiles', 'numfiles', 'multiple', 'accept'],
 
   setup(props) {
-    const global = (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__.inject)('global');
-    global.setState('numfiles', props.numfiles ?? 0);
+    _store_global__WEBPACK_IMPORTED_MODULE_1__["default"].setState('numfiles', props.numfiles ?? 0);
     const showSwal = (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_2__.ref)(false);
     const inputRef = (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_2__.ref)(null);
-    const allowed = (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_2__.computed)(() => props.maxfiles - global.state.numfiles);
+    const allowed = (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_2__.computed)(() => props.maxfiles - _store_global__WEBPACK_IMPORTED_MODULE_1__["default"].state.numfiles);
 
     const handleFiles = event => {
       const numAddFiles = event.target.files.length;
-      const totalFiles = numAddFiles + parseInt(global.state.numfiles);
-      const allowedFiles = props.maxfiles - global.state.numfiles;
+      const totalFiles = numAddFiles + parseInt(_store_global__WEBPACK_IMPORTED_MODULE_1__["default"].state.numfiles);
+      const allowedFiles = props.maxfiles - _store_global__WEBPACK_IMPORTED_MODULE_1__["default"].state.numfiles;
 
       if (totalFiles > props.maxfiles && numAddFiles > 0) {
         showSwal.value = true;
@@ -22504,7 +22502,6 @@ __webpack_require__.r(__webpack_exports__);
       inputRef,
       props,
       showSwal,
-      global,
       allowed
     };
   }
@@ -22649,7 +22646,7 @@ const _hoisted_1 = ["href", "data-bs-target"];
 const _hoisted_2 = ["src"];
 const _hoisted_3 = ["disabled"];
 
-const _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+const _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("em", {
   class: "fas fa-trash-alt"
 }, null, -1
 /* HOISTED */
@@ -22748,7 +22745,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     multiple: $props.multiple
   }, null, 40
   /* PROPS, HYDRATE_EVENTS */
-  , _hoisted_1), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_3, "(Number of photos allowed: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.allowed) + ")", 1
+  , _hoisted_1), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_3, "Number of photos allowed: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.allowed), 1
   /* TEXT */
   )])], 64
   /* STABLE_FRAGMENT */
@@ -22820,23 +22817,17 @@ async function deleteApi(url, data) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
-/* harmony import */ var _store_global__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./store/global */ "./resources/js/store/global.js");
-/* harmony import */ var _components_users_BtnBlockUser__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/users/BtnBlockUser */ "./resources/js/components/users/BtnBlockUser.vue");
-/* harmony import */ var _components_BtnTumbnail_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/BtnTumbnail.vue */ "./resources/js/components/BtnTumbnail.vue");
-/* harmony import */ var _components_InputFile_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/InputFile.vue */ "./resources/js/components/InputFile.vue");
+/* harmony import */ var _components_users_BtnBlockUser__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/users/BtnBlockUser */ "./resources/js/components/users/BtnBlockUser.vue");
+/* harmony import */ var _components_BtnTumbnail_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/BtnTumbnail.vue */ "./resources/js/components/BtnTumbnail.vue");
+/* harmony import */ var _components_InputFile_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/InputFile.vue */ "./resources/js/components/InputFile.vue");
 
 
 
 
-
-const app = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createApp)({
-  provide: {
-    global: _store_global__WEBPACK_IMPORTED_MODULE_1__["default"]
-  }
-});
-app.component('btn-block-user', _components_users_BtnBlockUser__WEBPACK_IMPORTED_MODULE_2__["default"]);
-app.component('btn-tumbnail', _components_BtnTumbnail_vue__WEBPACK_IMPORTED_MODULE_3__["default"]);
-app.component('input-file', _components_InputFile_vue__WEBPACK_IMPORTED_MODULE_4__["default"]);
+const app = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createApp)({});
+app.component('btn-block-user', _components_users_BtnBlockUser__WEBPACK_IMPORTED_MODULE_1__["default"]);
+app.component('btn-tumbnail', _components_BtnTumbnail_vue__WEBPACK_IMPORTED_MODULE_2__["default"]);
+app.component('input-file', _components_InputFile_vue__WEBPACK_IMPORTED_MODULE_3__["default"]);
 app.mount('#app');
 
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");

@@ -25,7 +25,7 @@ class GstImgur implements Strategy
 
     public function getSize(string $idOrUrl, ?string $size = null): string
     {
-        $hash = preg_replace('@([a-zA-Z0-9]+)(.*)@i', '$1', preg_replace('@http(s)://(i.)?imgur.com/@i', '', $idOrUrl));
+        $hash = preg_replace('@([A-Z0-9]+)(.*)@i', '$1', preg_replace('@http(s)://(i.)?imgur.com/@i', '', $idOrUrl));
         if (!in_array($size, ['s', 'b', 't', 'm', 'l', 'h'])) {
             $size = '';
         }

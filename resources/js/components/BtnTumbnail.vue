@@ -5,7 +5,7 @@
 
   <button class="btn btn-xs btn-danger text-light py-0 mt-1 d-flex align-items-center justify-content-center w-100"
    type="button" @click="removeImg" v-if="textButtonDelete" :disabled="buttonDeleteDisabled">
-      <i class="fas fa-trash-alt"></i> <span class="ms-1">{{ textButtonDelete }}</span>
+      <em class="fas fa-trash-alt"></em> <span class="ms-1">{{ textButtonDelete }}</span>
   </button>
 
   <div class="modal fade" :id="'showImg' + id" tabindex="-1" :aria-labelledby="'showImg' + id" aria-hidden="true">
@@ -23,7 +23,7 @@
 import Swal from 'sweetalert2'
 import { deleteApi } from '../api'
 import { ref } from '@vue/reactivity'
-import { inject } from '@vue/runtime-core'
+import global from '../store/global'
 
 export default {
   props: ['linkdelete', 'textbuttondelete', 'linkimg', 'linktumbnail', 'id'],
@@ -32,7 +32,6 @@ export default {
     const showSwal = ref(false)
     const textButtonDelete = ref(props.textbuttondelete)
     const buttonDeleteDisabled = ref(false)
-    const global = inject('global')
 
     const removeImg = () => {
       showSwal.value = true
@@ -42,7 +41,7 @@ export default {
         if (result.isConfirmed) {
           textButtonDelete.value = 'Wait...'
           buttonDeleteDisabled.value = true
-          removeImgServer(props.linkdelete, props.id, global).finally(r => {
+          removeImgServer(props.linkdelete, props.id).finally(r => {
             textButtonDelete.value = props.textbuttondelete
             buttonDeleteDisabled.value = false
           })
@@ -72,7 +71,7 @@ const showModalConfirm = () => {
   })
 }
 
-const removeImgServer = (link, id, global) => {
+const removeImgServer = (link, id) => {
   global.setState('numfiles', global.state.numfiles - 1)
 
   return deleteApi(link)

@@ -13,7 +13,7 @@ class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->app->singleton(ContextImage::class, function ($app) {
+        $this->app->singleton(ContextImage::class, function () {
             return new ContextImage(new GstImgur(config('filesystems.disks.imgur'), new Client()));
         });
     }
