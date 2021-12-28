@@ -8,7 +8,7 @@ use App\Services\User\UserService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 
-class UserController extends Controller
+class AdminUserController extends Controller
 {
     public function __construct(
         public UserService $userService

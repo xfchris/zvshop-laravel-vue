@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\Log;
 
 trait NotifyLog
 {
-    private function notifyLog($element, $id, $action)
+    private function notifyLog($channel, $element, $id, $action)
     {
-        return Log::info($element . ': ' . $id . ' has been ' . $action . ' by: ' . Auth::user()->name . ', id: ' . Auth::user()->id);
+        return Log::channel($channel)->info($element . ': ' . $id . ' has been ' . $action . ' by: ' . Auth::user()->name . ', id: ' . Auth::user()->id);
     }
 }

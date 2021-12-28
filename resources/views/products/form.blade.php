@@ -4,21 +4,21 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="name" class="form-label mt-2">Title</label>
+                    <label for="name" class="form-label mt-2">@lang('app.title')</label>
                     <input type="text" class="form-control" id="name" value="{{ $product->name }}" name="name"
                         maxlength="80" aria-describedby="name" placeholder="Enter name" required>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="quantity" class="form-label mt-2">Quantity</label>
+                    <label for="quantity" class="form-label mt-2">@lang('app.quantity')</label>
                     <input type="number" class="form-control" id="quantity" value="{{ $product->quantity }}"
                         name="quantity" min="0" max="2000" aria-describedby="quantity" placeholder="Enter quantity"
                         required>
                 </div>
             </div>
             <div class="col-md-6">
-                <label for="price" class="form-label mt-2">Price</label>
+                <label for="price" class="form-label mt-2">@lang('app.price')</label>
                 <div class="form-group">
                     <div class="input-group mb-3">
                         <input type="number" class="form-control" id="price" value="{{ $product->price }}"
@@ -32,10 +32,10 @@
             <div class="col-md-8">
 
                 <div class="form-group">
-                    <label for="category_id" class="form-label mt-2">Categories</label>
+                    <label for="category_id" class="form-label mt-2">@lang('app.categories')</label>
 
                     <select class="form-select" name="category_id" required>
-                        <option value="">Select a category</option>
+                        <option value="">@lang('app.select_category')</option>
                         @foreach ($categories as $category)
                             <option value="{{ $category->id }}"
                                 {{ $category->id == $product->category_id ? 'selected' : '' }}>
@@ -47,7 +47,7 @@
 
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="name" class="form-label mt-2">Description</label>
+                    <label for="name" class="form-label mt-2">@lang('app.description')</label>
                     <textarea rows="5" class="form-control" required name="description"
                         maxlength="2000">{{ $product->description }}</textarea>
                 </div>
@@ -59,32 +59,37 @@
         <div class="col-md-8">
             <div class="mb-2">
                 <label for="images" class="form-label mt-2">
-                    Add Photos
+                    @lang('app.product_management.add_photos')
                 </label>
-                <input class="form-control" type="file" id="images" name="images[]" max="2" multiple>
+                <input-file
+                    maxfiles="{{ config('constants.image_products_max_number') }}"
+                    numfiles="{{ $product->images->count() }}"
+                    id="images" name="images[]" multiple accept="image/*" />
             </div>
         </div>
 
-        <div class="col-md-12">
+        @if ($product->images->count())
+            <div class="col-md-12">
+                <label for="images" class="form-label mt-2">
+                    @lang('app.photos')
+                </label>
+                <div class="row">
+                    @foreach ($product->images as $image)
 
-            <label for="images" class="form-label mt-2">
-                Photos
-            </label>
-            <div class="row">
-                @foreach ($product->images as $image)
+                        <div id="col_id_{{ $image->id }}" class="col-md-3 my-3 mt-0">
+                            <btn-tumbnail linkdelete="{{ route('api.images.destroy', $image->id) }}"
+                                textbuttondelete="@lang('app.product_management.remove_image')"
+                                linkImg="{{ $image->url }}"
+                                linkTumbnail="{{ $contextImage->getSize($image->url, 'b') }}"
+                                id="{{ $image->id }}" />
+                        </div>
 
-                    <div id="col_id_{{ $image->id }}" class="col-md-3 my-3 mt-0">
-                        <tumbnail-product
-                            linkdelete="{{ route('api.images.destroy', $image->id) }}"
-                            textbuttondelete="@lang('app.product_management.remove_image')"
-                            linkImg="{{ $image->url }}"
-                            linkTumbnail="{{ $contextImage->getSize($image->url, 'b') }}"
-                            id="{{ $image->id }}" />
-                    </div>
-
-                @endforeach
+                    @endforeach
+                </div>
             </div>
+        @endif
 
-        </div>
+
+
     </div>
 </div>

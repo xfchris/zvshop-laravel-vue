@@ -21,8 +21,9 @@
 
 <script>
 import Swal from 'sweetalert2'
-import { deleteApi } from '../../api'
+import { deleteApi } from '../api'
 import { ref } from '@vue/reactivity'
+import { inject } from '@vue/runtime-core'
 
 export default {
   props: ['linkdelete', 'textbuttondelete', 'linkimg', 'linktumbnail', 'id'],
@@ -31,6 +32,7 @@ export default {
     const showSwal = ref(false)
     const textButtonDelete = ref(props.textbuttondelete)
     const buttonDeleteDisabled = ref(false)
+    const global = inject('global')
 
     const removeImg = () => {
       showSwal.value = true
@@ -40,7 +42,7 @@ export default {
         if (result.isConfirmed) {
           textButtonDelete.value = 'Wait...'
           buttonDeleteDisabled.value = true
-          setUserBlock(props.linkdelete, props.id).finally(r => {
+          removeImgServer(props.linkdelete, props.id, global).finally(r => {
             textButtonDelete.value = props.textbuttondelete
             buttonDeleteDisabled.value = false
           })
@@ -70,16 +72,20 @@ const showModalConfirm = () => {
   })
 }
 
-const setUserBlock = (link, id) => {
-  return deleteApi(link).then(res => {
-    if (res.data.status === 'success') {
-      Swal.fire('Image removed')
-      document.querySelector('#col_id_' + id)?.remove()
-    } else {
-      Swal.fire('Error', res.data.message)
-    }
-  }).catch(() => {
-    Swal.fire('Operation cancelled')
-  })
+const removeImgServer = (link, id, global) => {
+  global.setState('numfiles', global.state.numfiles - 1)
+
+  return deleteApi(link)
+    .then(res => {
+      if (res.data.status === 'success') {
+        Swal.fire(res.data.message)
+        document.querySelector('#col_id_' + id)?.remove()
+      } else {
+        Swal.fire('Error', res.data.message)
+      }
+    })
+    .catch(() => {
+      Swal.fire('Operation cancelled')
+    })
 }
 </script>

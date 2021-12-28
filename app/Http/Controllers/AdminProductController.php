@@ -11,7 +11,7 @@ use App\Strategies\GstImages\ContextImage;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 
-class ProductController extends Controller
+class AdminProductController extends Controller
 {
     public function __construct(
         public ProductService $productService
@@ -58,7 +58,6 @@ class ProductController extends Controller
     public function update(ProductUpdateRequest $request, int $id): RedirectResponse
     {
         $this->productService->updateProduct($request, $id);
-
         return redirect()->route('admin.products.edit', $id)->with('success', trans('app.product_management.product_update'));
     }
 

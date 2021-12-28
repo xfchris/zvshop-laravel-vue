@@ -10,10 +10,9 @@ use TypeError;
 
 class GstImgur implements Strategy
 {
-    public function __construct(
-        array $conexion
-    ) {
-        $this->client = new Client();
+    public function __construct(array $conexion, Client $client)
+    {
+        $this->client = $client;
         $this->client->setOption('client_id', $conexion['client_id']);
         $this->client->setOption('client_secret', $conexion['client_secret']);
     }
@@ -26,11 +25,11 @@ class GstImgur implements Strategy
 
     public function getSize(string $idOrUrl, ?string $size = null): string
     {
-        $id = preg_replace('@([a-zA-Z0-9]+)(.*)@i', '$1', preg_replace('@http(s)://(i.)?imgur.com/@i', '', $idOrUrl));
+        $hash = preg_replace('@([a-zA-Z0-9]+)(.*)@i', '$1', preg_replace('@http(s)://(i.)?imgur.com/@i', '', $idOrUrl));
         if (!in_array($size, ['s', 'b', 't', 'm', 'l', 'h'])) {
             $size = '';
         }
-        return 'https://i.imgur.com/' . $id . $size . '.jpg';
+        return 'https://i.imgur.com/' . $hash . $size . '.jpg';
     }
 
     public function remove(ResponseImage $responseImage): bool

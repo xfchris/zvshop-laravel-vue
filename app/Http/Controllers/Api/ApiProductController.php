@@ -17,11 +17,11 @@ class ApiProductController extends Controller
     public function removeImage(Image $image): JsonResponse
     {
         $status = 'error';
-        $message = 'Image could not be deleted';
+        $message = trans('app.image_management.image_no_removed');
 
         if ($this->productService->removeImage($image)) {
             $status = 'success';
-            $message = 'Image deleted';
+            $message = trans('app.image_management.image_removed');
         }
 
         return response()->json([

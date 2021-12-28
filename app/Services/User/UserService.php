@@ -15,7 +15,7 @@ class UserService
     public function updateUser(Request $request, User $user): User
     {
         $user->fill($request->validated())->save();
-        $this->notifyLog('User', $user->id, 'created');
+        $this->notifyLog('user', 'User', $user->id, 'created');
 
         return $user;
     }
@@ -28,7 +28,7 @@ class UserService
 
             if ($user->save()) {
                 BanUnbanUserEvent::dispatch($user);
-                $this->notifyLog('User', $user->id, $user->banned_until ? 'banned' : 'unbanned');
+                $this->notifyLog('user', 'User', $user->id, $user->banned_until ? 'banned' : 'unbanned');
 
                 return true;
             }

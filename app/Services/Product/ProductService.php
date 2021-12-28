@@ -24,7 +24,7 @@ class ProductService
         if ($product->fill($request->all())->save()) {
             $this->uploadImagesFile('images', $request, $product);
         }
-        $this->notifyLog('Procuct', $product->id, 'created');
+        $this->notifyLog('product', 'Procuct', $product->id, 'created');
 
         return $product;
     }
@@ -35,14 +35,14 @@ class ProductService
         if ($product->update($request->all())) {
             $this->uploadImagesFile('images', $request, $product);
         }
-        $this->notifyLog('Procuct', $product->id, 'updated');
+        $this->notifyLog('product', 'Procuct', $product->id, 'updated');
         return $product;
     }
 
     public function disableProduct(int $id): ?bool
     {
         $product = Product::withTrashed()->find($id);
-        $this->notifyLog('Procuct', $product->id, 'disabled');
+        $this->notifyLog('product', 'Procuct', $product->id, 'disabled');
 
         return $product->delete();
     }
@@ -50,14 +50,14 @@ class ProductService
     public function enableProduct(int $id): ?bool
     {
         $product = Product::withTrashed()->find($id);
-        $this->notifyLog('Procuct', $product->id, 'enabled');
+        $this->notifyLog('product', 'Procuct', $product->id, 'enabled');
 
         return $product->restore();
     }
 
     public function getProductsPerPage(): LengthAwarePaginator
     {
-        return Product::with('category:id,name')
+        return Product::with('category:id,name', 'images')
                     ->withTrashed()
                     ->orderBy('created_at', 'DESC')
                     ->paginate(config('constants.num_rows_per_table'));

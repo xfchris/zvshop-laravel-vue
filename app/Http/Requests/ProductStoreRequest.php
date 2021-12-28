@@ -16,7 +16,7 @@ class ProductStoreRequest extends FormRequest
         return [
             'name' => ['required', 'max:120'],
             'images.*' => ['mimes:jpeg,png,jpg,gif', 'max:' . config('constants.image_max_size')],
-            'images' => ['max:5'],
+            'images' => ['max:' . config('constants.image_products_max_number')],
             'category_id' => ['required', 'exists:categories,id'],
             'quantity' => ['required', 'numeric', 'min:0'],
             'price' => ['required', 'numeric', 'min:0'],

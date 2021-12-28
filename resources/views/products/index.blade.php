@@ -29,6 +29,7 @@
                         <th scope="col" style="width:20%">Category</th>
                         <th scope="col" style="width:15%">Price ({{ config('constants.currency') }})</th>
                         <th scope="col" style="width:15%">Status</th>
+                        <th scope="col" style="width:15%">Num images</th>
                         <th scope="col" style="width:10%">Quantity</th>
                         <th scope="col" style="width:10%">Created</th>
                         <th scope="col" style="width:15%">Options</th>
@@ -49,6 +50,7 @@
                                     <span class="badge bg-success">{{ _('Enabled') }}</span>
                                 @endif
                             </td>
+                            <td>{{ $product->images->count() }}</td>
                             <td>{{ $product->quantity }}</td>
                             <td>{{ $product->created_at->format('d/m/Y') }}</td>
                             <td>
