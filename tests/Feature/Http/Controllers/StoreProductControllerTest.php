@@ -3,6 +3,7 @@
 namespace Tests\Feature\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -47,5 +48,20 @@ class StoreProductControllerTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertSee($q);
+    }
+
+    public function test_it_show_the_products_details(): void
+    {
+        $user = $this->userClientCreate();
+        $product = Product::factory()->create();
+        $product->images()->createMany([
+            ['url' => 'https://i.imgur.com/fakehash1.jpg'],
+            ['url' => 'https://i.imgur.com/fakehash2.jpg'],
+        ]);
+        $response = $this->actingAs($user)->get(route('store.products.show', $product->id));
+
+        $response->assertStatus(200);
+        $response->assertSee($product->name);
+        $response->assertSee($product->description);
     }
 }

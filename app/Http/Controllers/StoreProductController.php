@@ -17,6 +17,7 @@ class StoreProductController extends Controller
         ContextImage $contextImage,
     ) {
         $this->categories = Category::get()->keyBy('slug');
+
         FacadesView::share('categories', $this->categories);
         FacadesView::share('contextImage', $contextImage);
     }
@@ -31,8 +32,13 @@ class StoreProductController extends Controller
             $category = ($this->categories[$category_slug]);
             $category_id = $category->id;
         }
+        if ($q) {
+            $products = $this->productService->SearchProductsPerPage($category_id, $q);
+        } else {
+            $products = $this->productService->getProductsStorePerPage($category_id);
+        }
         return view('store.products.index', [
-            'products' => $this->productService->SearchProductsPerPage($category_id, $q),
+            'products' => $products,
             'category' => $category,
             'q' => $q,
         ]);
@@ -40,6 +46,6 @@ class StoreProductController extends Controller
 
     public function show(Product $product): View
     {
-        return view('products.show', ['product' => $product]);
+        return view('store.products.show', ['product' => $product]);
     }
 }

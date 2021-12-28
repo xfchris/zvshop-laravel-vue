@@ -75,4 +75,14 @@ class ProductService
 
         return $products->paginate(config('constants.num_product_rows_per_table'));
     }
+
+    public function getProductsStorePerPage(int $category_id = null): LengthAwarePaginator
+    {
+        $products = Product::with('category:id,name', 'images');
+        if ($category_id) {
+            $products->where('category_id', $category_id);
+        }
+
+        return $products->orderBy('created_at', 'DESC')->paginate(config('constants.num_product_rows_per_table'));
+    }
 }

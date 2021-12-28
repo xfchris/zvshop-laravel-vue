@@ -1,4 +1,3 @@
-<div class="col-sm-6 col-md-4 col-lg-3 col-xl-3">
     <div class="card_product mx-auto my-2 card overflow-hidden">
         <a class="text-decoration-none text-dark d-block"
             href="{{ route('store.products.show', $product->id) }}">
@@ -13,4 +12,3 @@
             </div>
         </a>
     </div>
-</div>
