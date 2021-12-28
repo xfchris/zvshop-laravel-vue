@@ -10,7 +10,7 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100)->unique();
+            $table->string('name', 100)->index();
             $table->text('description')->nullable();
             $table->unsignedBigInteger('category_id')->references('id')->on('categories')->onDelete('cascade')->onUpdate('cascade');
             $table->decimal('price', 10, 2);

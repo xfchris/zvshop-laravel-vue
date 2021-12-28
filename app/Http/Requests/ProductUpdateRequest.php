@@ -13,7 +13,6 @@ class ProductUpdateRequest extends ProductStoreRequest
             }
             return $item;
         });
-
         return $rules;
     }
 }

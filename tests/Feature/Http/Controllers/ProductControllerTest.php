@@ -6,13 +6,22 @@ use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
 use Tests\TestCase;
+use Tests\Traits\ContextImageFake;
 
 class ProductControllerTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
+    use ContextImageFake;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->fakeInstanceImage();
+    }
 
     public function test_it_show_the_user_products(): void
     {
@@ -49,6 +58,11 @@ class ProductControllerTest extends TestCase
     {
         $user = $this->userAdminCreate();
         $product = Product::factory()->create();
+        $product->images()->createMany([
+            ['url' => 'https://i.imgur.com/fakehash1.jpg', 'data' => ['deletehash' => 'fakeDeleteHash1']],
+            ['url' => 'https://i.imgur.com/fakehash2.jpg', 'data' => ['deletehash' => 'fakeDeleteHash2']],
+        ]);
+
         $response = $this->actingAs($user)->get(route('admin.products.edit', $product->id));
 
         $response->assertStatus(200);
@@ -73,6 +87,9 @@ class ProductControllerTest extends TestCase
             'category_id' => Category::select('id')->inRandomOrder()->first()->id, // rand(1, 5),
             'price' => $this->faker->numberBetween(1000, 2500),
             'quantity' => $this->faker->numberBetween(0, 100),
+            'images' => [
+                UploadedFile::fake()->image('poster.jpg'),
+            ],
         ];
 
         $response = $this->actingAs($userAdmin)->post(route('admin.products.store'), $data);
@@ -87,13 +104,16 @@ class ProductControllerTest extends TestCase
     {
         $userAdmin = $this->userAdminCreate();
         $product = Product::factory()->create();
-        $data = ['name' => 'New Name'];
+        $data = [
+            'name' => 'New Name',
+            'images' => [UploadedFile::fake()->image('poster.jpg')],
+        ];
         $response = $this->actingAs($userAdmin)->put(route('admin.products.update', $product->id), $data);
 
         $productCheck = Product::find($product->id);
         $response->assertSessionHasNoErrors();
         $this->assertSame($productCheck->name, $data['name']);
-        $response->assertRedirect(route('admin.products.index'));
+        $response->assertRedirect(route('admin.products.edit', $product->id));
     }
 
     /**

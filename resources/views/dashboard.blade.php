@@ -40,7 +40,7 @@
                         </div>
                     @endif
 
-                    @if (Auth::user()->hasAnyRole([config('permission.roles.admin.name'), config('permission.roles.clients.name')]))
+                    @if (Auth::user()->hasAnyPermission([config('permission.names.store_show_products')]))
                         <div class="col-sm-3">
                             <a href="#" class="btn btn-lg btn-outline-success text-lightx w-100">
                                 <i class="fas fa-cart-plus"></i>

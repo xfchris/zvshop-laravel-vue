@@ -9,6 +9,12 @@ return [
         'product_update' => 'Product update!',
         'alert_enabled' => 'Product enabled!',
         'alert_disabled' => 'Product disabled!',
+        'remove_image' => 'Remove',
+        'add_photos' => 'Add Photos',
+    ],
+    'image_management' => [
+        'image_no_removed' => 'Image could not be removed',
+        'image_removed' => 'Image removed',
     ],
     'user_management' => [
         'title' => 'User management',
@@ -21,4 +27,11 @@ return [
     'online_store' => [
         'title' => 'Online store',
     ],
+    'photos' => 'Photos',
+    'description' => 'Description',
+    'categories' => 'Categories',
+    'select_category' => 'Select a category',
+    'title' => 'Title',
+    'quantity' => 'Quantity',
+    'price' => 'Price',
 ];

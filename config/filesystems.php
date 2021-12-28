@@ -53,6 +53,12 @@ return [
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
         ],
 
+        'imgur' => [
+            'driver' => 'imgur',
+            'client_id' => env('IMGUR_CLIENT_ID'),
+            'client_secret' => env('IMGUR_CLIENT_SECRET'),
+            'visibility' => 'public',
+        ],
     ],
 
     /*
