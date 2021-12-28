@@ -6,5 +6,5 @@ return [
     'currency' => env('CURRENCY', 'USD'),
     'image_max_size' => env('IMAGE_MAX_SIZE', 2048),
     'image_products_max_number' => env('IMAGE_PRODUCTS_MAX_NUMBER', 8),
-
+    'default_poster' => 'https://i.imgur.com/N8duDnu.png',
 ];

@@ -52,6 +52,6 @@ class Product extends Model
     public function getPosterAttribute()
     {
         $image = $this->images()->latest()->first();
-        return ($image) ? $image->url : 'https://i.imgur.com/N8duDnu.png';
+        return ($image) ? $image->url : config('constants.default_poster');
     }
 }
