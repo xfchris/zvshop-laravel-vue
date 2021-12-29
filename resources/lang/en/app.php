@@ -15,6 +15,7 @@ return [
     'image_management' => [
         'image_no_removed' => 'Image could not be removed',
         'image_removed' => 'Image removed',
+        'error_uplading_image' => 'error uploading images',
     ],
     'user_management' => [
         'title' => 'User management',
@@ -34,4 +35,5 @@ return [
     'title' => 'Title',
     'quantity' => 'Quantity',
     'price' => 'Price',
+    '_bat_' => ' bat, ',
 ];

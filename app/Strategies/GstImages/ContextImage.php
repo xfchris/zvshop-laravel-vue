@@ -20,7 +20,7 @@ class ContextImage
         return $this->strategy->upload($data, $typeFile);
     }
 
-    public function getSize(string $id, string $size): string
+    public function getSize(string $id, ?string $size = null): string
     {
         return $this->strategy->getSize($id, $size);
     }

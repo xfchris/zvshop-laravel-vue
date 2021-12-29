@@ -13,13 +13,19 @@ class ImgurApiFake extends AbstractApi
         parent::__construct($client, $pager);
     }
 
-    public function upload()
+    public function upload(): array
     {
+        if ($this->client->errorUpload) {
+            throw $this->client->errorUpload;
+        }
         return ['id' => 1, 'link' => 'https://i.imgur.com/fakehash.jpg', 'deletehash' => 'fakeDeleteHash'];
     }
 
-    public function deleteImage()
+    public function deleteImage(): bool
     {
+        if ($this->client->errorDeleteImage) {
+            throw $this->client->errorDeleteImage;
+        }
         return true;
     }
 }

@@ -4,30 +4,30 @@ namespace App\Services\Trait;
 
 use App\Models\Image;
 use App\Strategies\GstImages\ResponseImage;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 trait ImageTrait
 {
-    public function uploadImagesFile(string $column, Request $request, Model $model): ?Collection
+    public function uploadImagesFile(string $column, Request $request, Model $model): array
     {
-        if (!$request->hasFile($column)) {
-            return null;
-        }
         $urlimages = [];
-        $images = is_array($request->file($column)) ? $request->file($column) : [$request->file($column)];
+        try {
+            $images = is_array($request->file($column)) ? $request->file($column) : [$request->file($column)];
 
-        foreach ($images as $image) {
-            $tmp = $image->getPathName();
-            $responseImage = $this->contextImage->upload(['image' => $tmp, 'type' => 'file']);
+            foreach ($images as $image) {
+                $responseImage = $this->contextImage->upload(['image' => $image->getPathName(), 'type' => 'file']);
 
-            $urlimages[] = [
-                'url' => $responseImage->link,
-                'data' => $responseImage->data,
-            ];
+                $urlimages[] = [
+                    'url' => $responseImage->link,
+                    'data' => $responseImage->data,
+                ];
+            }
+        } catch (\Throwable $th) {
+            Log::error('Error uploading images: ' . $th->getMessage());
         }
-        return $model->images()->createMany($urlimages);
+        return $urlimages;
     }
 
     public function removeImage(Image $image): bool
