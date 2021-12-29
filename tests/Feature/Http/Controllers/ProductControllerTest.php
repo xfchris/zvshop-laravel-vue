@@ -4,10 +4,12 @@ namespace Tests\Feature\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
+use Exception;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
+use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
 use Tests\Traits\ContextImageFake;
 
@@ -78,7 +80,7 @@ class ProductControllerTest extends TestCase
         $response->assertSee(trans('app.product_management.create_product'));
     }
 
-    public function test_it_can_create_a_product(): void
+    public function test_it_can_create_a_product(): TestResponse
     {
         $userAdmin = $this->userAdminCreate();
         $data = [
@@ -93,11 +95,21 @@ class ProductControllerTest extends TestCase
         ];
 
         $response = $this->actingAs($userAdmin)->post(route('admin.products.store'), $data);
-
         $response->assertSessionHasNoErrors();
         $productCheck = Product::latest()->first();
         $this->assertSame($productCheck->name, $data['name']);
         $response->assertRedirect(route('admin.products.index'));
+        return $response;
+    }
+
+    public function test_it_can_create_a_product_bat_errors_in_upload_imagen(): void
+    {
+        $this->fakeInstanceImage(new Exception());
+        $response = $this->test_it_can_create_a_product();
+        $response->assertSessionHas(
+            'success',
+            trans('app.product_management.product_create') . trans('app._bat_') . trans('app.image_management.error_uplading_image')
+        );
     }
 
     public function test_it_can_update_a_product(): void
@@ -131,6 +143,14 @@ class ProductControllerTest extends TestCase
 
         $response->assertRedirect();
         $response->assertSessionHasErrors($field);
+    }
+
+    public function test_it_show_to_searchable_array(): void
+    {
+        $product = Product::factory()->create();
+        $searchable = $product->toSearchableArray();
+
+        $this->assertArrayHasKey('category_name', $searchable);
     }
 
     public function usersDataProvider(): array

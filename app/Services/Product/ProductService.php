@@ -7,6 +7,7 @@ use App\Services\Trait\ImageTrait;
 use App\Services\Trait\NotifyLog;
 use App\Strategies\GstImages\ContextImage;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use MeiliSearch\Endpoints\Indexes;
 
@@ -22,22 +23,30 @@ class ProductService
 
     public function createProduct(Request $request, Product $product): Product
     {
-        if ($product->fill($request->all())->save()) {
-            $this->uploadImagesFile('images', $request, $product);
-        }
+        $product->fill($request->all())->save();
         $this->notifyLog('product', 'Procuct', $product->id, 'created');
-
         return $product;
     }
 
     public function updateProduct(Request $request, int $id): Product
     {
         $product = Product::withTrashed()->find($id);
-        if ($product->update($request->all())) {
-            $this->uploadImagesFile('images', $request, $product);
-        }
+        $product->update($request->all());
         $this->notifyLog('product', 'Procuct', $product->id, 'updated');
         return $product;
+    }
+
+    public function createImages($column, Request $request, Model $model): ?string
+    {
+        if ($request->hasFile($column)) {
+            $urlimages = $this->uploadImagesFile($column, $request, $model);
+            if (count($urlimages)) {
+                $model->images()->createMany($urlimages);
+            } else {
+                return ' bat, ' . strtolower(trans('app.image_management.error_uplading_image'));
+            }
+        }
+        return null;
     }
 
     public function disableProduct(int $id): ?bool

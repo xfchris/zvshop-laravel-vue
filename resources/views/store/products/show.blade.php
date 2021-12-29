@@ -17,7 +17,8 @@
                 <div class="col-sm-12">
                     <div class="row">
                         <div class="col-sm-3">
-                            <btn-tumbnail linkImg="{{ $product->poster }}"
+                            <btn-tumbnail
+                                linkImg="{{ $contextImage->getSize($product->poster) }}"
                                 linkTumbnail="{{ $contextImage->getSize($product->poster, 'l') }}"
                                 id="{{ $product->id }}" />
                         </div>

@@ -4,11 +4,15 @@ namespace Tests\Feature\Http\Controllers\Api;
 
 use App\Models\Product;
 use App\Models\User;
+use Exception;
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Psr7\Request;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
 use Tests\Traits\ContextImageFake;
+use TypeError;
 
 class ApiProductControllerTest extends TestCase
 {
@@ -21,7 +25,7 @@ class ApiProductControllerTest extends TestCase
         $this->fakeInstanceImage();
     }
 
-    public function test_it_can_delete_a_image(): void
+    private function createAndPostDeleteImage(): array
     {
         $userAdmin = $this->userAdminCreate();
         $product = Product::factory()->create();
@@ -30,13 +34,39 @@ class ApiProductControllerTest extends TestCase
         ]);
         $image = $product->images->first();
         $response = $this->actingAs($userAdmin)->delete(route('api.images.destroy', $image->id));
+        return [$response, $product];
+    }
+
+    public function test_it_can_delete_a_image(): TestResponse
+    {
+        [$response, $product] = $this->createAndPostDeleteImage();
 
         $response->assertStatus(200);
         $response->assertJson(['status' => 'success']);
         $this->assertSame(0, $product->fresh()->images->count());
+        return $response;
     }
 
-    ////////
+    public function test_it_can_delete_a_image_with_type_error(): void
+    {
+        $this->fakeInstanceImage(null, new TypeError());
+        $this->test_it_can_delete_a_image();
+    }
+
+    public function test_it_can_delete_a_image_with_connection_errors(): void
+    {
+        $this->fakeInstanceImage(null, new ConnectException('', new Request('delete', '/')));
+        [$response] = $this->createAndPostDeleteImage();
+        $response->assertJson(['status' => 'error']);
+    }
+
+    public function test_it_can_delete_a_image_with_others_errors(): void
+    {
+        $this->fakeInstanceImage(null, new Exception());
+        [$response] = $this->createAndPostDeleteImage();
+        $response->assertJson(['status' => 'error']);
+    }
+
     public function test_it_can_inactivate_a_user(): void
     {
         $userAdmin = User::find(1);

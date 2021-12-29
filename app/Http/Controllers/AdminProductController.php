@@ -37,21 +37,26 @@ class AdminProductController extends Controller
 
     public function store(ProductStoreRequest $request, Product $product): RedirectResponse
     {
-        $this->productService->createProduct($request, $product);
-        return redirect()->route('admin.products.index')->with('success', trans('app.product_management.product_create'));
+        $product = $this->productService->createProduct($request, $product);
+        $msgImages = $this->productService->createImages('images', $request, $product);
+
+        return redirect()->route('admin.products.index')->with('success', trans('app.product_management.product_create') . $msgImages);
     }
 
     public function edit(int $id, ContextImage $contextImage): View
     {
         $product = Product::with('images', 'category:id,name')->withTrashed()->find($id);
         $categories = Category::select('id', 'name')->get();
+
         return view('products.edit', ['product' => $product, 'categories' => $categories, 'contextImage' => $contextImage]);
     }
 
     public function update(ProductUpdateRequest $request, int $id): RedirectResponse
     {
-        $this->productService->updateProduct($request, $id);
-        return redirect()->route('admin.products.edit', $id)->with('success', trans('app.product_management.product_update'));
+        $product = $this->productService->updateProduct($request, $id);
+        $msgImages = $this->productService->createImages('images', $request, $product);
+
+        return redirect()->route('admin.products.edit', $id)->with('success', trans('app.product_management.product_update') . $msgImages);
     }
 
     public function disable(int $id): RedirectResponse

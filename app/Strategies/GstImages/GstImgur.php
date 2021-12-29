@@ -23,7 +23,7 @@ class GstImgur implements Strategy
         return new ResponseImage($result['id'], $result['link'], ['deletehash' => $result['deletehash']]);
     }
 
-    public function getSize(string $idOrUrl, ?string $size = null): string
+    public function getSize(string $idOrUrl, ?string $size): string
     {
         $hash = preg_replace('@([A-Z0-9]+)(.*)@i', '$1', preg_replace('@http(s)://(i.)?imgur.com/@i', '', $idOrUrl));
         if (!in_array($size, ['s', 'b', 't', 'm', 'l', 'h'])) {

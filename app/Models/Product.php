@@ -34,9 +34,9 @@ class Product extends Model
     public function toSearchableArray()
     {
         $columns = $this->only(['name', 'description', 'deleted_at']);
-        $related = $this->category->only('name', 'slug');
+        $related = $this->category->only('name');
 
-        return array_merge($columns, $related);
+        return array_merge($columns, ['category_name' => $related['name']]);
     }
 
     public function category(): BelongsTo
