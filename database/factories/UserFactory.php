@@ -28,4 +28,9 @@ class UserFactory extends Factory
             ];
         });
     }
+
+    public function banned(int $days): Factory
+    {
+        return $this->state(fn () => ['banned_until' => now()->addDays($days)->addHour()]);
+    }
 }

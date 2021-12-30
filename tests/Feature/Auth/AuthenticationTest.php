@@ -62,9 +62,7 @@ class AuthenticationTest extends TestCase
     public function test_inactive_users_can_not_authenticate()
     {
         $days = 5;
-        $user = User::factory()->create();
-        $user->banned_until = now()->addDays($days)->addHour();
-        $user->save();
+        $user = User::factory()->banned($days)->create();
 
         $response = $this->followingRedirects()->post('/login', [
             'email' => $user->email,
@@ -73,6 +71,24 @@ class AuthenticationTest extends TestCase
 
         $message = trans('auth.account_suspended') . ' ' . trans('auth.suspended_days', ['days' => $days]) . '. ' . trans('auth.contact_administrator');
         $response->assertSee($message);
+    }
+
+    public function test_inactive_users_can_authenticate_after_ban_time(): void
+    {
+        $days = 5;
+        $user = User::factory()->banned($days)->create();
+
+        $this->travel($days + 1)->days();
+
+        $response = $this->followingRedirects()->post('/login', [
+            'email' => $user->email,
+            'password' => 'password',
+        ]);
+
+        $message = trans('auth.account_suspended') . ' ' . trans('auth.suspended_days', ['days' => $days]) . '. ' . trans('auth.contact_administrator');
+        $response->assertDontSee($message);
+
+        $response->assertSee(trans('app.dashboard'));
     }
 
     public function test_inactive_users_can_logout()

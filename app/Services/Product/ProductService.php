@@ -43,7 +43,7 @@ class ProductService
             if (count($urlimages)) {
                 $model->images()->createMany($urlimages);
             } else {
-                return ' bat, ' . strtolower(trans('app.image_management.error_uplading_image'));
+                return trans('app._bat_') . strtolower(trans('app.image_management.error_uplading_image'));
             }
         }
         return null;

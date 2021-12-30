@@ -36,4 +36,5 @@ return [
     'quantity' => 'Quantity',
     'price' => 'Price',
     '_bat_' => ' bat, ',
+    'dashboard' => 'dashboard',
 ];

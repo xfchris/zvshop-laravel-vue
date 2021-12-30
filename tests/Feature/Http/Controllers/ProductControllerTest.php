@@ -150,7 +150,7 @@ class ProductControllerTest extends TestCase
         $product = Product::factory()->create();
         $searchable = $product->toSearchableArray();
 
-        $this->assertArrayHasKey('category_name', $searchable);
+        $this->assertArrayHasKey('name', $searchable);
     }
 
     public function usersDataProvider(): array
