@@ -31,7 +31,7 @@
                 </div>
 
                 <div class="col-sm-9">
-                    <h3>{{ $category ? $category->name : 'All Products' }} {{ $q ? '- ' . $q : '' }}</h3>
+                    <h3>{{ $category ? $category->name : 'All Products' }} {{ request()->get('q') ? '- ' . request()->get('q') : '' }}</h3>
                     <div class="row">
                         @foreach ($products as $product)
                             <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3">

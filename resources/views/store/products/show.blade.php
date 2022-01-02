@@ -43,7 +43,7 @@
                                     <p class="card-text mt-4">
                                         <hr />
                                     <h4>{{ _('All images') }}</h4>
-                                    <div class="row">
+                                    <div class="row text-center">
                                         @foreach ($product->images as $image)
                                             <div id="col_id_{{ $image->id }}" class="col-md-3 mt-3">
                                                 <btn-tumbnail linkImg="{{ $image->url }}"
