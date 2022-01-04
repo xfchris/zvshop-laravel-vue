@@ -49,7 +49,7 @@
                             <td>{{ $user->created_at->format('d/m/Y') }}</td>
                             <td>
                                 <div class="d-flex">
-                                    <a href="{{ route('admin.users.edit', $user->id) }}"
+                                    <a href="{{ route('users.edit', $user->id) }}"
                                         class="btn btn-xs btn-primary text-light py-0 d-flex align-items-center">
                                         <i class="fas fa-edit"></i> <span class="ms-1">Edit</span>
                                     </a>

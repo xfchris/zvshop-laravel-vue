@@ -14,7 +14,7 @@
                 <div class="row">
                     @if (Auth::user()->hasAnyRole(['admin']))
                         <div class="col-sm-3">
-                            <a href="{{ route('admin.users.index') }}"
+                            <a href="{{ route('users.index') }}"
                                 class="btn btn-lg btn-outline-danger text-lightx w-100">
                                 <i class="fas fa-users"></i>
                                 <div>@lang('app.user_management.title')</div>
