@@ -3,7 +3,9 @@
 namespace Tests\Feature\Http\Controllers\Api;
 
 use App\Models\User;
+use App\Notifications\SendBanUnbanNotification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
 
@@ -24,7 +26,7 @@ class ApiUserControllerTest extends TestCase
 
     public function test_it_can_not_inactive_an_user_with_admin_role(): void
     {
-        $response = $this->executeAdminTest(['banned_until' => 5]);
+        $response = $this->executeAdminTest(['banned_until' => 5], 'error');
         $response->assertStatus(200);
     }
 
@@ -44,16 +46,18 @@ class ApiUserControllerTest extends TestCase
 
     public function test_it_show_errors_when_is_invalid_the_post_data(): void
     {
-        $response = $this->executeAdminTest(['banned_untilxx' => 5]);
+        Notification::fake();
+        $response = $this->executeAdminTest(['banned_untilxx' => 5], 'error');
+        Notification::assertNotSentTo(User::find(1), SendBanUnbanNotification::class);
         $response->assertStatus(422);
     }
 
-    private function executeAdminTest(array $postData): TestResponse
+    private function executeAdminTest(array $postData, string $assertStatus): TestResponse
     {
         $userAdmin = User::find(1);
         $response = $this->actingAs($userAdmin)->post(route('api.users.activateInactivateUser', $userAdmin->id), $postData);
 
-        $response->assertJson(['status' => 'error']);
+        $response->assertJson(['status' => $assertStatus]);
         return $response;
     }
 }

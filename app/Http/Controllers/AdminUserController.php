@@ -8,7 +8,7 @@ use App\Services\User\UserService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 
-class UserController extends Controller
+class AdminUserController extends Controller
 {
     public function __construct(
         public UserService $userService
@@ -29,7 +29,7 @@ class UserController extends Controller
 
     public function update(UserUpdateRequest $request, User $user): RedirectResponse
     {
-        $this->userService->updateUser($request->all(), $user);
+        $this->userService->updateUser($request, $user);
         return redirect()->route('admin.users.index')->with('success', 'User update!');
     }
 }
