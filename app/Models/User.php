@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Constants\AppConstants;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -23,6 +25,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'password',
         'banned_until',
+        'id_type',
+        'id_number',
+        'address',
+        'phone',
     ];
 
     protected $hidden = [
@@ -40,7 +46,19 @@ class User extends Authenticatable implements MustVerifyEmail
 
     protected $appends = [
         'check_banned_until',
+        'order',
     ];
+
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function getOrderAttribute(): Order
+    {
+        return $this->orders()->firstOrCreate(['status' => AppConstants::CREATED]);
+    }
+
 
     public function getCheckBannedUntilAttribute(): ?string
     {

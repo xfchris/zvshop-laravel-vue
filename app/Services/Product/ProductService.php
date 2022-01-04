@@ -2,6 +2,7 @@
 
 namespace App\Services\Product;
 
+use App\Models\Category;
 use App\Models\Product;
 use App\Services\Trait\ImageTrait;
 use App\Services\Trait\NotifyLog;
@@ -73,7 +74,23 @@ class ProductService
                     ->paginate(config('constants.num_rows_per_table'));
     }
 
-    public function SearchProductsPerPage(int $category_id = null, string $search = null): LengthAwarePaginator
+    public function getCategoryBySlug(?string $categorySlug): ?Model
+    {
+        if ($categorySlug) {
+            return Category::where('slug', $categorySlug)->first();
+        }
+        return null;
+    }
+
+    public function getOrSearchProductsPerPage(int $category_id = null, string $search = null): LengthAwarePaginator
+    {
+        if ($search) {
+            return $this->searchProductsPerPage($category_id, $search);
+        }
+        return $this->getProductsStorePerPage($category_id);
+    }
+
+    public function searchProductsPerPage(int $category_id = null, string $search = null): LengthAwarePaginator
     {
         $products = Product::search($search, function (Indexes $index, $query, $options) use ($category_id) {
             if ($category_id) {
