@@ -163,6 +163,7 @@ return [
         'users_show_users'   => 'users_show_users',
         'users_create_users' => 'users_create_users',
         'users_update_users' => 'users_update_users',
+        'users_update_own_users' => 'users_update_own_users',
         'users_delete_users' => 'users_delete_users',
         'store_show_products' => 'store_show_products',
     ],
@@ -174,7 +175,7 @@ return [
         ],
         'clients' => [
             'name' => 'clients',
-            'permissions' => ['store_show_products'],
+            'permissions' => ['store_show_products', 'users_update_own_users'],
         ],
     ],
 ];
