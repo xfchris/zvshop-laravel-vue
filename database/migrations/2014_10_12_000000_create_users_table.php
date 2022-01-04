@@ -17,6 +17,13 @@ class CreateUsersTable extends Migration
             $table->timestamp('banned_until')->nullable();
             $table->rememberToken();
             $table->timestamps();
+            $table->String('id_type', 20)->nullable();
+            $table->bigInteger('id_number')->nullable();
+
+            $table->string('address', 180)->nullable();
+            $table->bigInteger('phone')->nullable();
+
+            $table->unique(['id_type', 'id_number']);
         });
     }
 
