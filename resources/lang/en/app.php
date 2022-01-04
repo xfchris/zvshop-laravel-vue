@@ -37,4 +37,10 @@ return [
     'price' => 'Price',
     '_bat_' => ' bat, ',
     'dashboard' => 'dashboard',
+    'type_document' => [
+        'CC' => 'Identification Card',
+        'CE' => 'Foreigner ID',
+        'FS0002' => 'Passport',
+        'NIT' => 'NIT',
+    ],
 ];
