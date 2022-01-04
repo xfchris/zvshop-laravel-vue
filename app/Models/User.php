@@ -59,7 +59,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->orders()->firstOrCreate(['status' => AppConstants::CREATED]);
     }
 
-
     public function getCheckBannedUntilAttribute(): ?string
     {
         if ($this->banned_until && now()->lessThan($this->banned_until)) {

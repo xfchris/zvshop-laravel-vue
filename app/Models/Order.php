@@ -15,7 +15,7 @@ class Order extends Model
 
     protected $appends = [
         'totalAmount',
-        'totalProducts'
+        'totalProducts',
     ];
 
     public function products(): BelongsToMany
