@@ -51,7 +51,7 @@ class OrderControllerTest extends TestCase
             'quantity' => 1,
         ]);
 
-        $this->assertSame($user->order->products[0]->pivot->quantity, 1);
+        $this->assertSame((int)$user->order->products[0]->pivot->quantity, 1);
     }
 
     public function test_it_cannot_add_a_product_to_order_when_exceeds_the_available_quantity(): void
