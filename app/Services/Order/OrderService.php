@@ -31,7 +31,6 @@ class OrderService
     {
         $order->products()->attach($product, [
             'quantity' => $quantity,
-            'price' => $product->price,
         ]);
     }
 

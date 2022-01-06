@@ -34,6 +34,9 @@ return [
     'select_category' => 'Select a category',
     'title' => 'Title',
     'quantity' => 'Quantity',
+    'total' => 'Total',
+    'resume' => 'Resume',
+    'cart_empty' => 'Your cart is empty',
     'price' => 'Price',
     '_bat_' => ' bat, ',
     'dashboard' => 'dashboard',
@@ -42,5 +45,12 @@ return [
         'CE' => 'Foreigner ID',
         'FS0002' => 'Passport',
         'NIT' => 'NIT',
+    ],
+    'order' => [
+        'product_list' => 'Products list',
+        'shipping_address' => 'Shipping Address',
+        'name_receive' => 'Name receive',
+        'address' => 'Address',
+        'phone' => 'Phone',
     ],
 ];

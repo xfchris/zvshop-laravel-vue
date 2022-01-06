@@ -25,8 +25,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'password',
         'banned_until',
-        'id_type',
-        'id_number',
+        'document_type',
+        'document',
         'address',
         'phone',
     ];
@@ -56,7 +56,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function getOrderAttribute(): Order
     {
-        return $this->orders()->firstOrCreate(['status' => AppConstants::CREATED]);
+        return $this->orders()->with('products:id,name,price,quantity')->firstOrCreate(['status' => AppConstants::CREATED]);
     }
 
     public function getCheckBannedUntilAttribute(): ?string

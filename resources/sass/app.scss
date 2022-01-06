@@ -37,4 +37,16 @@ body {
             object-fit: cover;
         }
     }
+    .w-140px {
+        width: 140px;
+    }
+    .border-dashed {
+        border: 3px dashed #eee;
+    }
+
+    .order-item {
+        &:hover {
+            background-color: #eeeeee73;
+        }
+    }
 }

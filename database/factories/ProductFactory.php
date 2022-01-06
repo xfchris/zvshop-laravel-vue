@@ -14,7 +14,7 @@ class ProductFactory extends Factory
             'description' => $this->faker->text(100),
             'category_id' => Category::select('id')->inRandomOrder()->first()->id, // rand(1, 5),
             'price' => $this->faker->numberBetween(1000, 2500),
-            'quantity' => $this->faker->numberBetween(0, 100),
+            'quantity' => $this->faker->numberBetween(1, 100),
             'created_at' => now(),
             'updated_at' => now(),
         ];

@@ -44,11 +44,11 @@
                         <div class="form-group">
                             <label for="name" class="form-label mt-2">Document type</label>
 
-                            <select class="form-select" name="id_type" id="id_type">
+                            <select class="form-select" name="document_type" id="document_type">
                                 <option>Select a type...</option>
                                 @foreach (App\Constants\AppConstants::TYPE_DOCUMENT as $typeDocument)
                                     <option value="{{ $typeDocument }}"
-                                        {{ $user->id_type == $typeDocument ? 'selected' : '' }}>
+                                        {{ $user->document_type == $typeDocument ? 'selected' : '' }}>
                                         @lang('app.type_document.'.$typeDocument)
                                     </option>
                                 @endforeach
@@ -58,9 +58,9 @@
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label for="id_number" class="form-label mt-2">ID Number</label>
-                            <input type="number" class="form-control" id="id_number" value="{{ $user->id_number }}"
-                                name="id_number" maxlength="15" min="1" max="99999999999" aria-describedby="id_number" placeholder="Enter id">
+                            <label for="document" class="form-label mt-2">ID Number</label>
+                            <input type="number" class="form-control" id="document" value="{{ $user->document }}"
+                                name="document" maxlength="15" min="1" max="99999999999" aria-describedby="document" placeholder="Enter document">
                         </div>
                     </div>
                 </div>

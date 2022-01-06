@@ -16,16 +16,16 @@ class UserUpdateRequest extends FormRequest
     public function rules(): array
     {
         $uniqueRule = Rule::unique('users')->where(function ($query) {
-            return $query->where('id_type', $this->input('id_type'))
-                        ->where('id_number', $this->input('id_number'))
+            return $query->where('document_type', $this->input('document_type'))
+                        ->where('document', $this->input('document'))
                         ->where('id', '<>', $this->route('user')->id);
         });
 
         return [
             'name' => 'required|max:80',
-            'id_type' => ['required', Rule::in(AppConstants::TYPE_DOCUMENT)],
-            'id_number' => ['required', 'integer', 'min:1', 'max:99999999999', $uniqueRule],
-            'address' => ['nullable', 'max:180'],
+            'document_type' => ['required', Rule::in(AppConstants::TYPE_DOCUMENT)],
+            'document' => ['required', 'integer', 'min:1', 'max:99999999999', $uniqueRule],
+            'address' => ['nullable', 'max:300'],
             'phone' => ['nullable', 'string', 'max:30'],
         ];
     }

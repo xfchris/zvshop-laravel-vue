@@ -15,8 +15,8 @@ class CreateOrdersTable extends Migration
             $table->unsignedBigInteger('user_id')->references('id')->on('users');
 
             $table->string('name_receive', 120)->nullable();
-            $table->string('address', 180)->nullable();
-            $table->bigInteger('phone')->nullable();
+            $table->string('address', 300)->nullable();
+            $table->string('phone', 30)->nullable();
 
             $table->timestamps();
         });

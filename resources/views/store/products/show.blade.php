@@ -8,12 +8,12 @@
         </div>
     </x-slot>
 
+    <x-auth-validation-errors class="mb-3" :errors="$errors" />
+
     <div class="card my-4">
         <div class="card-body">
 
             <div class="row">
-
-
                 <div class="col-sm-12">
                     <div class="row">
                         <div class="col-sm-3">

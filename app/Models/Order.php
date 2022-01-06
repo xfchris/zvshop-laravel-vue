@@ -32,7 +32,7 @@ class Order extends Model
     {
         $total = 0;
         foreach ($this->products as $product) {
-            $total += $product->pivot->quantity * $product->pivot->price;
+            $total += $product->pivot->quantity * ($product->pivot->price ?? $product->price);
         }
         return $total;
     }

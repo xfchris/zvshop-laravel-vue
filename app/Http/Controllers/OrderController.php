@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddProductOrderRequest;
 use App\Models\Product;
 use App\Services\Order\OrderService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class OrderController extends Controller
@@ -21,22 +21,16 @@ class OrderController extends Controller
         return view('store.orders.show', ['order' => $order]);
     }
 
-    public function updateOrderAddress(Request $request): RedirectResponse
-    {
-        $this->orderService->updateOrderAddress($request);
-        return redirect()->route('store.order.show');
-    }
-
     public function deleteOrder(): RedirectResponse
     {
         $this->orderService->deleteOrder();
         return redirect()->route('store.order.show');
     }
 
-    public function addProduct(Request $request, Product $product): RedirectResponse
+    public function addProduct(AddProductOrderRequest $request, Product $product): RedirectResponse
     {
         $this->orderService->addOrUpdateProduct($request, $product);
-        return redirect()->route('store.order.show')->with('message', 'Product added to Order!');
+        return redirect()->route('store.order.show');
     }
 
     public function removeProduct(Product $product): RedirectResponse

@@ -15,15 +15,16 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->timestamp('banned_until')->nullable();
+
+            $table->String('document_type', 20)->nullable();
+            $table->string('document', 30)->nullable();
+            $table->string('address', 300)->nullable();
+            $table->string('phone', 30)->nullable();
+
             $table->rememberToken();
             $table->timestamps();
-            $table->String('id_type', 20)->nullable();
-            $table->bigInteger('id_number')->nullable();
 
-            $table->string('address', 180)->nullable();
-            $table->bigInteger('phone')->nullable();
-
-            $table->unique(['id_type', 'id_number']);
+            $table->unique(['document_type', 'document']);
         });
     }
 

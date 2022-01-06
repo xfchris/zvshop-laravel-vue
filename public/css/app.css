@@ -17534,3 +17534,12 @@ body .card-product img {
   -o-object-fit: cover;
      object-fit: cover;
 }
+body .w-140px {
+  width: 140px;
+}
+body .border-dashed {
+  border: 3px dashed #eee;
+}
+body .order-item:hover {
+  background-color: #eeeeee73;
+}

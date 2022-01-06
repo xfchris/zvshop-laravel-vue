@@ -67,8 +67,8 @@ class UserControllerTest extends TestCase
         $user = $this->userAdminCreate();
         $data = [
                 'name' => 'New Name',
-                'id_type' => 'CC',
-                'id_number' => '123',
+                'document_type' => 'CC',
+                'document' => '123',
             ];
         $response = $this->actingAs($user)->put(route('users.update', $user->id), $data);
 

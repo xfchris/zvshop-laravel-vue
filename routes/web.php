@@ -33,6 +33,8 @@ Route::middleware(['auth', 'verified', 'role:admin|clients'])->prefix('store')->
     Route::post('order/product/{product}', [App\Http\Controllers\OrderController::class, 'addProduct'])->name('order.addProduct');
     Route::delete('order/product/{product}', [App\Http\Controllers\OrderController::class, 'removeProduct'])->name('order.deleteProduct');
 
+    Route::post('payments', [App\Http\Controllers\PaymentController::class, 'pay'])->name('payments.pay');
+
     Route::get('{category?}', [App\Http\Controllers\StoreProductController::class, 'index'])->name('products.index');
     Route::get('product/{product}', [App\Http\Controllers\StoreProductController::class, 'show'])->name('products.show');
 });

@@ -10,7 +10,7 @@ class ComposerServiceProvider extends ServiceProvider
 {
     public function boot(ContextImage $contextImage): void
     {
-        view()->composer(['store.products.index', 'store.products.show'], function ($view) use ($contextImage) {
+        view()->composer(['store.products.index', 'store.products.show', 'store.orders.show'], function ($view) use ($contextImage) {
             $view->with(['contextImage' => $contextImage]);
         });
 
