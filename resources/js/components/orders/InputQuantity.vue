@@ -2,7 +2,7 @@
     <form ref="form" :action="action" method="post">
         <input type="hidden" name="_token" :value="_token">
         <div class="form-group">
-            <div class="input-group mb-3 w-140px cursor-pointer" @click="handleClick">
+            <div class="input-group mb-3 w-140px cursor-pointer input-quantity" @click="handleClick">
                 <span class="input-group-text">-</span>
                 <input ref="inputQuantity" type="text" class="form-control text-center" name="quantity"
                     :value="value"
@@ -24,12 +24,15 @@ export default {
     const showSwal = ref(false)
     const form = ref(null)
     const inputQuantity = ref(null)
-    const handleClick = (event) => {
+
+    const handleClick = () => {
+      showSwal.value = true
       modalChangeQuantity(props.maxquantity, props.value).then((result) => {
         if (result.isConfirmed) {
           inputQuantity.value.value = result.value
           form.value.submit()
         }
+        showSwal.value = false
       })
     }
 

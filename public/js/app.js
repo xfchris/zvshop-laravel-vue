@@ -22536,12 +22536,15 @@ __webpack_require__.r(__webpack_exports__);
     const form = (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_1__.ref)(null);
     const inputQuantity = (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_1__.ref)(null);
 
-    const handleClick = event => {
+    const handleClick = () => {
+      showSwal.value = true;
       modalChangeQuantity(props.maxquantity, props.value).then(result => {
         if (result.isConfirmed) {
           inputQuantity.value.value = result.value;
           form.value.submit();
         }
+
+        showSwal.value = false;
       });
     };
 
@@ -22865,7 +22868,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, null, 8
   /* PROPS */
   , _hoisted_2), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-    class: "input-group mb-3 w-140px cursor-pointer",
+    class: "input-group mb-3 w-140px cursor-pointer input-quantity",
     onClick: _cache[0] || (_cache[0] = (...args) => $setup.handleClick && $setup.handleClick(...args))
   }, [_hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     ref: "inputQuantity",
