@@ -41,10 +41,12 @@ return [
     '_bat_' => ' bat, ',
     'dashboard' => 'dashboard',
     'type_document' => [
-        'CC' => 'Identification Card',
+        'TI' => 'Identification Card',
+        'CC' => 'Cedula',
         'CE' => 'Foreigner ID',
-        'FS0002' => 'Passport',
+        'PPN' => 'Passport',
         'NIT' => 'NIT',
+        'RUT' => 'RUT',
     ],
     'order' => [
         'product_list' => 'Products list',
