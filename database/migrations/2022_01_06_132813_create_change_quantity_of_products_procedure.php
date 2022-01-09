@@ -9,7 +9,7 @@ class CreateChangeQuantityOfProductsProcedure extends Migration
     {
         if (in_array(config('database.default'), ['pgsql', 'mysql'])) {
             $this->down();
-            DB::unprepared("CREATE PROCEDURE change_quantity_of_products(_id_order INT, isSum BOOL)
+            DB::unprepared('CREATE PROCEDURE change_quantity_of_products(_id_order INT, isSum BOOL)
             BEGIN
                 DECLARE _product_id INT;
                 DECLARE _order_quantity INT;
@@ -44,7 +44,7 @@ class CreateChangeQuantityOfProductsProcedure extends Migration
                     END IF;
                 END LOOP;
                 CLOSE products_order;
-            END;");
+            END;');
         }
     }
 
