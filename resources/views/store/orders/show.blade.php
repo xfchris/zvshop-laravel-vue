@@ -9,8 +9,6 @@
 
     </x-slot>
 
-    <x-auth-validation-errors class="mb-3" :errors="$errors" />
-
     <div class="card my-4">
         <div class="card-body">
 
@@ -86,7 +84,7 @@
                     </div>
 
                     <div class="col-sm-4">
-                        <form id="formPay" action="{{ route('store.payments.pay') }}" method="post">
+                        <form id="formPay" action="{{ route('payment.pay') }}" method="post">
                             @csrf
                             @include('store.orders.components.shipping_address_form')
 

@@ -8,8 +8,6 @@
         </div>
     </x-slot>
 
-    <x-auth-validation-errors class="mb-3" :errors="$errors" />
-
     <div class="card my-4">
         <div class="card-body">
 
@@ -21,20 +19,29 @@
                                 linkTumbnail="{{ $contextImage->getSize($product->poster, 'l') }}"
                                 id="{{ $product->id }}"></btn-tumbnail>
 
-
-                            <form class="mt-3" action="{{ route('store.order.addProduct', $product->id) }}" method="post">
-                                @csrf
-                                <div class="form-group">
-                                    <div class="input-group mb-3">
-                                        <span class="input-group-text">@lang('app.quantity')</span>
-                                        <input type="number" min="1" max="{{ $product->quantity }}" name="quantity"
-                                            value="1" class="form-control" />
+                            @if ($product->quantity)
+                                <form class="mt-3" action="{{ route('store.order.addProduct', $product->id) }}"
+                                    method="post">
+                                    @csrf
+                                    <div class="form-group">
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text">@lang('app.quantity')</span>
+                                            <input type="number" min="0" max="{{ $product->quantity }}"
+                                                name="quantity" value="1" class="form-control" />
+                                        </div>
                                     </div>
+                                    <button data-wait="Wait..." type="submit"
+                                        class="btn btn-success w-100 text-light btn-wait-submit">
+                                        <em class="fas fa-cart-plus"></em> {{ __('Add to cart') }}
+                                    </button>
+                                </form>
+                            @else
+
+                            <div class="alert alert-info alert-dismissible fade show mt-4" role="alert">
+                                    {{ __('There are no units for this product.') }}
                                 </div>
-                                <button data-wait="Wait..." type="submit" class="btn btn-success w-100 text-light btn-wait-submit">
-                                    <em class="fas fa-cart-plus"></em> {{ __('Add to cart') }}
-                                </button>
-                            </form>
+                            @endif
+
                         </div>
 
                         <div class="col-sm-9">
