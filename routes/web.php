@@ -21,7 +21,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
 });
 
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('api')->name('api.')->group(function () {
-    Route::post('users/activate-inactivate-user/{user}', [App\Http\Controllers\Api\ApiUserController::class, 'activateInactivateUser'])
+    Route::post('users/setbanned/{user}', [App\Http\Controllers\Api\ApiUserController::class, 'activateInactivateUser'])
     ->name('users.activateInactivateUser');
     Route::delete('images/{image}', [App\Http\Controllers\Api\ApiProductController::class, 'removeImage'])->name('images.destroy');
 });
@@ -32,11 +32,18 @@ Route::middleware(['auth', 'verified', 'role:admin|clients'])->prefix('store')->
     Route::delete('order', [App\Http\Controllers\OrderController::class, 'deleteOrder'])->name('order.deleteOrder');
     Route::post('order/product/{product}', [App\Http\Controllers\OrderController::class, 'addProduct'])->name('order.addProduct');
     Route::delete('order/product/{product}', [App\Http\Controllers\OrderController::class, 'removeProduct'])->name('order.deleteProduct');
-
-    Route::post('payments', [App\Http\Controllers\PaymentController::class, 'pay'])->name('payments.pay');
-
     Route::get('{category?}', [App\Http\Controllers\StoreProductController::class, 'index'])->name('products.index');
     Route::get('product/{product}', [App\Http\Controllers\StoreProductController::class, 'show'])->name('products.show');
 });
+
+Route::middleware(['auth', 'verified', 'role:admin|clients'])->prefix('payment')->name('payment.')->group(function () {
+    Route::middleware(['check.ordertopay'])->post('pay', [App\Http\Controllers\PaymentController::class, 'pay'])->name('pay');
+    Route::get('details/{order}', [App\Http\Controllers\PaymentController::class, 'details'])->name('details');
+    Route::get('orders', [App\Http\Controllers\PaymentController::class, 'showUserOrders'])->name('orders');
+    Route::get('retryPay/{order}', [App\Http\Controllers\PaymentController::class, 'retryPay'])->name('retryPay');
+});
+
+Route::get('payment/accept/{reference_id}', [App\Http\Controllers\PaymentController::class, 'accept'])->name('payment.accept');
+Route::get('payment/cancel/{reference_id}', [App\Http\Controllers\PaymentController::class, 'cancel'])->name('payment.cancel');
 
 require __DIR__ . '/auth.php';

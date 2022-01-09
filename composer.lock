@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c0a4073f9175b43d5023a1c61ce167c3",
+    "content-hash": "94f3c08801c132dc696c87fe462d8c1f",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -262,6 +262,55 @@
                 "source": "https://github.com/dflydev/dflydev-dot-access-data/tree/v3.0.1"
             },
             "time": "2021-08-13T13:06:58+00:00"
+        },
+        {
+            "name": "dnetix/redirection",
+            "version": "1.0.10",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dnetix/redirection.git",
+                "reference": "9a02f815c7e52a85695a4d659c12a60e12124e0c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dnetix/redirection/zipball/9a02f815c7e52a85695a4d659c12a60e12124e0c",
+                "reference": "9a02f815c7e52a85695a4d659c12a60e12124e0c",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-soap": "*",
+                "guzzlehttp/guzzle": "^6.5|^7.0",
+                "php": ">=7.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.16",
+                "phpunit/phpunit": "^8.5",
+                "squizlabs/php_codesniffer": "3.*",
+                "symfony/var-dumper": "^4.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Dnetix\\Redirection\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Diego Calle",
+                    "email": "dnetix@gmail.com"
+                }
+            ],
+            "description": "Library to connect with PlacetoPay Redirection service",
+            "support": {
+                "issues": "https://github.com/dnetix/redirection/issues",
+                "source": "https://github.com/dnetix/redirection/tree/1.0.10"
+            },
+            "time": "2021-08-19T19:49:26+00:00"
         },
         {
             "name": "doctrine/inflector",
