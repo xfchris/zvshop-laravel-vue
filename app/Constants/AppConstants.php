@@ -18,5 +18,5 @@ interface AppConstants
         self::EXPIRED,
     ];
 
-    public const TYPE_DOCUMENT = ['TI', 'CC', 'CE', 'PPN', 'NIT', 'RUT'];
+    public const DOCUMENT_TYPE = ['TI', 'CC', 'CE', 'PPN', 'NIT', 'RUT'];
 }

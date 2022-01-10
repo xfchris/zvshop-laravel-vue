@@ -40,7 +40,7 @@ return [
     'price' => 'Price',
     '_bat_' => ' bat, ',
     'dashboard' => 'dashboard',
-    'type_document' => [
+    'DOCUMENT_TYPE' => [
         'TI' => 'Identification Card',
         'CC' => 'Cedula',
         'CE' => 'Foreigner ID',

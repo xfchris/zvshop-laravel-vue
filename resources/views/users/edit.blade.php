@@ -15,11 +15,18 @@
 
                 <div class="row">
                     <h4 class="m-0">{{ __('Account data') }}</h4>
-                    <div class="col-sm-6">
+                    <div class="col-sm-3">
                         <div class="form-group">
-                            <label for="name" class="form-label mt-2">Full name</label>
+                            <label for="name" class="form-label mt-2">Name</label>
                             <input type="text" class="form-control" id="name" value="{{ $user->name }}" name="name"
                                 maxlength="80" aria-describedby="name" placeholder="Enter name" required>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label for="surname" class="form-label mt-2">Surname</label>
+                            <input type="text" class="form-control" id="surname" value="{{ $user->surname }}" name="surname"
+                                maxlength="80" aria-describedby="surname" placeholder="Enter surname" required>
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -41,10 +48,10 @@
 
                             <select class="form-select" name="document_type" id="document_type">
                                 <option>Select a type...</option>
-                                @foreach (App\Constants\AppConstants::TYPE_DOCUMENT as $typeDocument)
+                                @foreach (App\Constants\AppConstants::DOCUMENT_TYPE as $typeDocument)
                                     <option value="{{ $typeDocument }}"
                                         {{ $user->document_type == $typeDocument ? 'selected' : '' }}>
-                                        @lang('app.type_document.'.$typeDocument)
+                                        @lang('app.DOCUMENT_TYPE.'.$typeDocument)
                                     </option>
                                 @endforeach
                             </select>

@@ -101,7 +101,7 @@
                                     <div class="col-sm-7 fs-5">{{ $order->total_products }}</div>
                                 </div>
                                 <div class="row mt-2">
-                                    <div class="col-sm-5 fs-5">@lang('app.total')</div>
+                                    <div class="col-sm-5 fs-5">@lang('app.total') ({{ config('constants.currency') }})</div>
                                     <div class="col-sm-7 fs-5"> <strong>@money($order->total_amount)</strong></div>
                                 </div>
 
