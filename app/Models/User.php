@@ -56,7 +56,8 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function getOrderAttribute(): Order
     {
-        return $this->orders()->with('products:id,name,price,quantity')->firstOrCreate(['status' => AppConstants::CREATED]);
+        return $this->orders()->with('products:id,name,price,quantity')
+                    ->firstOrCreate(['status' => AppConstants::CREATED], ['currency' => config('constants.currency')]);
     }
 
     public function getCheckBannedUntilAttribute(): ?string

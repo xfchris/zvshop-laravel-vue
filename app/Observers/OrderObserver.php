@@ -17,7 +17,7 @@ class OrderObserver
                     DB::select('CALL change_quantity_of_products(' . $order->id . ', false)');
                     break;
                 case AppConstants::REJECTED:
-                    DB::select('CALL change_orders_products_quantity(' . $order->id . ', true)');
+                    DB::select('CALL change_quantity_of_products(' . $order->id . ', true)');
                     $order->user->notify(new OrderStatusChangedNotification($order));
                     break;
                 case AppConstants::APPROVED:

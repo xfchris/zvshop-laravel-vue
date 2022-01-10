@@ -18,8 +18,17 @@ class Payment extends Model
         'products' => 'array',
     ];
 
+    protected $appends = [
+        'totalProducts',
+    ];
+
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
+    }
+
+    public function getTotalProductsAttribute(): int
+    {
+        return array_reduce($this->products, fn ($total, $item) => $total += $item['pivot']['quantity']);
     }
 }

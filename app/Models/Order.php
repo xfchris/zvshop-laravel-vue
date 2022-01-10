@@ -13,7 +13,7 @@ class Order extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['status', 'name_receive', 'address', 'phone'];
+    protected $fillable = ['status', 'name_receive', 'address', 'phone', 'currency'];
 
     protected $appends = [
         'totalAmount',
@@ -51,20 +51,20 @@ class Order extends Model
         if ($this->payment) {
             return $this->payment->totalAmount;
         }
-
-        $total = 0;
-        foreach ($this->products as $product) {
-            $total += $product->pivot->quantity * $product->price;
-        }
-        return $total;
+        return $this->products->reduce(fn ($total, $product) => $total += $product->pivot->quantity * $product->price, 0);
     }
 
     public function getTotalProductsAttribute(): int
     {
-        $count = 0;
-        foreach ($this->products as $product) {
-            $count += $product->pivot->quantity;
+        if ($this->payment) {
+            return $this->payment->totalProducts;
         }
-        return $count;
+        return $this->products->reduce(fn ($total, $product) => $total += $product->pivot->quantity, 0);
+    }
+
+    public function lastProductsCopy(): array
+    {
+        return ($this->payment) ? $this->payment->products :
+                $this->products->makeHidden(['id', 'poster', 'quantity'])->toArray();
     }
 }
