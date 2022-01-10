@@ -2,12 +2,13 @@
 
 namespace App\Factories\PaymentGateway;
 
+use App\Factories\PaymentGateway\Contracts\PaymentGatewayContract;
 use Dnetix\Redirection\PlacetoPay;
 use InvalidArgumentException;
 
 class PaymentGatewayFactory
 {
-    public function make(string $gateway): PaymentGateway
+    public function make(string $gateway): PaymentGatewayContract
     {
         return match (strtolower($gateway)) {
             'placetopay' => $this->createPlacetoPay(),
@@ -17,7 +18,6 @@ class PaymentGatewayFactory
 
     protected function createPlacetoPay(): PlacetoPayGateway
     {
-        $gateway = new PlacetoPay(config('services.placetopay'));
-        return new PlacetoPayGateway($gateway);
+        return new PlacetoPayGateway(new PlacetoPay(config('services.placetopay')));
     }
 }

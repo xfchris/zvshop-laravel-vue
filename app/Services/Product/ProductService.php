@@ -2,10 +2,10 @@
 
 namespace App\Services\Product;
 
+use App\Events\LogUserActionEvent;
 use App\Models\Category;
 use App\Models\Product;
 use App\Services\Trait\ImageTrait;
-use App\Services\Trait\NotifyLog;
 use App\Strategies\GstImages\ContextImage;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
@@ -15,7 +15,6 @@ use MeiliSearch\Endpoints\Indexes;
 class ProductService
 {
     use ImageTrait;
-    use NotifyLog;
 
     public function __construct(
         protected ContextImage $contextImage
@@ -25,7 +24,8 @@ class ProductService
     public function createProduct(Request $request, Product $product): Product
     {
         $product->fill($request->all())->save();
-        $this->notifyLog('product', 'Procuct', $product->id, 'created');
+        LogUserActionEvent::dispatch('product', 'Procuct', $product->id, 'created');
+
         return $product;
     }
 
@@ -33,7 +33,8 @@ class ProductService
     {
         $product = Product::withTrashed()->find($id);
         $product->update($request->all());
-        $this->notifyLog('product', 'Procuct', $product->id, 'updated');
+        LogUserActionEvent::dispatch('product', 'Procuct', $product->id, 'updated');
+
         return $product;
     }
 
@@ -53,7 +54,7 @@ class ProductService
     public function disableProduct(int $id): ?bool
     {
         $product = Product::find($id);
-        $this->notifyLog('product', 'Procuct', $product->id, 'disabled');
+        LogUserActionEvent::dispatch('product', 'Procuct', $product->id, 'disabled');
 
         return $product->delete();
     }
@@ -61,7 +62,7 @@ class ProductService
     public function enableProduct(int $id): ?bool
     {
         $product = Product::onlyTrashed()->find($id);
-        $this->notifyLog('product', 'Procuct', $product->id, 'enabled');
+        LogUserActionEvent::dispatch('product', 'Procuct', $product->id, 'enabled');
 
         return $product->restore();
     }

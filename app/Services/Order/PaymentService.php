@@ -3,15 +3,17 @@
 namespace App\Services\Order;
 
 use App\Constants\AppConstants;
-use App\Factories\PaymentGateway\PaymentGateway;
+use App\Factories\PaymentGateway\Contracts\PaymentGatewayContract;
+use App\Factories\PaymentGateway\Responses\PaymentResponse;
 use App\Models\Order;
-use Illuminate\Database\Eloquent\Collection;
+use App\Models\Payment;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 
 class PaymentService
 {
     public function __construct(
-        public PaymentGateway $paymentGateway
+        public PaymentGatewayContract $paymentGateway
     ) {
     }
     public function getOrderByUser(): Order
@@ -19,9 +21,9 @@ class PaymentService
         return Auth::user()->order;
     }
 
-    public function pay(): ?string
+    public function pay(?Order $order = null): PaymentResponse
     {
-        $order = $this->getOrderByUser();
+        $order = $order ?? $this->getOrderByUser();
         $response = $this->paymentGateway->pay($order);
 
         if ($response->statusResponse->status == AppConstants::CREATED) {
@@ -29,17 +31,29 @@ class PaymentService
                 'requestId' => $response->requestId,
                 'processUrl' => $response->processUrl,
                 'status' => $response->statusResponse->status,
-                'products' => $order->products->makeHidden(['id', 'poster', 'quantity'])->toArray(),
+                'products' => $order->lastProductsCopy(),
                 'totalAmount' => $order->totalAmount,
                 'reference_id' => $order->referencePayment,
             ]);
-            return $response->processUrl;
         }
-        return null;
+        return $response;
     }
 
-    public function showUserOrders(): Collection
+    public function changeStatus(string $referenceId): array
     {
-        return Auth::user()->orders()->where('status', '!=', AppConstants::CREATED)->get();
+        $payment = Payment::where('reference_id', $referenceId)->latest()->first();
+
+        if ($payment->order->status == AppConstants::PENDING) {
+            $response = $this->paymentGateway->getStatus($payment->requestId);
+            $payment->update(['status' => $response->status]);
+            return [$payment->order->id, $response->status];
+        }
+        return [$payment->order->id, $payment->order->status];
+    }
+
+    public function showUserOrders(): LengthAwarePaginator
+    {
+        return Auth::user()->orders()->where('status', '!=', AppConstants::CREATED)->orderBy('id', 'DESC')
+                ->paginate(config('constants.num_rows_per_table'));
     }
 }
