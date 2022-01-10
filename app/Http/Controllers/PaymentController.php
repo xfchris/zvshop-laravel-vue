@@ -6,7 +6,7 @@ use App\Http\Requests\PaymentPayRequest;
 use App\Models\Order;
 use App\Services\Order\OrderService;
 use App\Services\Order\PaymentService;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class PaymentController extends Controller
@@ -17,50 +17,48 @@ class PaymentController extends Controller
     ) {
     }
 
-    public function accept(string $referenceId): View
+    public function changeStatus(string $referenceId): RedirectResponse
     {
-        //entrada publica
+        [$paymentId, $status] = $this->paymentService->changeStatus($referenceId);
+
+        return redirect()->route('payment.details', $paymentId)
+                         ->with('info', trans('app.payment.info_status_changed', ['status' => strtolower($status)]));
     }
 
-    public function cancel(string $referenceId): View
-    {
-        //publica
-    }
-
-    //Request: Verificar que la orden no este en estado pendiente o aprobada
-    public function pay(PaymentPayRequest $request)
+    public function pay(PaymentPayRequest $request): RedirectResponse
     {
         $this->orderService->updateOrderAddress($request);
-        $processUrl = $this->paymentService->pay();
+        $response = $this->paymentService->pay();
 
-        if ($processUrl) {
-            return redirect()->to($processUrl);
+        if ($response->processUrl) {
+            return redirect()->to($response->processUrl);
         } else {
-            return redirect()->back()->with('error', 'Error connecting to the payment gateway.');
+            return redirect()->back()->with('error', $response->statusResponse->message);
         }
     }
 
-    public function retryPay(Order $order)
+    public function retryPay(Order $order): RedirectResponse
     {
         $this->authorize('update', $order);
+        $response = $this->paymentService->pay($order);
 
-        //Valida que cada uno de los productos existan con su respectivo valor y precio
-        return 'retryPay';
+        if ($response->processUrl) {
+            return redirect()->to($response->processUrl);
+        } else {
+            return redirect()->back()->with('error', $response->statusResponse->message);
+        }
     }
 
-    public function details(Order $order)
+    public function details(Order $order): View
     {
         $this->authorize('update', $order);
 
-        //Muestro detalle de una factura
-        return $order;
+        return view('store.payments.details', ['orders' => [$order]]);
     }
 
     public function showUserOrders(): View
     {
-        //usuario dueño o admin "no hay necesidad"
         $orders = $this->paymentService->showUserOrders();
-
-        return $orders;
+        return view('store.payments.index', ['orders' => $orders]);
     }
 }
