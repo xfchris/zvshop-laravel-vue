@@ -21,7 +21,7 @@ class Order extends Model
         'referencePayment',
     ];
 
-    public function getReferencePaymentAttribute()
+    public function getReferencePaymentAttribute(): string
     {
         return $this->id . '_' . $this->created_at->timestamp;
     }

@@ -31,7 +31,7 @@ class Product extends Model
         'poster',
     ];
 
-    public function toSearchableArray()
+    public function toSearchableArray(): array
     {
         return $this->only(['id', 'name', 'description', 'deleted_at', 'category_id']);
     }
@@ -46,7 +46,7 @@ class Product extends Model
         return $this->morphMany(Image::class, 'imageable');
     }
 
-    public function getPosterAttribute()
+    public function getPosterAttribute(): string
     {
         $image = $this->images()->latest()->first();
         return ($image) ? $image->url : config('constants.default_poster');

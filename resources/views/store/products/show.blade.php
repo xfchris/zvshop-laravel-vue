@@ -2,7 +2,9 @@
     <x-slot name="header">
         <div class="d-flex justify-content-between align-items-center">
             <h2 class="h4 font-weight-bold mb-0">
-                {{ __('Online store') }}
+                <a href="{{ route('store.products.index') }}" class="text-dark text-decoration-none">
+                    {{ __('app.online_store.title') }}
+                </a>
             </h2>
             @include('store.products.components.head_right')
         </div>

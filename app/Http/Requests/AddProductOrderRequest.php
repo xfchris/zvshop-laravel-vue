@@ -11,7 +11,7 @@ class AddProductOrderRequest extends FormRequest
         return true;
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
             'quantity' => ['min:1', 'integer', 'max:' . $this->product->quantity],
