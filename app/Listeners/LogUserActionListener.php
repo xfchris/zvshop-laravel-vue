@@ -8,12 +8,10 @@ use Illuminate\Support\Facades\Log;
 
 class LogUserActionListener
 {
-    public function handle(LogUserActionEvent $event): void
+    public function handle(LogUserActionEvent $e): void
     {
-        $data = $event->logData;
-        Log::channel($data['channel'])->log(
-            $data['level'] ?? 'info',
-            $data['element'] . ': ' . $data['id'] . ' has been ' . $data['action'] . ' by: ' . Auth::user()->name . ', id: ' . Auth::user()->id
-        );
+        $message = $e->element . ': ' . $e->id . ' has been ' . $e->action . ' by: ' . Auth::user()->name . ', id: ' . Auth::user()->id;
+
+        Log::channel($e->channel)->log($e->level, $message);
     }
 }

@@ -13,7 +13,8 @@ class LogGeneralEvent
     use SerializesModels;
 
     public function __construct(
-        public array $logData
+        public string $level,
+        public string $message,
     ) {
     }
 }

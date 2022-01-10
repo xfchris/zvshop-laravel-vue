@@ -9,6 +9,6 @@ class LogGeneralListener
 {
     public function handle(LogGeneralEvent $event): void
     {
-        Log::log($event->logData['level'], $event->logData['message']);
+        Log::log($event->level, $event->message);
     }
 }
