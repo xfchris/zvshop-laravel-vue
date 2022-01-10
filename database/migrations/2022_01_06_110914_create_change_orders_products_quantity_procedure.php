@@ -10,7 +10,7 @@ class CreateChangeOrdersProductsQuantityProcedure extends Migration
     {
         if (in_array(config('database.default'), ['pgsql', 'mysql'])) {
             $this->down();
-            DB::unprepared("CREATE PROCEDURE change_orders_products_quantity(_product_id_var INT, _quantity_var INT)
+            DB::unprepared("CREATE PROCEDURE change_orders_products_quantity(_product_id_var INT, _quantity_var INT, _ignore_id_order INT)
             BEGIN
                 DECLARE _order_id INT;
                 DECLARE _product_id INT;
@@ -24,7 +24,9 @@ class CreateChangeOrdersProductsQuantityProcedure extends Migration
                         JOIN orders
                             ON orders.id = order_product.order_id
                     WHERE  orders.status = '" . AppConstants::CREATED . "'
-                        AND order_product.product_id = _product_id_var;
+                        AND order_product.product_id = _product_id_var
+                        AND order_product.order_id <> _ignore_id_order;
+                        
                 DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
                 OPEN orders;

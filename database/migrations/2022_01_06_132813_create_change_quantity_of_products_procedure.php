@@ -35,7 +35,7 @@ class CreateChangeQuantityOfProductsProcedure extends Migration
                              SET _new_quantity = _order_quantity + _product_quantity;
                          ELSE
                             SET _new_quantity = (_product_quantity - _order_quantity);
-                            CALL change_orders_products_quantity(_product_id, _new_quantity);
+                            CALL change_orders_products_quantity(_product_id, _new_quantity, _id_order);
                          END IF;
                          UPDATE products SET quantity = _new_quantity WHERE id = _product_id;
 

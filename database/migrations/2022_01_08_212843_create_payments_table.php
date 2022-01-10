@@ -17,7 +17,7 @@ class CreatePaymentsTable extends Migration
             $table->string('processUrl');
             $table->json('products')->nullable();
             $table->decimal('totalAmount', 10, 2);
-            $table->string('reference_id', 30);
+            $table->string('reference_id', 30)->unique();
             $table->timestamps();
         });
     }
