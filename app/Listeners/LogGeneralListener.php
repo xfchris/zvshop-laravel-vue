@@ -3,9 +3,10 @@
 namespace App\Listeners;
 
 use App\Events\LogGeneralEvent;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
 
-class LogGeneralListener
+class LogGeneralListener implements ShouldQueue
 {
     public function handle(LogGeneralEvent $event): void
     {
