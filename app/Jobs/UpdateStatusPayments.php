@@ -22,13 +22,15 @@ class UpdateStatusPayments implements ShouldQueue
     public function handle(PaymentGatewayContract $paymentGateway): void
     {
         $orders = Order::where('status', AppConstants::PENDING)->get();
+        $updated = [];
 
         foreach ($orders as $order) {
             $status = $paymentGateway->getStatus($order->payment->requestId)->status;
             if ($order->status != $status) {
                 $order->update(['status' => $status]);
+                $updated[] = $order->id;
             }
         }
-        LogGeneralEvent::dispatchIf($orders->count(), 'info', 'Updated status orders');
+        LogGeneralEvent::dispatchIf($orders->count(), 'info', 'Update status orders, order ids updated: ' . json_encode($updated));
     }
 }

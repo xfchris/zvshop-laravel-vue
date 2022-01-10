@@ -46,7 +46,7 @@ class PlacetoPayGateway implements PaymentGatewayContract
         return [
             'buyer' => [
                 'name' => Auth::user()->name,
-                'surname' => '',
+                'surname' => Auth::user()->surname,
                 'email' => Auth::user()->email,
                 'documentType' => Auth::user()->document_type,
                 'document' => Auth::user()->document,
