@@ -22,7 +22,7 @@
                 <div class="form-group">
                     <div class="input-group mb-3">
                         <input type="number" class="form-control" id="price" value="{{ $product->price }}"
-                            name="price" min="0" max="200000000000" step=".01" maxlength="2" aria-describedby="price"
+                            name="price" min="1" max="200000000000" step=".01" maxlength="2" aria-describedby="price"
                             placeholder="Enter price" required>
                         <span class="input-group-text">{{ config('constants.currency') }}</span>
                     </div>

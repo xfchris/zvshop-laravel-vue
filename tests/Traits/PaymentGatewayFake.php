@@ -2,7 +2,7 @@
 
 namespace Tests\Traits;
 
-use App\Factories\PaymentGateway\PaymentGateway;
+use App\Factories\PaymentGateway\Contracts\PaymentGatewayContract;
 use App\Factories\PaymentGateway\PaymentGatewayFactory;
 use App\Factories\PaymentGateway\PlacetoPayGateway;
 use Dnetix\Redirection\Message\RedirectInformation;
@@ -14,7 +14,7 @@ trait PaymentGatewayFake
     protected function fakeInstancePlacetoPay(?string $statusRequest, ?string $statusQuery, bool $isSuccessful = true): void
     {
         $this->app->instance(
-            PaymentGateway::class,
+            PaymentGatewayContract::class,
             $this->getPTPPaymentFactoryMock($statusRequest, $statusQuery, $isSuccessful)->make('placetopay')
         );
     }

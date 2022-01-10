@@ -6,7 +6,6 @@
             </h2>
             @include('store.products.components.head_right')
         </div>
-
     </x-slot>
 
     <div class="card my-4">
@@ -105,7 +104,7 @@
                                 </div>
 
                                 <button form="formPay" type="submit"
-                                    class="btn btn-success btn-outline-success mt-3 w-100 text-light btn-lg btn-wait-submit"
+                                    class="btn btn-success mt-3 w-100 text-light btn-lg btn-wait-submit"
                                     data-wait="Wait...">
                                     Pay <em class="fas fa-credit-card"></em>
                                 </button>
