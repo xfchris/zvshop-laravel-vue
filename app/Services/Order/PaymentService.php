@@ -41,7 +41,7 @@ class PaymentService
 
     public function changeStatus(string $referenceId): array
     {
-        $payment = Payment::where('reference_id', $referenceId)->latest()->first();
+        $payment = Payment::where('reference_id', $referenceId)->first();
 
         if ($payment->order->status == AppConstants::PENDING) {
             $response = $this->paymentGateway->getStatus($payment->requestId);

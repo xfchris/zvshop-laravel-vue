@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="d-flex justify-content-between align-items-center">
             <h2 class="h4 font-weight-bold mb-0">
-                {{ __('Order list') }}
+                {{ __('app.payment.order_list') }}
             </h2>
             @include('store.products.components.head_right')
         </div>

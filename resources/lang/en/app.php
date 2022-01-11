@@ -57,5 +57,6 @@ return [
     ],
     'payment' => [
         'info_status_changed' => 'Your order is in :status status',
+        'order_list' => 'Order list',
     ],
 ];

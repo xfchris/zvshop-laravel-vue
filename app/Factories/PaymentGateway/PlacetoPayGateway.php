@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 class PlacetoPayGateway implements PaymentGatewayContract
 {
     public function __construct(
-        private PlacetoPay $gateway
+        private ?PlacetoPay $gateway
     ) {
     }
 

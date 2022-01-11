@@ -12,9 +12,7 @@ class OrderPolicy
 
     public function update(User $userAuth, Order $order): bool
     {
-        if ($userAuth->hasPermissionTo('users_update_orders')) {
-            return true;
-        } elseif ($userAuth->hasPermissionTo('user_manage_own_order')) {
+        if ($userAuth->hasPermissionTo('user_manage_own_order')) {
             return $userAuth->id === $order->user->id;
         }
         return false;
