@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -12,8 +13,8 @@ class RolesAndPermissionSeeder extends Seeder
     {
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        Permission::truncate();
-        Role::truncate();
+        DB::table('permissions')->delete();
+        DB::table('roles')->delete();
 
         $permissions = config('permission.names');
         $roles = config('permission.roles');
