@@ -7,8 +7,6 @@
         </div>
     </x-slot>
 
-    <x-auth-validation-errors class="mb-3" :errors="$errors" />
-
     <div class="card my-4">
         <div class="card-body">
             <form action="{{ route('admin.products.store') }}" method="POST"

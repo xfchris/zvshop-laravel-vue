@@ -11,14 +11,14 @@ class AuthenticationTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_login_screen_can_be_rendered()
+    public function test_login_screen_can_be_rendered(): void
     {
         $response = $this->get('/login');
 
         $response->assertStatus(200);
     }
 
-    public function test_users_can_authenticate_using_the_login_screen()
+    public function test_users_can_authenticate_using_the_login_screen(): void
     {
         $user = User::factory()->create();
 
@@ -31,7 +31,7 @@ class AuthenticationTest extends TestCase
         $response->assertRedirect(RouteServiceProvider::HOME);
     }
 
-    public function test_users_can_not_authenticate_with_invalid_password()
+    public function test_users_can_not_authenticate_with_invalid_password(): void
     {
         $user = User::factory()->create();
 
@@ -43,7 +43,7 @@ class AuthenticationTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_it_blocks_the_user_when_has_tried_to_login_more_than_5_times()
+    public function test_it_blocks_the_user_when_has_tried_to_login_more_than_5_times(): void
     {
         $user = User::factory()->create();
         $response = null;
@@ -59,12 +59,10 @@ class AuthenticationTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_inactive_users_can_not_authenticate()
+    public function test_inactive_users_can_not_authenticate(): void
     {
         $days = 5;
-        $user = User::factory()->create();
-        $user->banned_until = now()->addDays($days)->addHour();
-        $user->save();
+        $user = User::factory()->banned($days)->create();
 
         $response = $this->followingRedirects()->post('/login', [
             'email' => $user->email,
@@ -75,7 +73,25 @@ class AuthenticationTest extends TestCase
         $response->assertSee($message);
     }
 
-    public function test_inactive_users_can_logout()
+    public function test_inactive_users_can_authenticate_after_ban_time(): void
+    {
+        $days = 5;
+        $user = User::factory()->banned($days)->create();
+
+        $this->travel(++$days)->days();
+
+        $response = $this->followingRedirects()->post('/login', [
+            'email' => $user->email,
+            'password' => 'password',
+        ]);
+
+        $message = trans('auth.account_suspended') . ' ' . trans('auth.suspended_days', ['days' => $days]) . '. ' . trans('auth.contact_administrator');
+        $response->assertDontSee($message);
+
+        $response->assertSee(trans('app.dashboard'));
+    }
+
+    public function test_inactive_users_can_logout(): void
     {
         $user = User::factory()->create();
 

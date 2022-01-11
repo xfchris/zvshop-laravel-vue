@@ -14,13 +14,14 @@
 - redis
 - Composer >= 2.0
 - node >= 12.0
+- meilisearch
 
 
 ### Instalación con Laravel Sail 🔧
 
 1. Ejecutar comando `sail up -d`
 
-2. Copiar el archivo `.env.example` incluido en uno de nombre `.env` y completar variables faltantes
+2. Copiar el archivo `.env.example` incluido en uno de nombre `.env` y completar variables faltantes (pasarela, bucket de imagenes, smtp etc.)
 
 3. Ejecutar comando `sail php artisan migrate:fresh --seed` 
 
@@ -28,7 +29,11 @@
 
 5. Ejecutar pruebas `sail php artisan test`
 
-6. Acceder al sitio `http://localhost`
+6. Añadir al crontab: `* * * * * php /raiz_del_proyecto/artisan schedule:run >> /dev/null 2>&1`
+
+7. Ejecutar proceso para consumo de trabajos encolados: `sail php artisan queue:work`
+
+8. Acceder al sitio `http://localhost`
 
 
 

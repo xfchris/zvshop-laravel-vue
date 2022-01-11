@@ -9,8 +9,9 @@ class CategorySeeder extends Seeder
 {
     public function run(): void
     {
-        Category::truncate();
-
+        if (Category::count()) {
+            return;
+        }
         Category::insert([
             ['name' => 'Phones', 'slug' => 'phones'],
             ['name' => 'Tablets', 'slug' => 'tablets'],

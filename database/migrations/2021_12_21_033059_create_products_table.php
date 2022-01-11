@@ -12,7 +12,7 @@ class CreateProductsTable extends Migration
             $table->id();
             $table->string('name', 100)->index();
             $table->text('description')->nullable();
-            $table->unsignedBigInteger('category_id')->references('id')->on('categories')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('category_id')->constrained('categories');
             $table->decimal('price', 10, 2);
             $table->unsignedInteger('quantity')->default(0);
             $table->softDeletes();

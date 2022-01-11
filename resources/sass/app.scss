@@ -27,7 +27,7 @@ body {
         cursor: pointer;
     }
 
-    .card_product {
+    .card-product {
         border: 1px solid #ccc;
         .prices {
             margin-top: -23px;
@@ -35,6 +35,18 @@ body {
         img {
             height: 177px;
             object-fit: cover;
+        }
+    }
+    .w-140px {
+        width: 140px;
+    }
+    .border-dashed {
+        border: 3px dashed #eee;
+    }
+
+    .order-item {
+        &:hover {
+            background-color: #eeeeee73;
         }
     }
 }

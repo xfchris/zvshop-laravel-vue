@@ -2,9 +2,10 @@
 
 namespace App\Services\Product;
 
+use App\Events\LogUserActionEvent;
+use App\Models\Category;
 use App\Models\Product;
 use App\Services\Trait\ImageTrait;
-use App\Services\Trait\NotifyLog;
 use App\Strategies\GstImages\ContextImage;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
@@ -14,7 +15,6 @@ use MeiliSearch\Endpoints\Indexes;
 class ProductService
 {
     use ImageTrait;
-    use NotifyLog;
 
     public function __construct(
         protected ContextImage $contextImage
@@ -24,7 +24,8 @@ class ProductService
     public function createProduct(Request $request, Product $product): Product
     {
         $product->fill($request->all())->save();
-        $this->notifyLog('product', 'Procuct', $product->id, 'created');
+        LogUserActionEvent::dispatch('product', 'Procuct', $product->id, 'created');
+
         return $product;
     }
 
@@ -32,7 +33,8 @@ class ProductService
     {
         $product = Product::withTrashed()->find($id);
         $product->update($request->all());
-        $this->notifyLog('product', 'Procuct', $product->id, 'updated');
+        LogUserActionEvent::dispatch('product', 'Procuct', $product->id, 'updated');
+
         return $product;
     }
 
@@ -43,7 +45,7 @@ class ProductService
             if (count($urlimages)) {
                 $model->images()->createMany($urlimages);
             } else {
-                return ' bat, ' . strtolower(trans('app.image_management.error_uplading_image'));
+                return trans('app._bat_') . strtolower(trans('app.image_management.error_uplading_image'));
             }
         }
         return null;
@@ -52,7 +54,7 @@ class ProductService
     public function disableProduct(int $id): ?bool
     {
         $product = Product::find($id);
-        $this->notifyLog('product', 'Procuct', $product->id, 'disabled');
+        LogUserActionEvent::dispatch('product', 'Procuct', $product->id, 'disabled');
 
         return $product->delete();
     }
@@ -60,7 +62,7 @@ class ProductService
     public function enableProduct(int $id): ?bool
     {
         $product = Product::onlyTrashed()->find($id);
-        $this->notifyLog('product', 'Procuct', $product->id, 'enabled');
+        LogUserActionEvent::dispatch('product', 'Procuct', $product->id, 'enabled');
 
         return $product->restore();
     }
@@ -73,7 +75,23 @@ class ProductService
                     ->paginate(config('constants.num_rows_per_table'));
     }
 
-    public function SearchProductsPerPage(int $category_id = null, string $search = null): LengthAwarePaginator
+    public function getCategoryBySlug(?string $categorySlug): ?Model
+    {
+        if ($categorySlug) {
+            return Category::where('slug', $categorySlug)->first();
+        }
+        return null;
+    }
+
+    public function getOrSearchProductsPerPage(int $category_id = null, string $search = null): LengthAwarePaginator
+    {
+        if ($search) {
+            return $this->searchProductsPerPage($category_id, $search);
+        }
+        return $this->getProductsStorePerPage($category_id);
+    }
+
+    public function searchProductsPerPage(int $category_id = null, string $search = null): LengthAwarePaginator
     {
         $products = Product::search($search, function (Indexes $index, $query, $options) use ($category_id) {
             if ($category_id) {

@@ -2,9 +2,11 @@
     <x-slot name="header">
         <div class="d-flex justify-content-between align-items-center">
             <h2 class="h4 font-weight-bold mb-0">
-                {{ __('Online store') }}
+                <a href="{{ route('store.products.index') }}" class="text-dark text-decoration-none">
+                    {{ __('app.online_store.title') }}
+                </a>
             </h2>
-            @include('store.products.components.search')
+            @include('store.products.components.head_right')
         </div>
 
     </x-slot>
@@ -31,7 +33,7 @@
                 </div>
 
                 <div class="col-sm-9">
-                    <h3>{{ $category ? $category->name : 'All Products' }} {{ $q ? '- ' . $q : '' }}</h3>
+                    <h3>{{ $category ? $category->name : 'All Products' }} {{ request()->get('q') ? '- ' . request()->get('q') : '' }}</h3>
                     <div class="row">
                         @foreach ($products as $product)
                             <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3">
