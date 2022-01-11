@@ -39,7 +39,6 @@ class PaymentController extends Controller
 
     public function retryPay(Order $order): RedirectResponse
     {
-        $this->authorize('update', $order);
         $response = $this->paymentService->pay($order);
 
         if ($response->processUrl) {
@@ -51,8 +50,6 @@ class PaymentController extends Controller
 
     public function details(Order $order): View
     {
-        $this->authorize('update', $order);
-
         return view('store.payments.details', ['orders' => [$order]]);
     }
 
