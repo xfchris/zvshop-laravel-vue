@@ -40,13 +40,10 @@ class CheckOrderToRetryPay
 
             if (!$storeProduct) {
                 $response = 'product (' . $product['name'] . ') does not exist';
-                break;
             } elseif ($product['price'] != $storeProduct->price) {
                 $response = 'the product price: (' . $product['name'] . ') has changed. New price: ' . $storeProduct->price;
-                break;
             } elseif ($product['pivot']['quantity'] > $storeProduct->quantity) {
                 $response = 'there is not enough quantity of products for the product: ' . $product['name'] . '. Quantity: ' . $storeProduct->quantity;
-                break;
             }
         }
         return $response;
