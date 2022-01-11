@@ -23,7 +23,10 @@ class Order extends Model
 
     public function getReferencePaymentAttribute(): string
     {
-        return $this->id . '_' . $this->created_at->timestamp;
+        if (!$this->refPayment) {
+            $this->refPayment = $this->id . '_' . base_convert(uniqid(), 16, 10);
+        }
+        return $this->refPayment;
     }
 
     public function products(): BelongsToMany

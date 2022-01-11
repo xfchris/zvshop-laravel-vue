@@ -61,6 +61,11 @@ class User extends Authenticatable implements MustVerifyEmail
                     ->firstOrCreate(['status' => AppConstants::CREATED], ['currency' => config('constants.currency')]);
     }
 
+    public function lastOrderPending(): ?Order
+    {
+        return $this->orders()->with('products:id,name,price,quantity')->where('status', AppConstants::PENDING)->latest()->first();
+    }
+
     public function getCheckBannedUntilAttribute(): ?string
     {
         if ($this->banned_until && now()->lessThan($this->banned_until)) {
