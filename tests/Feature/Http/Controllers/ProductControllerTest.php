@@ -119,6 +119,7 @@ class ProductControllerTest extends TestCase
         $data = [
             'name' => 'New Name',
             'images' => [UploadedFile::fake()->image('poster.jpg')],
+            'quantity' => 3,
         ];
         $response = $this->actingAs($userAdmin)->put(route('admin.products.update', $product->id), $data);
 

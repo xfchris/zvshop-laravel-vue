@@ -36,6 +36,7 @@ class OrderControllerTest extends TestCase
         $response->assertStatus(200);
         $response->assertDontSee(trans('app.cart_empty'));
         $response->assertSee($products[0]->name);
+        //$this->assertSame(((int)$user->order->totalAmount), $products[0]->quantity * $products[0]->price);
         $response->assertDontSee($products[1]->name);
     }
 

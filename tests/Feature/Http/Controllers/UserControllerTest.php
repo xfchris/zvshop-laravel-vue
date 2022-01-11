@@ -62,6 +62,20 @@ class UserControllerTest extends TestCase
         $response->assertStatus(403);
     }
 
+    public function test_it_show_erros_when_the_documents_id_already_exist(): void
+    {
+        $user = $this->userClientCreate();
+        User::factory()->create(['document_type' => 'CC', 'document' => '123']);
+
+        $response = $this->actingAs($user)->put(route('users.update', $user->id), [
+            'name' => 'New Name',
+            'document_type' => 'CC',
+            'document' => '123',
+        ]);
+
+        $response->assertSessionHas('errors');
+    }
+
     public function test_it_can_update_a_user(): void
     {
         $user = $this->userAdminCreate();
