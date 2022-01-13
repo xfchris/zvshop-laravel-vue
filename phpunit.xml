@@ -14,7 +14,6 @@
             <directory suffix=".php">./app</directory>
         </include>
         <exclude>
-            <file>./app/Console/Kernel.php</file>
         </exclude>
     </coverage>
     <php>
