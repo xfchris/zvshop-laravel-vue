@@ -4,8 +4,9 @@ namespace App\Listeners;
 
 use App\Events\BanUnbanUserEvent;
 use App\Notifications\SendBanUnbanNotification;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SendEmailBanUnbanListener
+class SendEmailBanUnbanListener implements ShouldQueue
 {
     public function handle(BanUnbanUserEvent $event): void
     {

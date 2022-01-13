@@ -27,6 +27,14 @@
                         </x-slot>
 
                         <x-slot name="content">
+                            <x-dropdown-link :href="route('users.edit', Auth::user()->id)">
+                                {{ __('Edit account') }}
+                            </x-dropdown-link>
+
+                            <x-dropdown-link :href="route('payment.orders')">
+                                {{ __('Order list') }}
+                            </x-dropdown-link>
+
                             <!-- Authentication -->
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf

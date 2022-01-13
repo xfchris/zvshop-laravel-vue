@@ -31,25 +31,22 @@ class Product extends Model
         'poster',
     ];
 
-    public function toSearchableArray()
+    public function toSearchableArray(): array
     {
-        $columns = $this->only(['name', 'description', 'deleted_at']);
-        $related = $this->category->only('name');
-
-        return array_merge($columns, ['category_name' => $related['name']]);
+        return $this->only(['id', 'name', 'description', 'deleted_at', 'category_id']);
     }
 
     public function category(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Category');
+        return $this->belongsTo(Category::class);
     }
 
     public function images(): MorphMany
     {
-        return $this->morphMany('App\Models\Image', 'imageable');
+        return $this->morphMany(Image::class, 'imageable');
     }
 
-    public function getPosterAttribute()
+    public function getPosterAttribute(): string
     {
         $image = $this->images()->latest()->first();
         return ($image) ? $image->url : config('constants.default_poster');

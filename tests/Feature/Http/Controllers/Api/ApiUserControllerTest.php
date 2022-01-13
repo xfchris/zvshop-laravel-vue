@@ -15,7 +15,7 @@ class ApiUserControllerTest extends TestCase
 
     public function test_it_can_inactivate_a_user(): void
     {
-        $userAdmin = User::find(1);
+        $userAdmin = $this->userAdminCreate();
         $user = $this->userClientCreate();
         $response = $this->actingAs($userAdmin)->post(route('api.users.activateInactivateUser', $user->id), ['banned_until' => 5]);
 
@@ -36,7 +36,7 @@ class ApiUserControllerTest extends TestCase
         $user->banned_until = now()->addDays(5);
         $user->save();
 
-        $userAdmin = User::find(1);
+        $userAdmin = $this->userAdminCreate();
         $response = $this->actingAs($userAdmin)->post(route('api.users.activateInactivateUser', $user->id), ['banned_until' => null]);
 
         $response->assertStatus(200);
@@ -47,14 +47,15 @@ class ApiUserControllerTest extends TestCase
     public function test_it_show_errors_when_is_invalid_the_post_data(): void
     {
         Notification::fake();
+        $userAdmin = $this->userAdminCreate();
         $response = $this->executeAdminTest(['banned_untilxx' => 5], 'error');
-        Notification::assertNotSentTo(User::find(1), SendBanUnbanNotification::class);
+        Notification::assertNotSentTo($userAdmin, SendBanUnbanNotification::class);
         $response->assertStatus(422);
     }
 
     private function executeAdminTest(array $postData, string $assertStatus): TestResponse
     {
-        $userAdmin = User::find(1);
+        $userAdmin = $this->userAdminCreate();
         $response = $this->actingAs($userAdmin)->post(route('api.users.activateInactivateUser', $userAdmin->id), $postData);
 
         $response->assertJson(['status' => $assertStatus]);

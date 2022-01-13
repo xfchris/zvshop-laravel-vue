@@ -17,12 +17,12 @@ class ApiUserController extends Controller
 
     public function activateInactivateUser(UserActiveInactiveRequest $request, User $user): JsonResponse
     {
-        $status = 'error';
-        $message = 'The account role is admin';
-
         if ($this->userService->setBanned($request, $user)) {
             $status = 'success';
             $message = '';
+        } else {
+            $status = 'error';
+            $message = 'The account role is admin';
         }
 
         return response()->json([

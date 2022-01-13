@@ -17523,14 +17523,23 @@ body {
 body .cursor-pointer {
   cursor: pointer;
 }
-body .card_product {
+body .card-product {
   border: 1px solid #ccc;
 }
-body .card_product .prices {
+body .card-product .prices {
   margin-top: -23px;
 }
-body .card_product img {
+body .card-product img {
   height: 177px;
   -o-object-fit: cover;
      object-fit: cover;
+}
+body .w-140px {
+  width: 140px;
+}
+body .border-dashed {
+  border: 3px dashed #eee;
+}
+body .order-item:hover {
+  background-color: #eeeeee73;
 }

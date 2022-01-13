@@ -30,6 +30,9 @@
 
             <!-- Page Content -->
             <main class="container my-5">
+
+                <x-auth-session-msg class="mb-3" />
+
                 {{ $slot }}
             </main>
         </div>

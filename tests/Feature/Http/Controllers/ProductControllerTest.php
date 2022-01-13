@@ -119,6 +119,7 @@ class ProductControllerTest extends TestCase
         $data = [
             'name' => 'New Name',
             'images' => [UploadedFile::fake()->image('poster.jpg')],
+            'quantity' => 3,
         ];
         $response = $this->actingAs($userAdmin)->put(route('admin.products.update', $product->id), $data);
 
@@ -150,7 +151,7 @@ class ProductControllerTest extends TestCase
         $product = Product::factory()->create();
         $searchable = $product->toSearchableArray();
 
-        $this->assertArrayHasKey('category_name', $searchable);
+        $this->assertArrayHasKey('name', $searchable);
     }
 
     public function usersDataProvider(): array

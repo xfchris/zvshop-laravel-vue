@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Constants\AppConstants;
+use App\Rules\UniqueDocument;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UserUpdateRequest extends FormRequest
 {
@@ -15,6 +18,14 @@ class UserUpdateRequest extends FormRequest
     {
         return [
             'name' => 'required|max:80',
+            'surname' => 'max:80',
+            'document_type' => ['required', Rule::in(AppConstants::DOCUMENT_TYPE)],
+            'document' => [
+                'required', 'integer', 'min:1', 'max:99999999999',
+                new UniqueDocument($this->input('document_type'), $this->input('document'), $this->route('user')->id),
+            ],
+            'address' => ['nullable', 'max:300'],
+            'phone' => ['nullable', 'string', 'max:30'],
         ];
     }
 }

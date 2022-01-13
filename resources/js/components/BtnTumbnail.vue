@@ -1,6 +1,6 @@
 <template>
   <a class="cursor-pointer" target="_blank" data-bs-toggle="modal" :data-bs-target="'#showImg' + id">
-      <img :src="linktumbnail" class="img-thumbnail" alt="img">
+      <img :src="linktumbnail" :class="imgClass" alt="img">
   </a>
 
   <button class="btn btn-xs btn-danger text-light py-0 mt-1 d-flex align-items-center justify-content-center w-100"
@@ -26,13 +26,13 @@ import { ref } from '@vue/reactivity'
 import global from '../store/global'
 
 export default {
-  props: ['linkdelete', 'textbuttondelete', 'linkimg', 'linktumbnail', 'id'],
+  props: ['linkdelete', 'textbuttondelete', 'linkimg', 'linktumbnail', 'id', 'imgclass'],
 
   setup (props) {
     const showSwal = ref(false)
     const textButtonDelete = ref(props.textbuttondelete)
     const buttonDeleteDisabled = ref(false)
-
+    const imgClass = props.imgclass + ' img-thumbnail'
     const removeImg = () => {
       showSwal.value = true
 
@@ -54,7 +54,8 @@ export default {
       props,
       showSwal,
       textButtonDelete,
-      buttonDeleteDisabled
+      buttonDeleteDisabled,
+      imgClass
     }
   }
 }

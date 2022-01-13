@@ -7,10 +7,6 @@
         </div>
     </x-slot>
 
-    <x-auth-validation-errors class="mb-3" :errors="$errors" />
-
-    <x-auth-session-success class="mb-3" />
-
 
     <div class="card my-4">
         <div class="card-body">
