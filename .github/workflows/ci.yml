@@ -56,8 +56,8 @@ jobs:
       - name: Install NPM dependencies
         run: npm install
 
-      - name: Compile assets for production
-        run: npm run production
+      #- name: Compile assets for production
+      #  run: npm run production
 
       - name: Check javaScript code style
         run: npm run eslint-ci
@@ -73,15 +73,7 @@ jobs:
           cp .env.ci .env
           php artisan key:generate
 
-      #- name: Create Database
-        #run: |
-        #  mkdir -p database
-        #  touch database/database.sqlite
-
       - name: Execute tests (Unit and Feature tests) via PHPUnit
-        #env:
-        #  DB_CONNECTION: sqlite
-        #  DB_DATABASE: database/database.sqlite
         run: composer run-script testdox
 
       - name: Execute javaScript tests

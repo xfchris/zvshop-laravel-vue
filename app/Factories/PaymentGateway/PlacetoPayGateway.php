@@ -60,7 +60,7 @@ class PlacetoPayGateway implements PaymentGatewayContract
                     'total' => $order->totalAmount,
                 ],
             ],
-            'expiration' => date('c', strtotime('+' . config('constants.expiration_days') . ' days')),
+            'expiration' => now()->addDays(config('constants.expiration_days'))->format('c'),
             'returnUrl' => route('payment.changeStatus', $reference_id),
             'ipAddress' => request()->ip(),
             'userAgent' => request()->header('user-agent'),

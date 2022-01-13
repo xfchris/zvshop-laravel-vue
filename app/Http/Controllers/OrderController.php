@@ -10,6 +10,8 @@ use Illuminate\View\View;
 
 class OrderController extends Controller
 {
+    public static string $defaultView = 'store.order.show';
+
     public function __construct(
         public OrderService $orderService
     ) {
@@ -24,18 +26,18 @@ class OrderController extends Controller
     public function deleteOrder(): RedirectResponse
     {
         $this->orderService->deleteOrder();
-        return redirect()->route('store.order.show');
+        return redirect()->route(self::$defaultView);
     }
 
     public function addProduct(AddProductOrderRequest $request, Product $product): RedirectResponse
     {
         $this->orderService->addOrUpdateProduct($request, $product);
-        return redirect()->route('store.order.show');
+        return redirect()->route(self::$defaultView);
     }
 
     public function removeProduct(Product $product): RedirectResponse
     {
         $this->orderService->removeProduct($product);
-        return redirect()->route('store.order.show');
+        return redirect()->route(self::$defaultView);
     }
 }
