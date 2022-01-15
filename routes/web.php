@@ -6,8 +6,8 @@ Route::middleware(['guest'])->get('/', fn () => view('index'));
 Route::middleware(['auth', 'verified'])->get('/dashboard', fn () => view('dashboard'))->name('dashboard');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::middleware('can:users_show_users')->get('users', [App\Http\Controllers\UserController::class, 'index'])->name('users.index');
-    Route::middleware('can:update,user')->resource('users', App\Http\Controllers\UserController::class)->except(['index', 'create', 'store', 'show', 'delete']);
+    Route::get('users', [App\Http\Controllers\UserController::class, 'index'])->name('users.index');
+    Route::resource('users', App\Http\Controllers\UserController::class)->except(['index', 'create', 'store', 'show', 'delete']);
 });
 
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
@@ -17,9 +17,8 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
 });
 
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('api')->name('api.')->group(function () {
-    Route::post('users/setbanned/{user}', [App\Http\Controllers\Api\ApiUserController::class, 'activateInactivateUser'])
-    ->name('users.activateInactivateUser');
-    Route::delete('images/{image}', [App\Http\Controllers\Api\ApiProductController::class, 'removeImage'])->name('images.destroy');
+    Route::post('users/setbanned/{user}', [App\Http\Controllers\Api\V1\ApiUserController::class, 'setbanned'])->name('users.setbanned');
+    Route::delete('images/{image}', [App\Http\Controllers\Api\V1\ApiProductController::class, 'removeImage'])->name('images.destroy');
 });
 
 Route::middleware(['auth', 'verified', 'role:admin|clients'])->prefix('store')->name('store.')->group(function () {
@@ -34,9 +33,9 @@ Route::middleware(['auth', 'verified', 'role:admin|clients'])->prefix('store')->
 
 Route::middleware(['auth', 'verified', 'role:admin|clients'])->prefix('payment')->name('payment.')->group(function () {
     Route::middleware(['check.ordertopay'])->post('pay', [App\Http\Controllers\PaymentController::class, 'pay'])->name('pay');
-    Route::middleware('can:update,order')->get('details/{order}', [App\Http\Controllers\PaymentController::class, 'details'])->name('details');
+    Route::get('details/{order}', [App\Http\Controllers\PaymentController::class, 'details'])->name('details');
     Route::get('orders', [App\Http\Controllers\PaymentController::class, 'showUserOrders'])->name('orders');
-    Route::middleware(['check.ordertoretrypay', 'can:update,order'])->post('retryPay/{order}', [App\Http\Controllers\PaymentController::class, 'retryPay'])
+    Route::middleware(['check.ordertoretrypay'])->post('retryPay/{order}', [App\Http\Controllers\PaymentController::class, 'retryPay'])
     ->name('retryPay');
 });
 
