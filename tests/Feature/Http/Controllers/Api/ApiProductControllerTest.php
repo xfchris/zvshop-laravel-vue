@@ -10,6 +10,7 @@ use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Testing\TestResponse;
 use LaravelJsonApi\Testing\MakesJsonApiRequests;
 use Tests\TestCase;
@@ -209,6 +210,32 @@ class ApiProductControllerTest extends TestCase
 
         $response = $this->jsonApi()->delete(route('v1.products.destroy', $product->id));
         $response->assertStatus(204);
+    }
+
+    public function test_it_can_queue_products_export()
+    {
+        $admin = $this->userAdminCreate();
+        $filename = 'products_' . now()->format('Y-m-d_H_i_s') . $admin->id . '.xlsx';
+
+        $response = $this->actingAs($admin)->post(route('admin.products.export'));
+
+        $response->assertRedirect();
+        Storage::assertExists($filename);
+        Storage::delete($filename);
+        Storage::assertMissing($filename);
+    }
+
+    public function test_it_can_download_export_file_correctly()
+    {
+        $filename = 'test.xlsx';
+        Storage::put($filename, 'test');
+
+        $response = $this->get(route('products.exportDownload', $filename));
+
+        $response->assertOk();
+        Storage::assertExists($filename);
+        Storage::delete($filename);
+        Storage::assertMissing($filename);
     }
 
     private function executeAdminTest(array $postData, int|string $assertStatus): TestResponse

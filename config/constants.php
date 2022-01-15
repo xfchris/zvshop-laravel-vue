@@ -8,4 +8,5 @@ return [
     'image_products_max_number' => env('IMAGE_PRODUCTS_MAX_NUMBER', 8),
     'default_poster' => 'https://i.imgur.com/N8duDnu.png',
     'expiration_days' => 1,
+    'reports_expiration_days' => 2,
 ];
