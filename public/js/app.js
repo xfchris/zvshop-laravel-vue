@@ -22447,7 +22447,7 @@ const showModalConfirm = () => {
 const removeImgServer = (link, id) => {
   _store_global__WEBPACK_IMPORTED_MODULE_2__["default"].setState('numfiles', _store_global__WEBPACK_IMPORTED_MODULE_2__["default"].state.numfiles - 1);
   return (0,_api__WEBPACK_IMPORTED_MODULE_1__.deleteApi)(link).then(res => {
-    if (res.data.status === 'success') {
+    if (res.data.status === 201) {
       sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire(res.data.message);
       document.querySelector('#col_id_' + id)?.remove();
     } else {
@@ -22686,7 +22686,7 @@ const setUserBlock = (link, value) => {
   (0,_api__WEBPACK_IMPORTED_MODULE_1__.postApi)(link, {
     banned_until: value
   }).then(res => {
-    if (res.data.status === 'success') {
+    if (res.data.status === 201) {
       sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire('User ' + (value === null ? 'Activated' : 'Inactivated')).then(_functions__WEBPACK_IMPORTED_MODULE_2__.reloadPage);
     } else {
       sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire('Error', res.data.message);

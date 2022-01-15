@@ -163,11 +163,22 @@ return [
         'users_show_users'   => 'users_show_users',
         'users_create_users' => 'users_create_users',
         'users_update_users' => 'users_update_users',
+        'users_disable_users' => 'users_disable_users',
+        'users_enable_users' => 'users_enable_users',
+
+        'users_show_products'   => 'users_show_products',
+        'users_create_products' => 'users_create_products',
+        'users_update_products' => 'users_update_products',
+        'users_disable_products' => 'users_disable_products',
+        'users_enable_products' => 'users_enable_products',
+
         'users_update_own_users' => 'users_update_own_users',
-        'users_delete_users' => 'users_delete_users',
-        'store_show_products' => 'store_show_products',
         'users_update_orders' => 'users_update_orders',
         'user_manage_own_order' => 'user_manage_own_order',
+
+        'store_show_products' => 'store_show_products',
+        'store_update_order' => 'store_update_order',
+
     ],
 
     'roles' => [
@@ -177,7 +188,7 @@ return [
         ],
         'clients' => [
             'name' => 'clients',
-            'permissions' => ['store_show_products', 'users_update_own_users', 'user_manage_own_order'],
+            'permissions' => ['store_show_products', 'store_update_order', 'users_update_own_users', 'user_manage_own_order'],
         ],
     ],
 ];
