@@ -21,9 +21,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrap();
-
-        Blade::directive('money', function ($amount) {
-            return "<?= '$' . number_format($amount, 2); ?>";
-        });
+        Blade::directive('money', fn ($amount) => "<?= '$' . number_format($amount, 2); ?>");
     }
 }

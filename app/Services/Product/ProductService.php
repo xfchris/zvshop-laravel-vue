@@ -8,8 +8,10 @@ use App\Models\Product;
 use App\Services\Trait\ImageTrait;
 use App\Strategies\GstImages\ContextImage;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Laravel\Scout\Builder as ScoutBuilder;
 use MeiliSearch\Endpoints\Indexes;
 
 class ProductService
@@ -85,13 +87,11 @@ class ProductService
 
     public function getOrSearchProductsPerPage(int $category_id = null, string $search = null): LengthAwarePaginator
     {
-        if ($search) {
-            return $this->searchProductsPerPage($category_id, $search);
-        }
-        return $this->getProductsStorePerPage($category_id);
+        $response = $search ? $this->searchProductsPerPage($category_id, $search) : $this->getProductsStorePerPage($category_id);
+        return $response->paginate(config('constants.num_product_rows_per_table'));
     }
 
-    public function searchProductsPerPage(int $category_id = null, string $search = null): LengthAwarePaginator
+    public function searchProductsPerPage(int $category_id = null, string $search = null): ScoutBuilder
     {
         $products = Product::search($search, function (Indexes $index, $query, $options) use ($category_id) {
             if ($category_id) {
@@ -100,16 +100,15 @@ class ProductService
             return $index->rawSearch($query, $options);
         });
 
-        return $products->paginate(config('constants.num_product_rows_per_table'));
+        return $products;
     }
 
-    public function getProductsStorePerPage(int $category_id = null): LengthAwarePaginator
+    public function getProductsStorePerPage(int $category_id = null): Builder
     {
         $products = Product::with('category:id,name', 'images');
         if ($category_id) {
             $products->where('category_id', $category_id);
         }
-
-        return $products->orderBy('created_at', 'DESC')->paginate(config('constants.num_product_rows_per_table'));
+        return $products->orderBy('created_at', 'DESC');
     }
 }

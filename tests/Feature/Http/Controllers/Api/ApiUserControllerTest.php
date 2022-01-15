@@ -13,21 +13,56 @@ class ApiUserControllerTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_it_can_login_from_api(): void
+    {
+        $user = $this->userAdminCreate();
+        $response = $this->postJson(route('v1.login'), [
+            'email' => $user->email,
+            'password' => 'password',
+        ]);
+
+        $response->assertJsonFragment([
+            'code' => 200,
+        ]);
+    }
+
+    public function test_it_can_not_login_from_incorrect_password_api(): void
+    {
+        $user = $this->userAdminCreate();
+        $data = [
+            'email' => $user->email,
+            'password' => '123456789',
+        ];
+        $response = $this->postJson(route('v1.login'), $data);
+
+        $response->assertJsonFragment(['code' => 401]);
+    }
+
+    public function test_it_can_not_login_from_missing_data(): void
+    {
+        $user = $this->userAdminCreate();
+        $data = [
+            'email' => $user->email,
+        ];
+        $response = $this->postJson(route('v1.login'), $data);
+
+        $response->assertJsonFragment(['code' => 422]);
+    }
+
     public function test_it_can_inactivate_a_user(): void
     {
         $userAdmin = $this->userAdminCreate();
         $user = $this->userClientCreate();
-        $response = $this->actingAs($userAdmin)->post(route('api.users.activateInactivateUser', $user->id), ['banned_until' => 5]);
+        $response = $this->actingAs($userAdmin)->post(route('api.users.setbanned', $user->id), ['banned_until' => 5]);
 
         $response->assertStatus(200);
-        $response->assertJson(['status' => 'success']);
         $this->assertSame(now()->addDays(5)->format('d/m/Y'), User::find($user->id)->banned_until->format('d/m/Y'));
     }
 
     public function test_it_can_not_inactive_an_user_with_admin_role(): void
     {
-        $response = $this->executeAdminTest(['banned_until' => 5], 'error');
-        $response->assertStatus(200);
+        $response = $this->executeAdminTest(['banned_until' => 5], 400);
+        $response->assertStatus(400);
     }
 
     public function test_it_can_activate_an_user(): void
@@ -37,10 +72,9 @@ class ApiUserControllerTest extends TestCase
         $user->save();
 
         $userAdmin = $this->userAdminCreate();
-        $response = $this->actingAs($userAdmin)->post(route('api.users.activateInactivateUser', $user->id), ['banned_until' => null]);
+        $response = $this->actingAs($userAdmin)->post(route('api.users.setbanned', $user->id), ['banned_until' => null]);
 
         $response->assertStatus(200);
-        $response->assertJson(['status' => 'success']);
         $this->assertNull(User::find($user->id)->check_banned_until);
     }
 
@@ -56,7 +90,7 @@ class ApiUserControllerTest extends TestCase
     private function executeAdminTest(array $postData, string $assertStatus): TestResponse
     {
         $userAdmin = $this->userAdminCreate();
-        $response = $this->actingAs($userAdmin)->post(route('api.users.activateInactivateUser', $userAdmin->id), $postData);
+        $response = $this->actingAs($userAdmin)->post(route('api.users.setbanned', $userAdmin->id), $postData);
 
         $response->assertJson(['status' => $assertStatus]);
         return $response;

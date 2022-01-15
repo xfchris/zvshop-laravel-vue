@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers\Api;
 
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\User;
 use Exception;
@@ -10,6 +11,7 @@ use GuzzleHttp\Psr7\Request;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Testing\TestResponse;
+use LaravelJsonApi\Testing\MakesJsonApiRequests;
 use Tests\TestCase;
 use Tests\Traits\ContextImageFake;
 use TypeError;
@@ -18,6 +20,7 @@ class ApiProductControllerTest extends TestCase
 {
     use RefreshDatabase;
     use ContextImageFake;
+    use MakesJsonApiRequests;
 
     public function setUp(): void
     {
@@ -25,24 +28,11 @@ class ApiProductControllerTest extends TestCase
         $this->fakeInstanceImage();
     }
 
-    private function createAndPostDeleteImage(): array
-    {
-        $userAdmin = $this->userAdminCreate();
-        $product = Product::factory()->create();
-        $product->images()->createMany([
-            ['url' => 'https://i.imgur.com/fakehash1.jpg', 'data' => ['deletehash' => 'fakeDeleteHash1']],
-        ]);
-        $image = $product->images->first();
-        $response = $this->actingAs($userAdmin)->delete(route('api.images.destroy', $image->id));
-        return [$response, $product];
-    }
-
     public function test_it_can_delete_a_image(): TestResponse
     {
         [$response, $product] = $this->createAndPostDeleteImage();
 
         $response->assertStatus(200);
-        $response->assertJson(['status' => 'success']);
         $this->assertSame(0, $product->fresh()->images->count());
         return $response;
     }
@@ -57,31 +47,30 @@ class ApiProductControllerTest extends TestCase
     {
         $this->fakeInstanceImage(null, new ConnectException('', new Request('delete', '/')));
         [$response] = $this->createAndPostDeleteImage();
-        $response->assertJson(['status' => 'error']);
+        $response->assertStatus(400);
     }
 
     public function test_it_can_delete_a_image_with_others_errors(): void
     {
         $this->fakeInstanceImage(null, new Exception());
         [$response] = $this->createAndPostDeleteImage();
-        $response->assertJson(['status' => 'error']);
+        $response->assertStatus(400);
     }
 
     public function test_it_can_inactivate_a_user(): void
     {
         $userAdmin = $this->userAdminCreate();
         $user = $this->userClientCreate();
-        $response = $this->actingAs($userAdmin)->post(route('api.users.activateInactivateUser', $user->id), ['banned_until' => 5]);
+        $response = $this->actingAs($userAdmin)->post(route('api.users.setbanned', $user->id), ['banned_until' => 5]);
 
         $response->assertStatus(200);
-        $response->assertJson(['status' => 'success']);
         $this->assertSame(now()->addDays(5)->format('d/m/Y'), User::find($user->id)->banned_until->format('d/m/Y'));
     }
 
     public function test_it_can_not_inactive_an_user_with_admin_role(): void
     {
-        $response = $this->executeAdminTest(['banned_until' => 5], 'error');
-        $response->assertStatus(200);
+        $response = $this->executeAdminTest(['banned_until' => 5], 400);
+        $response->assertStatus(400);
     }
 
     public function test_it_can_activate_an_user(): void
@@ -91,10 +80,9 @@ class ApiProductControllerTest extends TestCase
         $user->save();
 
         $userAdmin = $this->userAdminCreate();
-        $response = $this->actingAs($userAdmin)->post(route('api.users.activateInactivateUser', $user->id), ['banned_until' => null]);
+        $response = $this->actingAs($userAdmin)->post(route('api.users.setbanned', $user->id), ['banned_until' => null]);
 
         $response->assertStatus(200);
-        $response->assertJson(['status' => 'success']);
         $this->assertNull(User::find($user->id)->check_banned_until);
     }
 
@@ -107,12 +95,140 @@ class ApiProductControllerTest extends TestCase
         $response->assertStatus(422);
     }
 
-    private function executeAdminTest(array $postData, string $assertStatus): TestResponse
+    public function test_it_can_read_all_categories(): void
+    {
+        $this->userAdminApiCreate();
+        $categories = Category::get();
+
+        $response = $this->jsonApi()->expects('categories')->get(route('v1.categories.index'));
+
+        $response->assertStatus(200);
+        $response->assertFetchedMany($categories);
+    }
+
+    public function test_it_can_read_a_category(): void
+    {
+        $this->userAdminApiCreate();
+        $category = Category::first();
+
+        $response = $this->jsonApi()->expects('categories')->get(route('v1.categories.show', $category->id));
+
+        $response->assertStatus(200);
+        $response->assertFetchedOne($category);
+    }
+
+    public function test_it_can_read_all_products(): void
+    {
+        $this->userAdminApiCreate();
+        $products = Product::factory(3)->create();
+
+        $response = $this->jsonApi()->expects('products')->get(route('v1.products.index'));
+
+        $response->assertStatus(200);
+        $response->assertFetchedMany($products);
+    }
+
+    public function test_it_can_search_a_product(): void
+    {
+        $this->userAdminApiCreate();
+        $products = Product::factory(3)->create();
+
+        $response = $this->jsonApi()->expects('products')->get(route('v1.products.search') . '?search=' . $products[0]->name);
+
+        $response->assertStatus(200);
+    }
+
+    public function test_it_can_search_a_product_with_category(): void
+    {
+        $this->userAdminApiCreate();
+        $products = Product::factory(3)->create();
+        $this->expectException(Exception::class);
+
+        $response = $this->jsonApi()->expects('products')
+                    ->get(route('v1.products.search') . '?filter[category_id]= ' . $products->category_id . '&search=' . $products[0]->name);
+
+        $response->assertStatus(200);
+    }
+
+    public function test_it_can_read_a_product(): void
+    {
+        $this->userAdminApiCreate();
+        $product = Product::factory()->create();
+
+        $response = $this->jsonApi()->expects('products')->get(route('v1.products.show', $product->id));
+
+        $response->assertStatus(200);
+        $response->assertFetchedOne($product);
+    }
+
+    public function test_it_can_create_a_product(): void
+    {
+        $this->userAdminApiCreate();
+        $category = Category::select('id')->first();
+
+        $data = [
+                'type' => 'products',
+                'attributes' => [
+                    'name' => 'Computadora',
+                    'description' => 'description',
+                    'category_id' => $category->id,
+                    'quantity' => 3,
+                    'price' => '4.2',
+                    ],
+                ];
+
+        $response = $this->jsonApi()->withData($data)->post(route('v1.products.store'));
+        $response->assertStatus(201);
+    }
+
+    public function test_it_can_update_a_product(): void
+    {
+        $product = Product::factory()->create();
+        $this->userAdminApiCreate();
+        $category = Category::select('id')->first();
+        $data = [
+                'type' => 'products',
+                'id' => "$product->id",
+                'attributes' => [
+                    'name' => 'test',
+                    'description' => 'description',
+                    'category_id' => $category->id,
+                    'quantity' => 3,
+                    'price' => '4.2',
+                    ],
+                ];
+
+        $response = $this->jsonApi()->withData($data)->patch(route('v1.products.update', $product->id));
+        $response->assertStatus(200);
+    }
+
+    public function test_it_can_delete_a_product(): void
+    {
+        $product = Product::factory()->create();
+        $this->userAdminApiCreate();
+
+        $response = $this->jsonApi()->delete(route('v1.products.destroy', $product->id));
+        $response->assertStatus(204);
+    }
+
+    private function executeAdminTest(array $postData, int|string $assertStatus): TestResponse
     {
         $userAdmin = $this->userAdminCreate();
-        $response = $this->actingAs($userAdmin)->post(route('api.users.activateInactivateUser', $userAdmin->id), $postData);
+        $response = $this->actingAs($userAdmin)->post(route('api.users.setbanned', $userAdmin->id), $postData);
 
         $response->assertJson(['status' => $assertStatus]);
         return $response;
+    }
+
+    private function createAndPostDeleteImage(): array
+    {
+        $userAdmin = $this->userAdminCreate();
+        $product = Product::factory()->create();
+        $product->images()->createMany([
+            ['url' => 'https://i.imgur.com/fakehash1.jpg', 'data' => ['deletehash' => 'fakeDeleteHash1']],
+        ]);
+        $image = $product->images->first();
+        $response = $this->actingAs($userAdmin)->delete(route('api.images.destroy', $image->id));
+        return [$response, $product];
     }
 }

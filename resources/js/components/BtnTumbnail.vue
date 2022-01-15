@@ -33,6 +33,7 @@ export default {
     const textButtonDelete = ref(props.textbuttondelete)
     const buttonDeleteDisabled = ref(false)
     const imgClass = props.imgclass + ' img-thumbnail'
+
     const removeImg = () => {
       showSwal.value = true
 
@@ -77,7 +78,7 @@ const removeImgServer = (link, id) => {
 
   return deleteApi(link)
     .then(res => {
-      if (res.data.status === 'success') {
+      if (res.data.status === 200) {
         Swal.fire(res.data.message)
         document.querySelector('#col_id_' + id)?.remove()
       } else {
