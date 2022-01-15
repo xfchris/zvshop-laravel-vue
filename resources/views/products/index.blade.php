@@ -4,10 +4,20 @@
             <h2 class="h4 font-weight-bold mb-0">
                 {{ __('app.product_management.title') }}
             </h2>
-            <a href="{{ route('admin.products.create') }}"
-                class="btn btn-xs btn-primary text-light py-0 d-flex align-items-center">
-                <i class="fas fa-plus-circle"></i> <span class="ms-1">@lang('app.product_management.create_product')</span>
-            </a>
+            <div class="d-flex">
+                <a href="{{ route('admin.products.create') }}"
+                    class="btn btn-xs btn-primary text-light py-0 d-flex align-items-center">
+                    <i class="fas fa-plus-circle"></i> <span
+                        class="ms-1">@lang('app.product_management.create_product')</span>
+                </a>
+
+                <form class="ms-2" action="{{ route('admin.products.export') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <button type="submit" class="btn btn-xs btn-success btn-wait-submit text-light" data-wait="Wait...">
+                        <span class="ms-1"><i class="fas fa-file-excel"></i> @lang('app.product_management.export')</span>
+                    </button>
+                </form>
+            </div>
         </div>
     </x-slot>
 

@@ -11,6 +11,7 @@ return [
         'alert_disabled' => 'Product disabled!',
         'remove_image' => 'Remove',
         'add_photos' => 'Add Photos',
+        'export' => 'Export',
     ],
     'image_management' => [
         'image_no_removed' => 'Image could not be removed',
@@ -24,6 +25,7 @@ return [
     ],
     'reports' => [
         'title' => 'Reports',
+        'notify_export_products' => 'Export process started. When the process is finished we will notify you by email: ',
     ],
     'online_store' => [
         'title' => 'Online store',
