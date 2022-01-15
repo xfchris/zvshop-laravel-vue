@@ -23,7 +23,7 @@ describe('Remove Tumbnail', () => {
 
   it('can remove a image', (done) => {
     const message = 'Image removed'
-    axios.delete.mockResolvedValue({ data: { status: 'success', message } })
+    axios.delete.mockResolvedValue({ data: { status: 200, message } })
 
     expect(wrapper.html()).toContain('button')
     expect(wrapper.vm.showSwal).toBe(false)
@@ -43,7 +43,7 @@ describe('Remove Tumbnail', () => {
 
   it('can no remove a image', (done) => {
     const message = 'Image no removed'
-    axios.delete.mockResolvedValue({ data: { status: 'error', message } })
+    axios.delete.mockResolvedValue({ data: { status: 400, message } })
 
     expect(wrapper.html()).toContain('button')
     expect(wrapper.vm.showSwal).toBe(false)
