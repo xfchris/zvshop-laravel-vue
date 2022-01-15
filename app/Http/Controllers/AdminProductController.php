@@ -10,6 +10,9 @@ use App\Services\Product\ProductService;
 use App\Strategies\GstImages\ContextImage;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class AdminProductController extends Controller
 {
@@ -73,5 +76,17 @@ class AdminProductController extends Controller
         $this->authorize('can', 'users_enable_products');
         $this->productService->enableProduct($id);
         return back()->with('success', trans('app.product_management.alert_enabled'));
+    }
+
+    public function export(): RedirectResponse
+    {
+        $this->productService->export();
+        return back()->with('success', trans('app.reports.notify_export_products') . Auth::user()->email);
+    }
+
+    public function exportDownload(string $filename): StreamedResponse
+    {
+        abort_if(!Storage::exists($filename), 404);
+        return Storage::download($filename);
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Services\Product;
 
 use App\Events\LogUserActionEvent;
+use App\Exports\ProductExport;
+use App\Jobs\NotifyOfCompletedExport;
 use App\Models\Category;
 use App\Models\Product;
 use App\Services\Trait\ImageTrait;
@@ -11,6 +13,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Scout\Builder as ScoutBuilder;
 use MeiliSearch\Endpoints\Indexes;
 
@@ -110,5 +113,15 @@ class ProductService
             $products->where('category_id', $category_id);
         }
         return $products->orderBy('created_at', 'DESC');
+    }
+
+    public function export(): void
+    {
+        $type = 'products';
+        $name = $type . '_' . now()->format('Y-m-d_H_i_s') . Auth::user()->id . '.xlsx';
+
+        (new ProductExport())->queue($name)->chain([
+            new NotifyOfCompletedExport(Auth::user(), $type, route('products.exportDownload', $name)),
+        ]);
     }
 }
