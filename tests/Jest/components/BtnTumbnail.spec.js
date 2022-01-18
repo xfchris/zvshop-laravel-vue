@@ -61,4 +61,23 @@ describe('Remove Tumbnail', () => {
       done()
     })
   })
+
+  it('can no connect to server', (done) => {
+    axios.delete.mockResolvedValue({})
+
+    expect(wrapper.html()).toContain('button')
+    expect(wrapper.vm.showSwal).toBe(false)
+    wrapper.find('button').trigger('click')
+
+    expect(wrapper.vm.showSwal).toBe(true)
+    expect(Swal.getTitle().textContent).toEqual('Are you sure?')
+    Swal.clickConfirm()
+
+    setTimeout(() => {
+      expect(Swal.getTitle().textContent).toEqual('Operation cancelled')
+      Swal.clickConfirm()
+      expect(wrapper.vm.showSwal).toBe(false)
+      done()
+    })
+  })
 })
