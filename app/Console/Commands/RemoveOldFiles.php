@@ -14,7 +14,6 @@ class RemoveOldFiles extends Command
     public function handle(): int
     {
         $filesRemoved = [];
-
         collect(Storage::listContents())->each(function ($file) {
             if (
                     $file['timestamp'] < now()->subDays(config('constants.reports_expiration_days'))->getTimestamp() &&

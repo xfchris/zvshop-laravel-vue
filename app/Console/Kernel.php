@@ -15,7 +15,7 @@ class Kernel extends ConsoleKernel
 
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->job(new UpdateStatusPayments())->everyFiveMinutes()->withoutOverlapping();
+        $schedule->job(new UpdateStatusPayments())->everyFiveMinutes();
         $schedule->command('update:expired_orders')->daily();
         $schedule->command('remove:old_reports')->daily();
     }
