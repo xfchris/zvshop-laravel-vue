@@ -10,7 +10,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('users', App\Http\Controllers\UserController::class)->except(['index', 'create', 'store', 'show', 'delete']);
 });
 
-Route::get('admin/products/download/{name}', [App\Http\Controllers\AdminProductController::class, 'exportDownload'])->name('products.exportDownload');
+Route::get('admin/products/download/{dir}/{name}', [App\Http\Controllers\AdminProductController::class, 'exportDownload'])->name('products.exportDownload');
 
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::post('products/export', [App\Http\Controllers\AdminProductController::class, 'export'])->name('products.export');

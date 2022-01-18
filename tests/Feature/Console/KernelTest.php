@@ -2,8 +2,6 @@
 
 namespace Tests\Feature\Console;
 
-use App\Console\Commands\RemoveOldFiles;
-use App\Console\Commands\UpdateExpiredOrders;
 use App\Constants\AppConstants;
 use App\Jobs\UpdateStatusPayments;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -24,10 +22,9 @@ class KernelTest extends TestCase
         $this->initPayOrder($user);
         $order = $user->orders()->first();
         $this->setStatusPayment($order->payment, AppConstants::PENDING);
-
         $this->travel(config('constants.expiration_days') + 2)->days();
-        $comand = new UpdateExpiredOrders();
-        $comand->handle();
+
+        $this->artisan('update:expired_orders');
 
         $this->assertSame(AppConstants::EXPIRED, $order->fresh()->status);
     }
@@ -48,14 +45,20 @@ class KernelTest extends TestCase
 
     public function test_it_can_delete_old_files_correctly()
     {
-        $filename = 'test.xlsx';
+        $filename = config('report_directory') . 'test.xlsx';
         Storage::put($filename, 'test');
+        $this->artisan('remove:old_reports');
         Storage::assertExists($filename);
 
         $this->travel(config('constants.reports_expiration_days') + 5)->days();
-        $comand = new RemoveOldFiles();
-        $comand->handle();
+        $this->artisan('remove:old_reports');
 
         Storage::assertMissing($filename);
+    }
+
+    public function test_it_can_exec_the_schedule_tasks(): void
+    {
+        $this->artisan('schedule:run');
+        $this->addToAssertionCount(1);
     }
 }

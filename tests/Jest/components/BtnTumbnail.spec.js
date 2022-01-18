@@ -63,7 +63,7 @@ describe('Remove Tumbnail', () => {
   })
 
   it('can no connect to server', (done) => {
-    axios.delete.mockResolvedValue({})
+    axios.delete.mockResolvedValue('')
 
     expect(wrapper.html()).toContain('button')
     expect(wrapper.vm.showSwal).toBe(false)

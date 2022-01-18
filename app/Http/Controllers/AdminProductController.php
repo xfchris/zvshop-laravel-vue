@@ -84,9 +84,9 @@ class AdminProductController extends Controller
         return back()->with('success', trans('app.reports.notify_export_products') . Auth::user()->email);
     }
 
-    public function exportDownload(string $filename): StreamedResponse
+    public function exportDownload(string $dir, string $filename): StreamedResponse
     {
-        abort_if(!Storage::exists($filename), 404);
-        return Storage::download($filename);
+        abort_if(!Storage::exists($dir . '/' . $filename), 404);
+        return Storage::download($dir . '/' . $filename);
     }
 }

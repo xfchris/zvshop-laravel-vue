@@ -96,14 +96,10 @@ class ProductService
 
     public function searchProductsPerPage(int $category_id = null, string $search = null): ScoutBuilder
     {
-        $products = Product::search($search, function (Indexes $index, $query, $options) use ($category_id) {
-            if ($category_id) {
-                $options['filters'] = '(category_id = ' . $category_id . ')';
-            }
-            return $index->rawSearch($query, $options);
-        });
-
-        return $products;
+        $filters = [
+            'filters' => ($category_id) ? '(category_id = ' . $category_id . ')' : '',
+        ];
+        return Product::search($search, fn (Indexes $index, $query, $options) => $index->rawSearch($query, array_merge($options, $filters)));
     }
 
     public function getProductsStorePerPage(int $category_id = null): Builder
@@ -119,9 +115,10 @@ class ProductService
     {
         $type = 'products';
         $name = $type . '_' . now()->format('Y-m-d_H_i_s') . Auth::user()->id . '.xlsx';
+        $dir = config('constants.report_directory');
 
-        (new ProductExport())->queue($name)->chain([
-            new NotifyOfCompletedExport(Auth::user(), $type, route('products.exportDownload', $name)),
+        (new ProductExport())->queue($dir . $name)->chain([
+            new NotifyOfCompletedExport(Auth::user(), $type, route('products.exportDownload', $dir . $name)),
         ]);
     }
 }

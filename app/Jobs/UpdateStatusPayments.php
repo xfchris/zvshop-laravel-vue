@@ -23,6 +23,7 @@ class UpdateStatusPayments implements ShouldQueue
     {
         $orders = Order::where('status', AppConstants::PENDING)->get();
         $updated = [];
+
         foreach ($orders as $order) {
             $status = $paymentGateway->getStatus($order->payment->requestId)->status;
             if (in_array($status, AppConstants::STATUS) && $order->status != $status) {

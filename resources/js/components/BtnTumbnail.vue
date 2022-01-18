@@ -85,8 +85,6 @@ const removeImgServer = (link, id) => {
         Swal.fire('Error', res.data.message)
       }
     })
-    .catch(() => {
-      Swal.fire('Operation cancelled')
-    })
+    .catch(() => Swal.fire('Operation cancelled'))
 }
 </script>

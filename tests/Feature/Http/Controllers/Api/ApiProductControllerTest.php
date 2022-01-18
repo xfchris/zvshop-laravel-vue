@@ -143,10 +143,9 @@ class ApiProductControllerTest extends TestCase
     {
         $this->userAdminApiCreate();
         $products = Product::factory(3)->create();
-        $this->expectException(Exception::class);
 
         $response = $this->jsonApi()->expects('products')
-                    ->get(route('v1.products.search') . '?filter[category_id]= ' . $products->category_id . '&search=' . $products[0]->name);
+                    ->get(route('v1.products.search') . '?filter[category_id]= ' . $products[0]->category_id . '&search=' . $products[0]->name);
 
         $response->assertStatus(200);
     }
@@ -166,7 +165,6 @@ class ApiProductControllerTest extends TestCase
     {
         $this->userAdminApiCreate();
         $category = Category::select('id')->first();
-
         $data = [
                 'type' => 'products',
                 'attributes' => [
@@ -216,26 +214,28 @@ class ApiProductControllerTest extends TestCase
     {
         $admin = $this->userAdminCreate();
         $filename = 'products_' . now()->format('Y-m-d_H_i_s') . $admin->id . '.xlsx';
+        $dir = config('report_directory');
 
         $response = $this->actingAs($admin)->post(route('admin.products.export'));
 
         $response->assertRedirect();
-        Storage::assertExists($filename);
-        Storage::delete($filename);
-        Storage::assertMissing($filename);
+        Storage::assertExists($dir . $filename);
+        Storage::delete($dir . $filename);
+        Storage::assertMissing($dir . $filename);
     }
 
     public function test_it_can_download_export_file_correctly()
     {
         $filename = 'test.xlsx';
-        Storage::put($filename, 'test');
+        $dir = config('report_directory');
+        Storage::put(config('report_directory') . $filename, 'test');
 
         $response = $this->get(route('products.exportDownload', $filename));
 
         $response->assertOk();
-        Storage::assertExists($filename);
-        Storage::delete($filename);
-        Storage::assertMissing($filename);
+        Storage::assertExists($dir . $filename);
+        Storage::delete($dir . $filename);
+        Storage::assertMissing($dir . $filename);
     }
 
     private function executeAdminTest(array $postData, int|string $assertStatus): TestResponse

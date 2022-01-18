@@ -29,7 +29,7 @@ class ProductExport implements FromCollection, WithMapping, WithHeadings, WithSt
             $product->category->name,
             $product->quantity,
             $product->price,
-            $product->deleted_at ? 'Disabled' : 'Enabled',
+            $product->deleted_at,
             $product->updated_at,
             $product->created_at,
         ];
@@ -52,8 +52,6 @@ class ProductExport implements FromCollection, WithMapping, WithHeadings, WithSt
 
     public function styles(Worksheet $sheet): array
     {
-        return [
-            1    => ['font' => ['bold' => true]],
-        ];
+        return [1 => ['font' => ['bold' => true]]];
     }
 }
