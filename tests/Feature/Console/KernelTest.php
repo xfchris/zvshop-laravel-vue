@@ -45,7 +45,7 @@ class KernelTest extends TestCase
 
     public function test_it_can_delete_old_files_correctly()
     {
-        $filename = config('report_directory') . 'test.xlsx';
+        $filename = config('constants.report_directory') . 'test.xlsx';
         Storage::put($filename, 'test');
         $this->artisan('remove:old_reports');
         Storage::assertExists($filename);

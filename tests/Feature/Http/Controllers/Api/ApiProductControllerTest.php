@@ -214,11 +214,11 @@ class ApiProductControllerTest extends TestCase
     {
         $admin = $this->userAdminCreate();
         $filename = 'products_' . now()->format('Y-m-d_H_i_s') . $admin->id . '.xlsx';
-        $dir = config('report_directory');
+        $dir = config('constants.report_directory');
 
-        $response = $this->actingAs($admin)->post(route('admin.products.export'));
+        $response = $this->actingAs($admin)->post(route('api.products.export'));
 
-        $response->assertRedirect();
+        $response->assertStatus(200);
         Storage::assertExists($dir . $filename);
         Storage::delete($dir . $filename);
         Storage::assertMissing($dir . $filename);
@@ -227,10 +227,10 @@ class ApiProductControllerTest extends TestCase
     public function test_it_can_download_export_file_correctly()
     {
         $filename = 'test.xlsx';
-        $dir = config('report_directory');
-        Storage::put(config('report_directory') . $filename, 'test');
+        $dir = config('constants.report_directory');
+        Storage::put($dir . $filename, 'test');
 
-        $response = $this->get(route('products.exportDownload', $filename));
+        $response = $this->get(route('products.exportDownload', [trim($dir, '/'), $filename]));
 
         $response->assertOk();
         Storage::assertExists($dir . $filename);
