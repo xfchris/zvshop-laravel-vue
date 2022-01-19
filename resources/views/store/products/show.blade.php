@@ -32,10 +32,9 @@
                                                 name="quantity" value="1" class="form-control" />
                                         </div>
                                     </div>
-                                    <button data-wait="Wait..." type="submit"
-                                        class="btn btn-success w-100 text-light btn-wait-submit">
+                                    <btn-submit class="btn btn-success w-100 text-light">
                                         <em class="fas fa-cart-plus"></em> {{ __('Add to cart') }}
-                                    </button>
+                                    </btn-submit>
                                 </form>
                             @else
 

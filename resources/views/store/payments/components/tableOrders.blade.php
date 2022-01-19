@@ -57,11 +57,9 @@
                         @if ($order->status == App\Constants\AppConstants::REJECTED || $order->status == App\Constants\AppConstants::EXPIRED)
                            <form action="{{ route('payment.retryPay', $order->id) }}" method="post">
                                 @csrf
-                                <button type="submit"
-                                class="btn btn-xs btn-primary btn-wait-submit text-light py-0 d-flex align-items-center  w-100 mb-2 justify-content-center"
-                                data-wait="Wait...">
+                                <btn-submit class="btn btn-xs btn-primary text-light py-0 d-flex align-items-center w-100 mb-2 justify-content-center">
                                     <em class="fas fa-credit-card"></em> <span class="ms-1">Retry payment</span>
-                                </button>
+                                </btn-submit>
                            </form>
                         @elseif ($order->payment->status == App\Constants\AppConstants::CREATED)
                             <a href="{{ $order->payment['processUrl'] }}" target="_blank"

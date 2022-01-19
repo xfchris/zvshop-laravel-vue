@@ -26,6 +26,7 @@ return [
     'reports' => [
         'title' => 'Reports',
         'notify_export_products' => 'Export process started. When the process is finished we will notify you by email: ',
+        'notify_import_products' => 'Import process started. When the process is finished we will notify you by email: ',
     ],
     'online_store' => [
         'title' => 'Online store',

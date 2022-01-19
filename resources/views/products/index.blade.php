@@ -11,12 +11,16 @@
                         class="ms-1">@lang('app.product_management.create_product')</span>
                 </a>
 
-                <form class="ms-2" action="{{ route('admin.products.export') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <button type="submit" class="btn btn-xs btn-success btn-wait-submit text-light" data-wait="Wait...">
-                        <span class="ms-1"><i class="fas fa-file-excel"></i> @lang('app.product_management.export')</span>
-                    </button>
-                </form>
+                <btn-input-file
+                    action="{{ route('api.products.import') }}"
+                    class="ms-2 btn btn-xs btn-success text-light"
+                    text="Import"
+                    maxfilesize="{{ config('constants.file_max_size') }}">
+                </btn-input-file>
+
+                <btn-submit action="{{ route('api.products.export') }}" class="btn ms-2 btn-xs btn-success text-light">
+                    @lang('app.product_management.export')
+                </btn-submit>
             </div>
         </div>
     </x-slot>

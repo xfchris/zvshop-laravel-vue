@@ -77,10 +77,9 @@
                             @csrf
                             @method('delete')
 
-                            <button type="submit"
-                                class="btn btn-outline-secondary mt-3 btn-wait-submit" data-wait="Wait...">
+                            <btn-submit class="btn btn-outline-secondary mt-3">
                                 Empty cart <em class="fas fa-trash-alt"></em>
-                            </button>
+                            </btn-submit>
                         </form>
                     </div>
 
@@ -105,11 +104,11 @@
                                     <div class="col-sm-7 fs-5"> <strong>@money($order->total_amount)</strong></div>
                                 </div>
 
-                                <button form="formPay" type="submit"
-                                    class="btn btn-success mt-3 w-100 text-light btn-lg btn-wait-submit"
-                                    data-wait="Wait...">
+                                <btn-submit form="formPay"
+                                    class="btn btn-success mt-3 w-100 text-light btn-lg">
                                     Pay <em class="fas fa-credit-card"></em>
-                                </button>
+                                </btn-submit>
+
                             </div>
 
 

@@ -84,11 +84,10 @@
                     </div>
                 </div>
 
-
-                <a class="btn btn-secondary mt-4 me-2 btn-wait-submit text-light" href="{{ route('users.index') }}"
-                    data-wait="Wait...">Cancel</a>
-                <button type="submit" class="btn btn-success mt-4 btn-wait-submit text-light" data-wait="Wait...">Update
-                    data</button>
+                <a class="btn btn-secondary mt-4 me-2text-light" href="{{ route('users.index') }}">Cancel</a>
+                <btn-submit type="submit" class="btn btn-success mt-4 text-light">
+                    Update data
+                </btn-submit>
 
             </form>
         </div>
