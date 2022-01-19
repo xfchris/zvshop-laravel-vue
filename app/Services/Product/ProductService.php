@@ -97,7 +97,7 @@ class ProductService
     public function searchProductsPerPage(int $category_id = null, string $search = null): ScoutBuilder
     {
         $filters = [
-            'filters' => ($category_id) ? '(category_id = ' . $category_id . ')' : '',
+            'filters' => $category_id ? '(category_id = ' . $category_id . ')' : '',
         ];
         return Product::search($search, fn (Indexes $index, $query, $options) => $index->rawSearch($query, array_merge($options, $filters)));
     }
@@ -118,7 +118,12 @@ class ProductService
         $dir = config('constants.report_directory');
 
         (new ProductExport())->queue($dir . $name)->chain([
-            new NotifyOfCompletedExport(Auth::user(), $type, route('products.exportDownload', $dir . $name)),
+            new NotifyOfCompletedExport(Auth::user(), $type, route('products.exportDownload', [$dir, $name])),
         ]);
+    }
+
+    public function import(Request $request): void
+    {
+        sleep(1);
     }
 }

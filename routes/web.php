@@ -4,16 +4,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['guest'])->get('/', fn () => view('index'));
 Route::middleware(['auth', 'verified'])->get('/dashboard', fn () => view('dashboard'))->name('dashboard');
+Route::get('admin/products/download/{dir}/{name}', [App\Http\Controllers\AdminProductController::class, 'exportDownload'])->name('products.exportDownload');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('users', [App\Http\Controllers\UserController::class, 'index'])->name('users.index');
     Route::resource('users', App\Http\Controllers\UserController::class)->except(['index', 'create', 'store', 'show', 'delete']);
 });
 
-Route::get('admin/products/download/{dir}/{name}', [App\Http\Controllers\AdminProductController::class, 'exportDownload'])->name('products.exportDownload');
-
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::post('products/export', [App\Http\Controllers\AdminProductController::class, 'export'])->name('products.export');
     Route::resource('products', App\Http\Controllers\AdminProductController::class)->except(['show', 'delete']);
     Route::get('product/{product}/disable', [App\Http\Controllers\AdminProductController::class, 'disable'])->name('products.disable');
     Route::get('product/{product}/enable', [App\Http\Controllers\AdminProductController::class, 'enable'])->name('products.enable');
@@ -22,6 +20,8 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('api')->name('api.')->group(function () {
     Route::post('users/setbanned/{user}', [App\Http\Controllers\Api\V1\ApiUserController::class, 'setbanned'])->name('users.setbanned');
     Route::delete('images/{image}', [App\Http\Controllers\Api\V1\ApiProductController::class, 'removeImage'])->name('images.destroy');
+    Route::post('products/import', [App\Http\Controllers\Api\V1\ApiProductController::class, 'import'])->name('products.import');
+    Route::post('products/export', [App\Http\Controllers\Api\V1\ApiProductController::class, 'export'])->name('products.export');
 });
 
 Route::middleware(['auth', 'verified', 'role:admin|clients'])->prefix('store')->name('store.')->group(function () {
