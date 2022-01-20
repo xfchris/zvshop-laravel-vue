@@ -8,10 +8,11 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class ProductExport implements FromCollection, WithMapping, WithHeadings, WithStyles, ShouldAutoSize
+class ProductExport implements FromCollection, WithMapping, WithHeadings, WithStyles, ShouldAutoSize, WithStrictNullComparison
 {
     use Exportable;
 
@@ -44,7 +45,7 @@ class ProductExport implements FromCollection, WithMapping, WithHeadings, WithSt
             'Category',
             'Quantity',
             'Price',
-            'Status',
+            'Disabled',
             'Updated',
             'Created',
         ];

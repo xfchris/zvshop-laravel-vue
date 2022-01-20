@@ -4,7 +4,9 @@ namespace App\Services\Product;
 
 use App\Events\LogUserActionEvent;
 use App\Exports\ProductExport;
+use App\Imports\ProductImport;
 use App\Jobs\NotifyOfCompletedExport;
+use App\Jobs\NotifyOfCompletedImport;
 use App\Models\Category;
 use App\Models\Product;
 use App\Services\Trait\ImageTrait;
@@ -118,12 +120,15 @@ class ProductService
         $dir = config('constants.report_directory');
 
         (new ProductExport())->queue($dir . $name)->chain([
-            new NotifyOfCompletedExport(Auth::user(), $type, route('products.exportDownload', [$dir, $name])),
+            new NotifyOfCompletedExport(Auth::user(), $type, route('products.exportDownload', [trim($dir, '/'), $name])),
         ]);
     }
 
     public function import(Request $request): void
     {
-        sleep(1);
+        $file = $request->file('file');
+        $name = $file->getClientOriginalName();
+
+        (new ProductImport(Auth::user(), $name))->queue($file)->chain([new NotifyOfCompletedImport(Auth::user(), $name)]);
     }
 }

@@ -45,17 +45,17 @@ class ApiProductController extends Controller
         $this->authorize('can', 'users_update_products');
 
         $removed = $this->productService->removeImage($image);
-        $response = $removed ? ['status' => 200, 'message' => trans('app.image_management.image_removed')]
-                             : ['status' => 400, 'message' => trans('app.image_management.image_no_removed')];
+        $response = $removed ? ['code' => 200, 'message' => trans('app.image_management.image_removed')]
+                             : ['code' => 400, 'message' => trans('app.image_management.image_no_removed')];
 
-        return response()->json($response, $response['status']);
+        return response()->json($response, $response['code']);
     }
 
     public function export(): JsonResponse
     {
         $this->authorize('can', 'users_update_products');
         $this->productService->export();
-        $response = ['status' => 200, 'message' => trans('app.reports.notify_export_products') . Auth::user()->email];
+        $response = ['code' => 200, 'message' => trans('app.reports.notify_export_products') . Auth::user()->email];
         return response()->json($response);
     }
 
@@ -63,7 +63,7 @@ class ApiProductController extends Controller
     {
         $this->authorize('can', 'users_update_products');
         $this->productService->import($request);
-        $response = ['status' => 200, 'message' => trans('app.reports.notify_import_products') . Auth::user()->email];
+        $response = ['code' => 200, 'message' => trans('app.reports.notify_import_products') . Auth::user()->email];
         return response()->json($response);
     }
 }
