@@ -32,8 +32,8 @@ describe('File upload', () => {
 
     setTimeout(() => {
       expect(Swal.getValidationMessage().textContent).toContain('The file exceeds the allowed weight of:')
-      done()
       Swal.close()
+      done()
     })
   })
 
@@ -47,8 +47,8 @@ describe('File upload', () => {
 
     setTimeout(() => {
       expect(Swal.getValidationMessage().textContent).toContain('You must select a file')
-      done()
       Swal.close()
+      done()
     })
   })
 
@@ -67,8 +67,8 @@ describe('File upload', () => {
 
     setTimeout(() => {
       expect(Swal.getTitle().textContent).toContain('Uploading...')
-      done()
       Swal.close()
+      done()
     })
   })
 })
