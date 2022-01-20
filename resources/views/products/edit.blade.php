@@ -15,15 +15,14 @@
                 @csrf
                 @method('PUT')
 
-
                 @include('products.form')
 
+                <a class="btn btn-secondary mt-4 me-2 text-light" href="{{ route('admin.products.index') }}">Cancel</a>
 
-                <a class="btn btn-secondary mt-4 me-2 btn-wait-submit text-light"
-                    href="{{ route('admin.products.index') }}">Cancel</a>
-                <button type="submit" class="btn btn-success mt-4 btn-wait-submit text-light" data-wait="Wait...">
+                <btn-submit class="btn btn-success mt-4 text-light">
                     @lang('app.product_management.edit_product')
-                </button>
+                </btn-submit>
+
             </form>
         </div>
     </div>

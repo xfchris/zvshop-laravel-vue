@@ -3,6 +3,10 @@
 namespace App\Services\Product;
 
 use App\Events\LogUserActionEvent;
+use App\Exports\ProductExport;
+use App\Imports\ProductImport;
+use App\Jobs\NotifyOfCompletedExport;
+use App\Jobs\NotifyOfCompletedImport;
 use App\Models\Category;
 use App\Models\Product;
 use App\Services\Trait\ImageTrait;
@@ -11,6 +15,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Scout\Builder as ScoutBuilder;
 use MeiliSearch\Endpoints\Indexes;
 
@@ -93,14 +98,10 @@ class ProductService
 
     public function searchProductsPerPage(int $category_id = null, string $search = null): ScoutBuilder
     {
-        $products = Product::search($search, function (Indexes $index, $query, $options) use ($category_id) {
-            if ($category_id) {
-                $options['filters'] = '(category_id = ' . $category_id . ')';
-            }
-            return $index->rawSearch($query, $options);
-        });
-
-        return $products;
+        $filters = [
+            'filters' => $category_id ? '(category_id = ' . $category_id . ')' : '',
+        ];
+        return Product::search($search, fn (Indexes $index, $query, $options) => $index->rawSearch($query, array_merge($options, $filters)));
     }
 
     public function getProductsStorePerPage(int $category_id = null): Builder
@@ -110,5 +111,24 @@ class ProductService
             $products->where('category_id', $category_id);
         }
         return $products->orderBy('created_at', 'DESC');
+    }
+
+    public function export(): void
+    {
+        $type = 'products';
+        $name = $type . '_' . now()->format('Y-m-d_H_i_s') . Auth::user()->id . '.xlsx';
+        $dir = config('constants.report_directory');
+
+        (new ProductExport())->queue($dir . $name)->chain([
+            new NotifyOfCompletedExport(Auth::user(), $type, route('products.exportDownload', [trim($dir, '/'), $name])),
+        ]);
+    }
+
+    public function import(Request $request): void
+    {
+        $file = $request->file('file');
+        $name = $file->getClientOriginalName();
+
+        (new ProductImport(Auth::user(), $name))->queue($file)->chain([new NotifyOfCompletedImport(Auth::user(), $name)]);
     }
 }

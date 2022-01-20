@@ -19,12 +19,10 @@ class OrderObserver
                 case AppConstants::APPROVED:
                     $order->user->notify(new OrderStatusChangedNotification($order));
                     break;
-                case AppConstants::EXPIRED:
-                case AppConstants::REJECTED:
+                default:
                     DB::select('CALL change_quantity_of_products(' . $order->id . ', true)');
                     $order->user->notify(new OrderStatusChangedNotification($order));
                     break;
-                default:
             }
         }
     }

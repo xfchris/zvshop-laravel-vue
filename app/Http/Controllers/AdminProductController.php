@@ -10,6 +10,8 @@ use App\Services\Product\ProductService;
 use App\Strategies\GstImages\ContextImage;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class AdminProductController extends Controller
 {
@@ -58,7 +60,8 @@ class AdminProductController extends Controller
         $product = $this->productService->updateProduct($request, $id);
         $msgImages = $this->productService->createImages('images', $request, $product);
 
-        return redirect()->route('admin.products.edit', $id)->with('success', trans('app.product_management.product_update') . $msgImages);
+        return redirect()->route('admin.products.edit', $id)
+                         ->with('success', trans('app.product_management.product_update') . $msgImages);
     }
 
     public function disable(int $id): RedirectResponse
@@ -73,5 +76,11 @@ class AdminProductController extends Controller
         $this->authorize('can', 'users_enable_products');
         $this->productService->enableProduct($id);
         return back()->with('success', trans('app.product_management.alert_enabled'));
+    }
+
+    public function exportDownload(string $dir, string $filename): StreamedResponse
+    {
+        abort_if(!Storage::exists($dir . '/' . $filename), 404);
+        return Storage::download($dir . '/' . $filename);
     }
 }
