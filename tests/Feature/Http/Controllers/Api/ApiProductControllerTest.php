@@ -9,6 +9,8 @@ use Exception;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Testing\TestResponse;
@@ -210,21 +212,58 @@ class ApiProductControllerTest extends TestCase
         $response->assertStatus(204);
     }
 
-    public function test_it_can_queue_products_export()
+    public function test_it_can_queue_products_export(): string
     {
         $admin = $this->userAdminCreate();
+        Product::factory(2)->create();
         $filename = 'products_' . now()->format('Y-m-d_H_i_s') . $admin->id . '.xlsx';
-        $dir = config('constants.report_directory');
+        $path = config('constants.report_directory') . $filename;
 
         $response = $this->actingAs($admin)->post(route('api.products.export'));
 
         $response->assertStatus(200);
-        Storage::assertExists($dir . $filename);
-        Storage::delete($dir . $filename);
-        Storage::assertMissing($dir . $filename);
+        Storage::assertExists($path);
+        return $path;
     }
 
-    public function test_it_can_download_export_file_correctly()
+    public function test_it_show_errors_when_the_file_to_import_is_incorrect(): void
+    {
+        $admin = $this->userAdminCreate();
+        $excel = UploadedFile::fake()->image('avatar.jpg');
+
+        $response = $this->actingAs($admin)->post(route('api.products.import'), ['file' => $excel]);
+
+        $response->assertJsonFragment(['code' => 422]);
+    }
+
+    public function test_it_show_errors_when_the_any_column_to_import_is_incorrect(): void
+    {
+        $admin = $this->userAdminCreate();
+        $path = getcwd() . '/tests/Data/impor_product_bad.xlsx';
+        $excel = new UploadedFile($path, basename($path), 'xlsx', null, true);
+
+        $response = $this->actingAs($admin)->post(route('api.products.import'), ['file' => $excel]);
+        $response->assertRedirect();
+    }
+
+    /**
+     * @depends test_it_can_queue_products_export
+     */
+    public function test_it_can_queue_products_import(string $path): void
+    {
+        $admin = $this->userAdminCreate();
+        DB::table('products')->delete();
+        $excel = new UploadedFile(Storage::path($path), basename($path), 'xlsx', null, true);
+
+        $response = $this->actingAs($admin)->post(route('api.products.import'), ['file' => $excel]);
+
+        $response->assertJsonFragment(['code' => 200]);
+        $this->assertTrue(Product::count() > 0);
+        Storage::delete($path);
+        Storage::assertMissing($path);
+    }
+
+    public function test_it_can_download_export_file_correctly(): void
     {
         $filename = 'test.xlsx';
         $dir = config('constants.report_directory');
@@ -252,7 +291,7 @@ class ApiProductControllerTest extends TestCase
         $userAdmin = $this->userAdminCreate();
         $product = Product::factory()->create();
         $product->images()->createMany([
-            ['url' => 'https://i.imgur.com/fakehash1.jpg', 'data' => ['deletehash' => 'fakeDeleteHash1']],
+            ['url' => 'https://i.imgur.com/fakehash1.jpg', 'data' => ['deletehash' => 'fakeDeleteHash']],
         ]);
         $image = $product->images->first();
         $response = $this->actingAs($userAdmin)->delete(route('api.images.destroy', $image->id));
