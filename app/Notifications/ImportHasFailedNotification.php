@@ -30,7 +30,8 @@ class ImportHasFailedNotification extends Notification
         return (new MailMessage())
                     ->subject(config('app.name') . ' - You import of ' . $this->title . ' has failed!')
                     ->greeting('Hello ' . $this->user->name)
-                    ->line('The import of file: ' . $this->title . ' has failed: ' . $message)
+                    ->line('The import of file: ' . $this->title . ' has failed:')
+                    ->line($message)
                     ->action('Login', route('login'))
                     ->line('Thank you!');
     }
