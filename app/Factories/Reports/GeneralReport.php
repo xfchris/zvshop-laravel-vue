@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Reports;
+namespace App\Factories\Reports;
 
 use App\Constants\AppConstants;
+use App\Factories\Reports\Contracts\ReportContract;
 use App\Helpers\ReportHelper;
 use App\Models\Order;
 use App\Models\Payment;
-use App\Reports\Contracts\ReportContract;
 use Illuminate\Support\Facades\Storage;
 use PDF;
 

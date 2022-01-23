@@ -2,11 +2,11 @@
 
 namespace App\Services\Report;
 
+use App\Factories\Reports\GeneralReport;
+use App\Factories\Reports\ReportFactory;
+use App\Factories\Reports\SalesReport;
 use App\Helpers\ReportHelper;
 use App\Jobs\ReportsJob;
-use App\Reports\GeneralReport;
-use App\Reports\ReportFactory;
-use App\Reports\SalesReport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 

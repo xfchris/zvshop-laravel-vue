@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Reports;
+namespace App\Factories\Reports;
 
-use App\Reports\Contracts\ReportContract;
+use App\Factories\Reports\Contracts\ReportContract;
 
 class ReportFactory
 {
