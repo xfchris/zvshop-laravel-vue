@@ -13,7 +13,7 @@ class CreatePaymentsTable extends Migration
             $table->id();
             $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');
             $table->enum('status', AppConstants::STATUS)->default(AppConstants::CREATED);
-            $table->bigInteger('requestId')->unique();
+            $table->bigInteger('requestId')->index();
             $table->string('processUrl');
             $table->json('products')->nullable();
             $table->decimal('totalAmount', 10, 2);
