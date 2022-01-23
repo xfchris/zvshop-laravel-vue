@@ -13,8 +13,8 @@ class ComposerServiceProvider extends ServiceProvider
         view()->composer(
             ['store.products.index', 'store.products.show', 'store.orders.show'],
             function ($view) use ($contextImage) {
-            $view->with(['contextImage' => $contextImage]);
-        }
+                $view->with(['contextImage' => $contextImage]);
+            }
         );
 
         view()->composer(['store.products.index', 'store.products.show', 'reports.index'], CategoriesComposer::class);
