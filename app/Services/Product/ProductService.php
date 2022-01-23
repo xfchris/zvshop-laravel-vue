@@ -4,6 +4,7 @@ namespace App\Services\Product;
 
 use App\Events\LogUserActionEvent;
 use App\Exports\ProductExport;
+use App\Helpers\ReportHelper;
 use App\Imports\ProductImport;
 use App\Jobs\NotifyOfCompletedExport;
 use App\Jobs\NotifyOfCompletedImport;
@@ -115,12 +116,11 @@ class ProductService
 
     public function export(): void
     {
-        $type = 'products';
-        $name = $type . '_' . now()->format('Y-m-d_H_i_s') . Auth::user()->id . '.xlsx';
+        $name = 'products_' . ReportHelper::randomNameReports() . Auth::user()->id . '.xlsx';
         $dir = config('constants.report_directory');
 
         (new ProductExport())->queue($dir . $name)->chain([
-            new NotifyOfCompletedExport(Auth::user(), $type, route('products.exportDownload', [trim($dir, '/'), $name])),
+            new NotifyOfCompletedExport(Auth::user(), 'products', route('products.exportDownload', [trim($dir, '/'), $name])),
         ]);
     }
 

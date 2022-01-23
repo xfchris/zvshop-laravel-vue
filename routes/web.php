@@ -15,6 +15,9 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::resource('products', App\Http\Controllers\AdminProductController::class)->except(['show', 'delete']);
     Route::get('product/{product}/disable', [App\Http\Controllers\AdminProductController::class, 'disable'])->name('products.disable');
     Route::get('product/{product}/enable', [App\Http\Controllers\AdminProductController::class, 'enable'])->name('products.enable');
+    Route::get('reports', [App\Http\Controllers\AdminReportController::class, 'index'])->name('reports.index');
+    Route::post('reports/general', [App\Http\Controllers\AdminReportController::class, 'general'])->name('reports.general');
+    Route::post('reports/sales', [App\Http\Controllers\AdminReportController::class, 'sales'])->name('reports.sales');
 });
 
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('api')->name('api.')->group(function () {

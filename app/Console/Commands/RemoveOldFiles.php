@@ -17,7 +17,7 @@ class RemoveOldFiles extends Command
         collect(Storage::listContents(config('constants.report_directory')))->each(function ($file) {
             if (
                     $file['timestamp'] < now()->subDays(config('constants.reports_expiration_days'))->getTimestamp() &&
-                    $file['extension'] == 'xlsx'
+                    in_array($file['extension'], ['xlsx', 'pdf'])
                 ) {
                 Storage::delete($file['path']);
                 $filesRemoved[] = $file['path'];

@@ -14,7 +14,6 @@ class RolesAndPermissionSeeder extends Seeder
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
         DB::table('permissions')->delete();
-        DB::table('roles')->delete();
 
         $permissions = config('permission.names');
         $roles = config('permission.roles');

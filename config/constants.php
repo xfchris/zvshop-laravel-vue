@@ -11,4 +11,5 @@ return [
     'expiration_days' => 1,
     'reports_expiration_days' => 2,
     'report_directory' => 'reports/',
+    'cache_categories_duration' => 1440, //seconds, 1 day
 ];

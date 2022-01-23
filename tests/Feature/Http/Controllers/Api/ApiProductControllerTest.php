@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers\Api;
 
+use App\Helpers\ReportHelper;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\User;
@@ -216,7 +217,7 @@ class ApiProductControllerTest extends TestCase
     {
         $admin = $this->userAdminCreate();
         Product::factory(2)->create();
-        $filename = 'products_' . now()->format('Y-m-d_H_i_s') . $admin->id . '.xlsx';
+        $filename = 'products_' . ReportHelper::randomNameReports() . $admin->id . '.xlsx';
         $path = config('constants.report_directory') . $filename;
 
         $response = $this->actingAs($admin)->post(route('api.products.export'));

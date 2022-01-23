@@ -179,6 +179,8 @@ return [
         'store_show_products' => 'store_show_products',
         'store_update_order' => 'store_update_order',
 
+        'reports_general' => 'reports_general',
+        'reports_sales' => 'reports_sales',
     ],
 
     'roles' => [

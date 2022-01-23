@@ -7,7 +7,6 @@ use App\Models\Product;
 use App\Models\User;
 use App\Notifications\ImportHasFailedNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Database\Eloquent\Collection;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
@@ -21,13 +20,13 @@ class ProductImport implements ToModel, WithHeadingRow, WithValidation, WithBatc
 {
     use Importable;
 
-    public Collection $category;
+    public User $user;
+    public string $title;
 
-    public function __construct(
-        public User $user,
-        public string $title
-    ) {
-        $this->category = Category::select('id', 'name')->get()->keyBy('name');
+    public function __construct(User $user, string $title)
+    {
+        $this->user = $user;
+        $this->title = $title;
     }
 
     public function model(array $row): void
@@ -35,7 +34,7 @@ class ProductImport implements ToModel, WithHeadingRow, WithValidation, WithBatc
         $data = [
             'name' => $row['name'],
             'description' => $row['description'],
-            'category_id' => $this->category[$row['category']]->id,
+            'category_id' => Category::getFromCache()->get($row['category'])->id,
             'quantity' => $row['quantity'],
             'price' => $row['price'],
             'deleted_at' => $row['disabled'],
@@ -49,7 +48,9 @@ class ProductImport implements ToModel, WithHeadingRow, WithValidation, WithBatc
         return [
             'id' => ['present'],
             'name' => ['required', 'max:120'],
-            'category' => ['required', 'exists:categories,name'],
+            'category' => ['required', fn ($attribute, $value, $fail) => (
+                !Category::getFromCache()->get($value) ? $fail('The ' . $attribute . ' "' . $value . '" no exist.') : true
+            )],
             'quantity' => ['required', 'numeric', 'min:0'],
             'price' => ['required', 'numeric', 'min:1'],
             'description' => ['required'],
@@ -70,7 +71,9 @@ class ProductImport implements ToModel, WithHeadingRow, WithValidation, WithBatc
     public function registerEvents(): array
     {
         return [
-            ImportFailed::class => fn (ImportFailed $event) => $this->user->notify(new ImportHasFailedNotification($this->user, $this->title, $event)),
+            ImportFailed::class => fn (ImportFailed $event) => (
+                $this->user->notify(new ImportHasFailedNotification($this->user, $this->title, $event))
+            ),
         ];
     }
 }

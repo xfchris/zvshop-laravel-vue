@@ -13,7 +13,7 @@ use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
 use Tests\Traits\ContextImageFake;
 
-class ProductControllerTest extends TestCase
+class AdminProductControllerTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
