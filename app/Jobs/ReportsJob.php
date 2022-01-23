@@ -2,17 +2,17 @@
 
 namespace App\Jobs;
 
-use App\Helpers\ReportHelper;
 use App\Models\User;
 use App\Notifications\ExportCompletedNotification;
-use App\Reports\GeneralReport;
+use App\Reports\Contracts\ReportContract;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
-class GeneralReportJob implements ShouldQueue
+class ReportsJob implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -20,17 +20,16 @@ class GeneralReportJob implements ShouldQueue
     use SerializesModels;
 
     public function __construct(
-        public array $request,
         public User $user,
+        public string $name,
+        public ReportContract $report
     ) {
     }
 
     public function handle(): void
     {
-        $name = 'general_' . ReportHelper::randomNameReports() . $this->user->id . '.pdf';
-        $url = route('products.exportDownload', [trim(config('constants.report_directory'), '/'), $name]);
-
-        (new GeneralReport($name, $this->request))->generate();
-        $this->user->notify(new ExportCompletedNotification($this->user, 'general information', $url));
+        $this->report->generate();
+        $this->user->notify(new ExportCompletedNotification($this->user, $this->name, $this->report->getDownloadUrl()));
+        Log::log('info', 'A report of ' . $this->name . ' has been created by the user: Name=' . $this->user->name . ' id=' . $this->user->id);
     }
 }

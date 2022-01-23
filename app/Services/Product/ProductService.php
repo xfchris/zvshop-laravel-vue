@@ -117,7 +117,7 @@ class ProductService
 
     public function export(): void
     {
-        $name = 'products_' . ReportHelper::randomNameReports() . Auth::user()->id . '.xlsx';
+        $name = 'products_' . ReportHelper::createReportName() . Auth::user()->id . '.xlsx';
         $dir = config('constants.report_directory');
 
         (new ProductExport())->queue($dir . $name)->chain([

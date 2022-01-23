@@ -34,7 +34,7 @@ class AdminReportControllerTest extends TestCase
     {
         $admin = $this->userAdminCreate();
         Product::factory(2)->create();
-        $filename = 'general_' . ReportHelper::randomNameReports() . $admin->id . '.pdf';
+        $filename = 'general_' . ReportHelper::createReportName() . $admin->id . '.pdf';
         $path = config('constants.report_directory') . $filename;
 
         $response = $this->actingAs($admin)->post(route('admin.reports.general'), [
@@ -53,7 +53,7 @@ class AdminReportControllerTest extends TestCase
         $this->generateOrdersApproved($products, 2);
 
         $admin = $this->userAdminCreate();
-        $filename = 'sales_' . ReportHelper::randomNameReports() . $admin->id . '.pdf';
+        $filename = 'sales_' . ReportHelper::createReportName() . $admin->id . '.pdf';
         $path = config('constants.report_directory') . $filename;
 
         $response = $this->actingAs($admin)->post(route('admin.reports.sales'), [

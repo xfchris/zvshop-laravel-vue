@@ -5,20 +5,15 @@ namespace App\Reports;
 use App\Constants\AppConstants;
 use App\Helpers\ReportHelper;
 use App\Models\Payment;
+use App\Reports\Contracts\ReportContract;
 use Illuminate\Support\Facades\Storage;
 use PDF;
 
-class SalesReport
+class SalesReport extends ReportContract
 {
-    public function __construct(
-        public string $name,
-        public array $filters
-    ) {
-    }
-
     public function generate(): bool
     {
-        $rangeDate = ReportHelper::rangeDate($this->filters);
+        $rangeDate = ReportHelper::getRangeDate($this->filters);
         $salesProducts = Payment::select('products')->where('status', AppConstants::APPROVED)->whereBetween('updated_at', $rangeDate)->get();
         $products = ReportHelper::groupHistoryProducts($salesProducts);
 

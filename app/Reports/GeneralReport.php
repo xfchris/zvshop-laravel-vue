@@ -6,20 +6,15 @@ use App\Constants\AppConstants;
 use App\Helpers\ReportHelper;
 use App\Models\Order;
 use App\Models\Payment;
+use App\Reports\Contracts\ReportContract;
 use Illuminate\Support\Facades\Storage;
 use PDF;
 
-class GeneralReport
+class GeneralReport extends ReportContract
 {
-    public function __construct(
-        public string $name,
-        public array $filters
-    ) {
-    }
-
     public function generate(): bool
     {
-        $rangeDate = ReportHelper::rangeDate($this->filters);
+        $rangeDate = ReportHelper::getRangeDate($this->filters);
         $data = [
             'name' => $this->name,
             'start_date' => $this->filters['start_date'],
