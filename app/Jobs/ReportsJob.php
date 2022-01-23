@@ -2,9 +2,9 @@
 
 namespace App\Jobs;
 
+use App\Factories\Reports\Contracts\ReportContract;
 use App\Models\User;
 use App\Notifications\ExportCompletedNotification;
-use App\Reports\Contracts\ReportContract;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

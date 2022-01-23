@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Reports\Contracts;
+namespace App\Factories\Reports\Contracts;
 
 abstract class ReportContract
 {

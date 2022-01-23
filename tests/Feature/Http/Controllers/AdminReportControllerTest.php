@@ -16,11 +16,6 @@ class AdminReportControllerTest extends TestCase
     use PaymentGatewayFake;
     use PaymentManagement;
 
-    public function setUp(): void
-    {
-        parent::setUp();
-    }
-
     public function test_it_show_the_report_lists(): void
     {
         $user = $this->userAdminCreate();
