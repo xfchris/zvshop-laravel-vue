@@ -22,8 +22,9 @@ class OrderService
 
         if ($productOrder) {
             $this->updateProduct($quantity, $productOrder);
+        } else {
+            $this->addProduct($quantity, $order, $product);
         }
-        $this->addProduct($quantity, $order, $product);
     }
 
     private function addProduct(int $quantity, Order $order, Product $product): void
