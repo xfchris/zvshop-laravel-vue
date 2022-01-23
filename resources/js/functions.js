@@ -33,7 +33,7 @@ export function submitForm (btn) {
 function transformErrors (errors) {
   let message = ''
   Lodash.each(errors, (value) => {
-    message += value.join(', ') + ', '
+    message += value.join(' <br/>') + ' <br/>'
   })
   return message.slice(0, -2)
 }

@@ -17543,3 +17543,8 @@ body .border-dashed {
 body .order-item:hover {
   background-color: #eeeeee73;
 }
+body .pdf-reports .tableUsers th {
+  text-align: left;
+  background: #000;
+  color: #CCC;
+}

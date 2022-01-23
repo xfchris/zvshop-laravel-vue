@@ -1,4 +1,4 @@
-@extends('reports.layouts.pdf_layout')
+@extends('layouts.pdf_reports')
 
 @section('title', 'Sales Report')
 

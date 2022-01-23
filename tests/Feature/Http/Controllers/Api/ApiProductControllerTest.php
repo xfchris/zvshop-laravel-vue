@@ -217,7 +217,7 @@ class ApiProductControllerTest extends TestCase
     {
         $admin = $this->userAdminCreate();
         Product::factory(2)->create();
-        $filename = 'products_' . ReportHelper::randomNameReports() . $admin->id . '.xlsx';
+        $filename = 'products_' . ReportHelper::createReportName() . $admin->id . '.xlsx';
         $path = config('constants.report_directory') . $filename;
 
         $response = $this->actingAs($admin)->post(route('api.products.export'));

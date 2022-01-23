@@ -43,12 +43,12 @@ class ReportHelper
         }
     }
 
-    public static function rangeDate(array $request): array
+    public static function getRangeDate(array $request): array
     {
         return [$request['start_date'], $request['end_date'] . ' 23:59:59'];
     }
 
-    public static function randomNameReports(): string
+    public static function createReportName(): string
     {
         return now()->format('Y-m-d_H_i_s');
     }

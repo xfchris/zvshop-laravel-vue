@@ -40,14 +40,15 @@
         .center {
             text-align: center;
         }
-
     </style>
 </head>
 
 <body>
     Report: {{ $name }}
     <h1 class="mb-0 mt-3 center">@yield('title')</h1>
-    @yield('content')
+    <div class="pdf-reports">
+            @yield('content')
+    </div>
 </body>
 
 </html>
