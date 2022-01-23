@@ -43,16 +43,17 @@ Email|Password|
  ------ | ------ |
 admin@gmail.com|password
 
-------------------------
+
 
 ## API REST-ful
 
 - La API REST-ful implementa la especificación [json-api](https://jsonapi.org/).  
 - Permite la gestión de productos a través de la API REST-ful.
+- La ruta base: http://localhost/api/v1
 
 ### Autentificación desde la API
 
-- Genere el Bearer token autentificación asi:
+- Genere el bearer token asi:
 
  ```js
     axios.post('http://localhost/api/v1/login', {
@@ -63,16 +64,9 @@ admin@gmail.com|password
     .catch(err => console.log(err.message))
  ```
 
-- Ejemplo de onsumo de todos los servicios mediante el `token_api` obtenido.
-- La ruta base: http://localhost/api/v1
-
-- Ejemplo de obtencion de todos los productos
+- Ejemplo de obtención de todos los productos
  ```js
-    let data = {
-      param1: 'param1',
-      param2: 'param2'
-    }
-    axios.get('http://localhost/api/v1/products', data, {
+    axios.get('http://localhost/api/v1/products', {}, {
       headers: {
         Authorization: 'Bearer ' + token_api
       }
@@ -81,6 +75,7 @@ admin@gmail.com|password
     .catch(err => console.log(err.message))
  ```
 
+------------------------
 ## License
 
 **ZVShop** es un proyecto bajo la licencia [MIT license](https://opensource.org/licenses/MIT).
