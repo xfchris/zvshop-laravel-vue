@@ -93,7 +93,8 @@ class ProductService
 
     public function getOrSearchProductsPerPage(int $category_id = null, string $search = null): LengthAwarePaginator
     {
-        $response = $search ? $this->searchProductsPerPage($category_id, $search) : $this->getProductsStorePerPage($category_id);
+        $response = $search ? $this->searchProductsPerPage($category_id, $search)
+                            : $this->getProductsStorePerPage($category_id);
         return $response->paginate(config('constants.num_product_rows_per_table'));
     }
 
@@ -102,7 +103,7 @@ class ProductService
         $filters = [
             'filters' => $category_id ? '(category_id = ' . $category_id . ')' : '',
         ];
-        return Product::search($search, fn (Indexes $index, $query, $options) => $index->rawSearch($query, array_merge($options, $filters)));
+        return Product::search($search, fn (Indexes $index, $query, $options) => ($index->rawSearch($query, array_merge($options, $filters))));
     }
 
     public function getProductsStorePerPage(int $category_id = null): Builder
