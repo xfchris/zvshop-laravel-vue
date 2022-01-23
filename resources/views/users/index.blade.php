@@ -53,7 +53,7 @@
                                         class="btn btn-xs btn-primary text-light py-0 d-flex align-items-center">
                                         <i class="fas fa-edit"></i> <span class="ms-1">Edit</span>
                                     </a>
-                                    <btn-block-user link="{{ route('api.users.activateInactivateUser', $user->id) }}"
+                                    <btn-block-user link="{{ route('api.users.setbanned', $user->id) }}"
                                         banned_until="{{ $user->check_banned_until }}">
                                         {{ $user->check_banned_until ? 'Unblock' : 'Block' }} user
                                     </btn-block-user>

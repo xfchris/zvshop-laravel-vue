@@ -13,6 +13,11 @@ class ProductStoreRequest extends FormRequest
 
     public function rules(): array
     {
+        return self::rulesRequest();
+    }
+
+    public static function rulesRequest(): array
+    {
         return [
             'name' => ['required', 'max:120'],
             'images.*' => ['mimes:jpeg,png,jpg,gif', 'max:' . config('constants.image_max_size')],

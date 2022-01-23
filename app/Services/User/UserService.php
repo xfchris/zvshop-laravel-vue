@@ -7,6 +7,7 @@ use App\Events\LogUserActionEvent;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserService
 {
@@ -40,5 +41,18 @@ class UserService
                 ->select(['id', 'name', 'email', 'email_verified_at', 'created_at', 'banned_until'])
                 ->orderBy('created_at', 'DESC')
                 ->paginate(config('constants.num_rows_per_table'));
+    }
+
+    public function loginApi(string $email, string $password): array
+    {
+        $user = User::where('email', $email)->first();
+        if (!$user || !Hash::check($password, $user->password)) {
+            return ['code' => 401, 'status' => 'FAILED', 'message' => 'Invalid user or password'];
+        }
+        return [
+            'code' => 200,
+            'access_token' => $user->createToken('authToken')->plainTextToken,
+            'token_type' => 'Bearer',
+        ];
     }
 }

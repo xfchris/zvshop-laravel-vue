@@ -67,7 +67,7 @@ class Order extends Model
 
     public function lastProductsCopy(): array
     {
-        return ($this->payment) ? $this->payment->products :
-                $this->products->makeHidden(['id', 'poster', 'quantity'])->toArray();
+        return ($this->payment) ? $this->payment->products
+                                : $this->products->makeHidden(['id', 'poster', 'quantity'])->toArray();
     }
 }

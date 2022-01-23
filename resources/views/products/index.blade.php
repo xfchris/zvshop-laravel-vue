@@ -4,10 +4,24 @@
             <h2 class="h4 font-weight-bold mb-0">
                 {{ __('app.product_management.title') }}
             </h2>
-            <a href="{{ route('admin.products.create') }}"
-                class="btn btn-xs btn-primary text-light py-0 d-flex align-items-center">
-                <i class="fas fa-plus-circle"></i> <span class="ms-1">@lang('app.product_management.create_product')</span>
-            </a>
+            <div class="d-flex">
+                <a href="{{ route('admin.products.create') }}"
+                    class="btn btn-xs btn-primary text-light py-0 d-flex align-items-center">
+                    <i class="fas fa-plus-circle"></i> <span
+                        class="ms-1">@lang('app.product_management.create_product')</span>
+                </a>
+
+                <btn-input-file
+                    action="{{ route('api.products.import') }}"
+                    class="ms-2 btn btn-xs btn-success text-light"
+                    text="Import"
+                    maxfilesize="{{ config('constants.file_max_size') }}">
+                </btn-input-file>
+
+                <btn-submit action="{{ route('api.products.export') }}" class="btn ms-2 btn-xs btn-success text-light">
+                    @lang('app.product_management.export')
+                </btn-submit>
+            </div>
         </div>
     </x-slot>
 

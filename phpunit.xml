@@ -13,8 +13,6 @@
         <include>
             <directory suffix=".php">./app</directory>
         </include>
-        <exclude>
-        </exclude>
     </coverage>
     <php>
         <server name="APP_ENV" value="testing"/>

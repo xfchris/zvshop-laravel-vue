@@ -23,7 +23,7 @@ describe('Remove Tumbnail', () => {
 
   it('can remove a image', (done) => {
     const message = 'Image removed'
-    axios.delete.mockResolvedValue({ data: { status: 'success', message } })
+    axios.delete.mockResolvedValue({ data: { status: 200, message } })
 
     expect(wrapper.html()).toContain('button')
     expect(wrapper.vm.showSwal).toBe(false)
@@ -43,7 +43,7 @@ describe('Remove Tumbnail', () => {
 
   it('can no remove a image', (done) => {
     const message = 'Image no removed'
-    axios.delete.mockResolvedValue({ data: { status: 'error', message } })
+    axios.delete.mockResolvedValue({ data: { status: 400, message } })
 
     expect(wrapper.html()).toContain('button')
     expect(wrapper.vm.showSwal).toBe(false)
@@ -56,6 +56,25 @@ describe('Remove Tumbnail', () => {
     setTimeout(() => {
       expect(Swal.getTitle().textContent).toEqual('Error')
       expect(Swal.getHtmlContainer().textContent).toEqual(message)
+      Swal.clickConfirm()
+      expect(wrapper.vm.showSwal).toBe(false)
+      done()
+    })
+  })
+
+  it('can no connect to server', (done) => {
+    axios.delete.mockResolvedValue('')
+
+    expect(wrapper.html()).toContain('button')
+    expect(wrapper.vm.showSwal).toBe(false)
+    wrapper.find('button').trigger('click')
+
+    expect(wrapper.vm.showSwal).toBe(true)
+    expect(Swal.getTitle().textContent).toEqual('Are you sure?')
+    Swal.clickConfirm()
+
+    setTimeout(() => {
+      expect(Swal.getTitle().textContent).toEqual('Operation cancelled')
       Swal.clickConfirm()
       expect(wrapper.vm.showSwal).toBe(false)
       done()

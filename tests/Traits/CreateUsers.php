@@ -3,6 +3,7 @@
 namespace Tests\Traits;
 
 use App\Models\User;
+use Laravel\Sanctum\Sanctum;
 
 trait CreateUsers
 {
@@ -17,6 +18,13 @@ trait CreateUsers
     {
         $user = User::factory()->create($attributes);
         $user->assignRole(config('permission.roles.admin.name'));
+        return $user;
+    }
+
+    public function userAdminApiCreate(array $attributes = []): User
+    {
+        $user = $this->userAdminCreate($attributes);
+        Sanctum::actingAs($user);
         return $user;
     }
 }

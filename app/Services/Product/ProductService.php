@@ -3,13 +3,21 @@
 namespace App\Services\Product;
 
 use App\Events\LogUserActionEvent;
+use App\Exports\ProductExport;
+use App\Helpers\ReportHelper;
+use App\Imports\ProductImport;
+use App\Jobs\NotifyOfCompletedExport;
+use App\Jobs\NotifyOfCompletedImport;
 use App\Models\Category;
 use App\Models\Product;
 use App\Services\Trait\ImageTrait;
 use App\Strategies\GstImages\ContextImage;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Laravel\Scout\Builder as ScoutBuilder;
 use MeiliSearch\Endpoints\Indexes;
 
 class ProductService
@@ -85,31 +93,43 @@ class ProductService
 
     public function getOrSearchProductsPerPage(int $category_id = null, string $search = null): LengthAwarePaginator
     {
-        if ($search) {
-            return $this->searchProductsPerPage($category_id, $search);
-        }
-        return $this->getProductsStorePerPage($category_id);
+        $response = $search ? $this->searchProductsPerPage($category_id, $search)
+                            : $this->getProductsStorePerPage($category_id);
+        return $response->paginate(config('constants.num_product_rows_per_table'));
     }
 
-    public function searchProductsPerPage(int $category_id = null, string $search = null): LengthAwarePaginator
+    public function searchProductsPerPage(int $category_id = null, string $search = null): ScoutBuilder
     {
-        $products = Product::search($search, function (Indexes $index, $query, $options) use ($category_id) {
-            if ($category_id) {
-                $options['filters'] = '(category_id = ' . $category_id . ')';
-            }
-            return $index->rawSearch($query, $options);
-        });
-
-        return $products->paginate(config('constants.num_product_rows_per_table'));
+        $filters = [
+            'filters' => $category_id ? '(category_id = ' . $category_id . ')' : '',
+        ];
+        return Product::search($search, fn (Indexes $index, $query, $options) => ($index->rawSearch($query, array_merge($options, $filters))));
     }
 
-    public function getProductsStorePerPage(int $category_id = null): LengthAwarePaginator
+    public function getProductsStorePerPage(int $category_id = null): Builder
     {
         $products = Product::with('category:id,name', 'images');
         if ($category_id) {
             $products->where('category_id', $category_id);
         }
+        return $products->orderBy('created_at', 'DESC');
+    }
 
-        return $products->orderBy('created_at', 'DESC')->paginate(config('constants.num_product_rows_per_table'));
+    public function export(): void
+    {
+        $name = 'products_' . ReportHelper::createReportName() . Auth::user()->id . '.xlsx';
+        $dir = config('constants.report_directory');
+
+        (new ProductExport())->queue($dir . $name)->chain([
+            new NotifyOfCompletedExport(Auth::user(), 'products', route('products.exportDownload', [trim($dir, '/'), $name])),
+        ]);
+    }
+
+    public function import(Request $request): void
+    {
+        $file = $request->file('file');
+        $name = $file->getClientOriginalName();
+
+        (new ProductImport(Auth::user(), $name))->queue($file)->chain([new NotifyOfCompletedImport(Auth::user(), $name)]);
     }
 }

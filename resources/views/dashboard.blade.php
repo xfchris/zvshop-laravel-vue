@@ -33,7 +33,7 @@
 
                     @if (Auth::user()->hasAnyRole([config('permission.roles.admin.name')]))
                         <div class="col-sm-3">
-                            <a href="#" class="btn btn-lg btn-outline-primary text-lightx w-100">
+                            <a href="{{ route('admin.reports.index') }}" class="btn btn-lg btn-outline-primary text-lightx w-100">
                                 <i class="fas fa-chart-line"></i>
                                 <div>@lang('app.reports.title')</div>
                             </a>

@@ -19,7 +19,7 @@ describe('Inactive a user by 5 days', () => {
   })
 
   it('can inactivate a user by 5 days', (done) => {
-    axios.post.mockResolvedValue({ data: { status: 'success' } })
+    axios.post.mockResolvedValue({ data: { status: 200 } })
 
     expect(wrapper.html()).toContain('button')
     expect(wrapper.vm.showSwal).toBe(false)
@@ -39,7 +39,7 @@ describe('Inactive a user by 5 days', () => {
 
   it('can no inactivate a admin user', (done) => {
     const message = 'The account role is admin'
-    axios.post.mockResolvedValue({ data: { status: 'error', message } })
+    axios.post.mockResolvedValue({ data: { status: 400, message } })
 
     expect(wrapper.html()).toContain('button')
     expect(wrapper.vm.showSwal).toBe(false)
@@ -69,7 +69,7 @@ describe('Active user', () => {
   })
 
   it('can activate a user', (done) => {
-    axios.post.mockResolvedValue({ data: { status: 'success' } })
+    axios.post.mockResolvedValue({ data: { status: 200 } })
 
     expect(wrapper.html()).toContain('button')
     expect(wrapper.vm.showSwal).toBe(false)

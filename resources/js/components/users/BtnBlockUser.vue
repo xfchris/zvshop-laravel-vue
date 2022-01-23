@@ -93,12 +93,8 @@ const modalInactiveUser = (link) => {
 
     inputValidator: (value) => {
       return new Promise((resolve) => {
-        if (value !== '') {
-          resolve()
-          setUserBlock(link, value)
-        } else {
-          resolve('You need to select an item from the list')
-        }
+        resolve()
+        setUserBlock(link, value)
       })
     }
   })
@@ -106,7 +102,7 @@ const modalInactiveUser = (link) => {
 
 const setUserBlock = (link, value) => {
   postApi(link, { banned_until: value }).then(res => {
-    if (res.data.status === 'success') {
+    if (res.data.status === 200) {
       Swal.fire('User ' + ((value === null) ? 'Activated' : 'Inactivated')).then(reloadPage)
     } else {
       Swal.fire('Error', res.data.message)

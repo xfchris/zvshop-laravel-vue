@@ -4,22 +4,27 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['guest'])->get('/', fn () => view('index'));
 Route::middleware(['auth', 'verified'])->get('/dashboard', fn () => view('dashboard'))->name('dashboard');
+Route::get('admin/products/download/{dir}/{name}', [App\Http\Controllers\AdminProductController::class, 'exportDownload'])->name('products.exportDownload');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::middleware('can:users_show_users')->get('users', [App\Http\Controllers\UserController::class, 'index'])->name('users.index');
-    Route::middleware('can:update,user')->resource('users', App\Http\Controllers\UserController::class)->except(['index', 'create', 'store', 'show', 'delete']);
+    Route::get('users', [App\Http\Controllers\UserController::class, 'index'])->name('users.index');
+    Route::resource('users', App\Http\Controllers\UserController::class)->except(['index', 'create', 'store', 'show', 'delete']);
 });
 
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('products', App\Http\Controllers\AdminProductController::class)->except(['show', 'delete']);
     Route::get('product/{product}/disable', [App\Http\Controllers\AdminProductController::class, 'disable'])->name('products.disable');
     Route::get('product/{product}/enable', [App\Http\Controllers\AdminProductController::class, 'enable'])->name('products.enable');
+    Route::get('reports', [App\Http\Controllers\AdminReportController::class, 'index'])->name('reports.index');
+    Route::post('reports/general', [App\Http\Controllers\AdminReportController::class, 'general'])->name('reports.general');
+    Route::post('reports/sales', [App\Http\Controllers\AdminReportController::class, 'sales'])->name('reports.sales');
 });
 
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('api')->name('api.')->group(function () {
-    Route::post('users/setbanned/{user}', [App\Http\Controllers\Api\ApiUserController::class, 'activateInactivateUser'])
-    ->name('users.activateInactivateUser');
-    Route::delete('images/{image}', [App\Http\Controllers\Api\ApiProductController::class, 'removeImage'])->name('images.destroy');
+    Route::post('users/setbanned/{user}', [App\Http\Controllers\Api\V1\ApiUserController::class, 'setbanned'])->name('users.setbanned');
+    Route::delete('images/{image}', [App\Http\Controllers\Api\V1\ApiProductController::class, 'removeImage'])->name('images.destroy');
+    Route::post('products/import', [App\Http\Controllers\Api\V1\ApiProductController::class, 'import'])->name('products.import');
+    Route::post('products/export', [App\Http\Controllers\Api\V1\ApiProductController::class, 'export'])->name('products.export');
 });
 
 Route::middleware(['auth', 'verified', 'role:admin|clients'])->prefix('store')->name('store.')->group(function () {
@@ -34,9 +39,9 @@ Route::middleware(['auth', 'verified', 'role:admin|clients'])->prefix('store')->
 
 Route::middleware(['auth', 'verified', 'role:admin|clients'])->prefix('payment')->name('payment.')->group(function () {
     Route::middleware(['check.ordertopay'])->post('pay', [App\Http\Controllers\PaymentController::class, 'pay'])->name('pay');
-    Route::middleware('can:update,order')->get('details/{order}', [App\Http\Controllers\PaymentController::class, 'details'])->name('details');
+    Route::get('details/{order}', [App\Http\Controllers\PaymentController::class, 'details'])->name('details');
     Route::get('orders', [App\Http\Controllers\PaymentController::class, 'showUserOrders'])->name('orders');
-    Route::middleware(['check.ordertoretrypay', 'can:update,order'])->post('retryPay/{order}', [App\Http\Controllers\PaymentController::class, 'retryPay'])
+    Route::middleware(['check.ordertoretrypay'])->post('retryPay/{order}', [App\Http\Controllers\PaymentController::class, 'retryPay'])
     ->name('retryPay');
 });
 

@@ -2,13 +2,13 @@
 
 namespace App\Http\ViewComposers;
 
-use Illuminate\Support\Facades\DB;
+use App\Models\Category;
 use Illuminate\View\View;
 
 class CategoriesComposer
 {
     public function compose(View $view): void
     {
-        $view->with('categories', DB::table('categories')->select('id', 'name', 'slug')->orderBy('name')->get());
+        $view->with('categories', Category::getFromCache());
     }
 }
