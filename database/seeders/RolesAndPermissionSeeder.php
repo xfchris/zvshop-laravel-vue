@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -13,23 +12,28 @@ class RolesAndPermissionSeeder extends Seeder
     {
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        DB::table('permissions')->delete();
-
         $permissions = config('permission.names');
         $roles = config('permission.roles');
+        $permissionsInDB = Permission::select('id', 'name')->get()->keyBy('name');
 
         foreach ($permissions as $permission) {
-            Permission::firstOrCreate(['name' => $permission]);
+            if (!$permissionsInDB->get($permission)) {
+                Permission::Create(['name' => $permission]);
+            }
         }
+
+        $permisionsToDelete = $permissionsInDB->filter(fn ($permissionDB) => (
+            empty($permissions[$permissionDB->name])
+        ));
+        Permission::whereIn('id', $permisionsToDelete->pluck('id'))->delete();
 
         foreach ($roles as $role) {
             $objRole = Role::firstOrCreate(['name' => $role['name']]);
-            $objRole->syncPermissions();
 
             if ($role['permissions'] == 'ALL') {
-                $objRole->givePermissionTo(Permission::all());
-            } elseif (count($role['permissions'])) {
-                $objRole->givePermissionTo(array_map(fn ($key) => $permissions[$key], $role['permissions']));
+                $objRole->syncPermissions(Permission::all());
+            } elseif (is_array($role['permissions'])) {
+                $objRole->syncPermissions(array_map(fn ($key) => $permissions[$key], $role['permissions']));
             }
         }
     }
