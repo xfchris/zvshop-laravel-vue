@@ -3,6 +3,7 @@
 namespace App\Services\Order;
 
 use App\Constants\AppConstants;
+use App\Exceptions\PaymentException;
 use App\Factories\PaymentGateway\Contracts\PaymentGatewayContract;
 use App\Factories\PaymentGateway\Responses\PaymentResponse;
 use App\Models\Order;
@@ -35,6 +36,8 @@ class PaymentService
                 'totalAmount' => $order->totalAmount,
                 'reference_id' => $order->referencePayment,
             ]);
+        } else {
+            throw new PaymentException($response->statusResponse->message);
         }
         return $response;
     }
