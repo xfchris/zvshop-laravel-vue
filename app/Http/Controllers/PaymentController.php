@@ -31,11 +31,7 @@ class PaymentController extends Controller
         $this->orderService->updateOrderAddress($request);
         $response = $this->paymentService->pay();
 
-        if ($response->processUrl) {
-            return redirect()->to($response->processUrl);
-        } else {
-            return redirect()->back()->with('error', $response->statusResponse->message);
-        }
+        return redirect()->to($response->processUrl);
     }
 
     public function retryPay(Order $order): RedirectResponse
@@ -43,11 +39,7 @@ class PaymentController extends Controller
         $this->authorize('update', $order);
         $response = $this->paymentService->pay($order);
 
-        if ($response->processUrl) {
-            return redirect()->to($response->processUrl);
-        } else {
-            return redirect()->back()->with('error', $response->statusResponse->message);
-        }
+        return redirect()->to($response->processUrl);
     }
 
     public function details(Order $order): View
