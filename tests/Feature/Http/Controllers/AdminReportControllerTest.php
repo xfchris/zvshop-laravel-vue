@@ -2,11 +2,10 @@
 
 namespace Tests\Feature\Http\Controllers;
 
-use App\Helpers\ReportHelper;
 use App\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
+use Tests\Traits\CustomAsserts;
 use Tests\Traits\PaymentGatewayFake;
 use Tests\Traits\PaymentManagement;
 
@@ -15,6 +14,7 @@ class AdminReportControllerTest extends TestCase
     use RefreshDatabase;
     use PaymentGatewayFake;
     use PaymentManagement;
+    use CustomAsserts;
 
     public function test_it_show_the_report_lists(): void
     {
@@ -29,8 +29,6 @@ class AdminReportControllerTest extends TestCase
     {
         $admin = $this->userAdminCreate();
         Product::factory(2)->create();
-        $filename = 'general_' . ReportHelper::createReportName() . $admin->id . '.pdf';
-        $path = config('constants.report_directory') . $filename;
 
         $response = $this->actingAs($admin)->post(route('admin.reports.general'), [
             'start_date' => '2020-01-01',
@@ -39,7 +37,7 @@ class AdminReportControllerTest extends TestCase
 
         $response->assertRedirect();
         $response->assertSessionHas('success');
-        Storage::assertExists($path);
+        $this->assertFileStorageExists(config('constants.report_directory') . 'general_*' . $admin->id . '.pdf');
     }
 
     public function test_it_can_to_create_a_sales_report(): void
@@ -48,8 +46,6 @@ class AdminReportControllerTest extends TestCase
         $this->generateOrdersApproved($products, 2);
 
         $admin = $this->userAdminCreate();
-        $filename = 'sales_' . ReportHelper::createReportName() . $admin->id . '.pdf';
-        $path = config('constants.report_directory') . $filename;
 
         $response = $this->actingAs($admin)->post(route('admin.reports.sales'), [
             'start_date' => '2020-01-01',
@@ -59,6 +55,6 @@ class AdminReportControllerTest extends TestCase
 
         $response->assertRedirect();
         $response->assertSessionHas('success');
-        Storage::assertExists($path);
+        $this->assertFileStorageExists(config('constants.report_directory') . 'sales_*' . $admin->id . '.pdf');
     }
 }

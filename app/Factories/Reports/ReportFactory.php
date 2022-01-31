@@ -6,8 +6,8 @@ use App\Factories\Reports\Contracts\ReportContract;
 
 class ReportFactory
 {
-    public static function make(string $report, string $name, array $filters): ReportContract
+    public static function make(string $report, string $filename, array $filters): ReportContract
     {
-        return new $report($name, $filters);
+        return new $report($filename, $filters);
     }
 }
