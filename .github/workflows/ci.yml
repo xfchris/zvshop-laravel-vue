@@ -70,6 +70,7 @@ jobs:
 
       - name: Prepare the application 🔧
         run: |
+          rm .env.testing
           cp .env.ci .env
           php artisan key:generate
 
