@@ -15,7 +15,6 @@ yarn-error.log
 /.vscode
 /.php-cs-fixer.cache
 /coverage.xml
-/.env.testing
 /build
 /database/database.sqlite
 /results

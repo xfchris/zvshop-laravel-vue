@@ -50,6 +50,6 @@ class ReportHelper
 
     public static function createReportName(): string
     {
-        return now()->format('Y-m-d_H_i_s');
+        return now()->format('Y-m-d_H_i_s_');
     }
 }

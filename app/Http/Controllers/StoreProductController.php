@@ -14,11 +14,11 @@ class StoreProductController extends Controller
     ) {
     }
 
-    public function index(Request $request, ?string $category_slug = null): View
+    public function index(Request $request, ?string $categorySlug = null): View
     {
         $this->authorize('can', 'store_show_products');
 
-        $category = $this->productService->getCategoryBySlug($category_slug);
+        $category = $this->productService->getCategoryBySlug($categorySlug);
         $category_id = $category ? $category->id : null;
         $products = $this->productService->getOrSearchProductsPerPage($category_id, $request->get('q'));
 

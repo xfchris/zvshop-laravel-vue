@@ -25,14 +25,14 @@ class AdminProductController extends Controller
         $this->authorize('can', 'users_show_products');
         return view(
             'products.index',
-            ['products' => $this->productService->getProductsPerPage(), 'categories' => Category::get()]
+            ['products' => $this->productService->getProductsPerPage(), 'categories' => Category::getFromCache()]
         );
     }
 
     public function create(Product $product): View
     {
         $this->authorize('can', 'users_create_products');
-        $categories = Category::get();
+        $categories = Category::getFromCache();
         return view('products.create', ['categories' => $categories, 'product' => $product]);
     }
 
@@ -49,7 +49,7 @@ class AdminProductController extends Controller
     {
         $this->authorize('can', 'users_update_products');
         $product = Product::with('images', 'category:id,name')->withTrashed()->find($id);
-        $categories = Category::select('id', 'name')->get();
+        $categories = Category::getFromCache();
 
         return view('products.edit', ['product' => $product, 'categories' => $categories, 'contextImage' => $contextImage]);
     }

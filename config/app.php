@@ -176,6 +176,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\ComposerServiceProvider::class,
         App\Providers\PaymentGatewayProvider::class,
+        App\Providers\ModelFilterProvider::class,
 
     ],
 

@@ -14,7 +14,11 @@ class SalesReport extends ReportContract
     public function generate(): bool
     {
         $rangeDate = ReportHelper::getRangeDate($this->filters);
-        $salesProducts = Payment::select('products')->where('status', AppConstants::APPROVED)->whereBetween('updated_at', $rangeDate)->get();
+        $filtersApproved = [
+            'status' => AppConstants::APPROVED,
+            'updated_at' => $rangeDate,
+        ];
+        $salesProducts = Payment::filter($filtersApproved)->select('products')->get();
         $products = ReportHelper::groupHistoryProducts($salesProducts);
 
         if ($this->filters['category_id']) {

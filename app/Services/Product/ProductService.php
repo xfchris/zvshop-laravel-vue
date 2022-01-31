@@ -85,10 +85,7 @@ class ProductService
 
     public function getCategoryBySlug(?string $categorySlug): ?Model
     {
-        if ($categorySlug) {
-            return Category::where('slug', $categorySlug)->first();
-        }
-        return null;
+        return Category::getFromCache('slug')->get($categorySlug);
     }
 
     public function getOrSearchProductsPerPage(int $category_id = null, string $search = null): LengthAwarePaginator
@@ -108,11 +105,11 @@ class ProductService
 
     public function getProductsStorePerPage(int $category_id = null): Builder
     {
-        $products = Product::with('category:id,name', 'images');
+        $filters = [];
         if ($category_id) {
-            $products->where('category_id', $category_id);
+            $filters['categoryId'] = $category_id;
         }
-        return $products->orderBy('created_at', 'DESC');
+        return Product::filter($filters)->orderBy('created_at', 'DESC');
     }
 
     public function export(): void
