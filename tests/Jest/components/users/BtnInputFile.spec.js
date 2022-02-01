@@ -1,7 +1,10 @@
 import BtnInputFile from '../../../../resources/js/components/users/BtnInputFile.vue'
 import { mount } from '@vue/test-utils'
 import Swal from 'sweetalert2'
+import axios from 'axios'
+import MockAdapter from 'axios-mock-adapter'
 
+// jest.mock('axios')
 window.scrollTo = jest.fn()
 Object.defineProperty(window, 'location', {
   writable: true,
@@ -53,6 +56,8 @@ describe('File upload', () => {
   })
 
   it('can upload a file', (done) => {
+    (new MockAdapter(axios, { delayResponse: 2000 })).onPost().reply(200, { status: 200, message: '' })
+
     expect(wrapper.vm.showSwal).toBe(false)
     wrapper.find('button').trigger('click')
     expect(wrapper.vm.showSwal).toBe(true)

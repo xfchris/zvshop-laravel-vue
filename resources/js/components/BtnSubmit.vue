@@ -6,8 +6,7 @@
 
 <script type="module">
 import { ref } from '@vue/reactivity'
-import { postApi } from '../api'
-import { changeStatusBtn, completeException, completeSuccess, submitForm } from '../functions'
+import { submitForm, submitAjax } from '../helpers/functions'
 
 export default {
   props: ['action'],
@@ -29,14 +28,6 @@ export default {
       btn
     }
   }
-}
-
-const submitAjax = (btn, props, text) => {
-  changeStatusBtn(btn, true, 'Wait...')
-  postApi(props.action)
-    .then(completeSuccess)
-    .catch(completeException)
-    .finally(r => changeStatusBtn(btn, false, text))
 }
 
 </script>

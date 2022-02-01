@@ -1,6 +1,9 @@
 import BtnSubmit from '../../../resources/js/components/BtnSubmit.vue'
 import { mount } from '@vue/test-utils'
+import Swal from 'sweetalert2'
+import axios from 'axios'
 
+jest.mock('axios')
 window.scrollTo = jest.fn()
 Object.defineProperty(window, 'location', {
   writable: true,
@@ -13,9 +16,46 @@ describe('button sumit ajax wait', () => {
       action: 'fakeLink'
     }
   })
-  it('disable button when clicked and request is ajax', (done) => {
+
+  it('disable button when clicked and request is ajax', () => {
+    axios.post.mockResolvedValue({ data: { status: 200 } })
     wrapper.find('button').trigger('click')
+
+    expect(wrapper.vm.btn.disabled).toBe(true)
+    expect(wrapper.vm.btn.innerText).toContain('Wait...')
+  })
+
+  it('cannot disable button when clicked with a general error', (done) => {
+    axios.post.mockResolvedValue({ response: null })
+    wrapper.find('button').trigger('click')
+    expect(wrapper.vm.btn.disabled).toBe(true)
+    expect(wrapper.vm.btn.innerText).toContain('Wait...')
+
     setTimeout(() => {
+      expect(Swal.getTitle().textContent).toContain('Operation cancelled')
+      Swal.close()
+      done()
+    })
+  })
+
+  it('cannot disable button when clicked with a validation error', (done) => {
+    const errorsToken = ['It\'s not authorized']
+    axios.post.mockResolvedValue({
+      response: {
+        data: {
+          errors: {
+            errorsToken
+          }
+        }
+      }
+    })
+    wrapper.find('button').trigger('click')
+    expect(wrapper.vm.btn.disabled).toBe(true)
+    expect(wrapper.vm.btn.innerText).toContain('Wait...')
+
+    setTimeout(() => {
+      expect(Swal.getHtmlContainer().textContent).toContain(errorsToken[0])
+      Swal.close()
       done()
     })
   })
@@ -25,9 +65,20 @@ describe('Button sumit wait', () => {
   const wrapper = mount(BtnSubmit)
 
   it('disable button when clicked', (done) => {
+    axios.post.mockResolvedValue({ data: { status: 200 } })
+
+    Object.defineProperty(wrapper.vm.btn, 'form', {
+      value: {
+        checkValidity: () => true,
+        submit: () => true
+      }
+    })
+
     wrapper.find('button').trigger('click')
+
     setTimeout(() => {
-      expect(wrapper.vm.btn.disabled).toBe(false)
+      expect(wrapper.vm.btn.disabled).toBe(true)
+      expect(wrapper.vm.btn.innerText).toContain('Wait...')
       done()
     })
   })

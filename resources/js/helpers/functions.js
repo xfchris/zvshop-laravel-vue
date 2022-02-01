@@ -1,5 +1,6 @@
 import Swal from 'sweetalert2'
 import Lodash from 'lodash'
+import { postApi } from '../api'
 
 export function reloadPage () {
   window.location.reload()
@@ -19,15 +20,23 @@ export function completeSuccess (resp) {
   }
 }
 
-export function completeException () {
+export function completeException (resp) {
   Swal.fire('Operation cancelled')
 }
 
 export function submitForm (btn) {
-  if (btn?.form?.checkValidity()) {
+  if (btn.form.checkValidity()) {
     changeStatusBtn(btn, true, 'Wait...')
     btn.form.submit()
   }
+}
+
+export function submitAjax (btn, props, text) {
+  changeStatusBtn(btn, true, 'Wait...')
+  postApi(props.action)
+    .then(completeSuccess)
+    .catch(completeException)
+    .finally(r => changeStatusBtn(btn, false, text))
 }
 
 function transformErrors (errors) {

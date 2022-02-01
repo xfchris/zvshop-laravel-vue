@@ -13,7 +13,6 @@ module.exports = {
     '!resources/js/app.js',
     '!resources/js/api.js',
     '!resources/js/bootstrap.js',
-    '!resources/js/functions.js',
     '!**/node_modules/**'
   ],
   collectCoverage: true,

@@ -8,7 +8,7 @@
 import Swal from 'sweetalert2'
 import { ref } from '@vue/reactivity'
 import { postFileApi } from '../../api'
-import { changeStatusBtn, completeException, completeSuccess } from '../../functions'
+import { changeStatusBtn, completeException, completeSuccess } from '../../helpers/functions'
 
 export default {
   props: ['text', 'action', 'maxfilesize'],

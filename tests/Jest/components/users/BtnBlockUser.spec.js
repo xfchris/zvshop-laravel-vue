@@ -39,7 +39,7 @@ describe('Inactive a user by 5 days', () => {
 
   it('can no inactivate a admin user', (done) => {
     const message = 'The account role is admin'
-    axios.post.mockResolvedValue({ data: { status: 400, message } })
+    axios.post.mockResolvedValue({ data: { status: 400, message } }, { delayResponse: 2000 })
 
     expect(wrapper.html()).toContain('button')
     expect(wrapper.vm.showSwal).toBe(false)
