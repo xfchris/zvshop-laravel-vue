@@ -19,7 +19,7 @@
 <script>
 import Swal from 'sweetalert2'
 import { postApi } from '../../api'
-import { reloadPage } from '../../functions'
+import { reloadPage } from '../../helpers/functions'
 import { ref } from '@vue/reactivity'
 
 export default {

@@ -85,7 +85,7 @@
                 </div>
 
                 <a class="btn btn-secondary mt-4 me-2text-light" href="{{ route('users.index') }}">Cancel</a>
-                <btn-submit type="submit" class="btn btn-success mt-4 text-light">
+                <btn-submit type="submit" class="btn btn-success mt-4 text-light ms-2">
                     Update data
                 </btn-submit>
 

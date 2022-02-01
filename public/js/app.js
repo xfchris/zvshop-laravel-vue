@@ -22386,23 +22386,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _vue_reactivity__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @vue/reactivity */ "./node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js");
-/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../api */ "./resources/js/api.js");
-/* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../functions */ "./resources/js/functions.js");
-
+/* harmony import */ var _vue_reactivity__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @vue/reactivity */ "./node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js");
+/* harmony import */ var _helpers_functions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../helpers/functions */ "./resources/js/helpers/functions.js");
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['action'],
 
   setup(props) {
-    const btn = (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_2__.ref)(null);
+    const btn = (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_1__.ref)(null);
 
     const handleClick = () => {
       if (!props.action) {
-        (0,_functions__WEBPACK_IMPORTED_MODULE_1__.submitForm)(btn.value);
+        (0,_helpers_functions__WEBPACK_IMPORTED_MODULE_0__.submitForm)(btn.value);
       } else {
-        submitAjax(btn.value, props, btn.value.innerHTML);
+        (0,_helpers_functions__WEBPACK_IMPORTED_MODULE_0__.submitAjax)(btn.value, props, btn.value.innerHTML);
       }
     };
 
@@ -22414,11 +22412,6 @@ __webpack_require__.r(__webpack_exports__);
   }
 
 });
-
-const submitAjax = (btn, props, text) => {
-  (0,_functions__WEBPACK_IMPORTED_MODULE_1__.changeStatusBtn)(btn, true, 'Wait...');
-  (0,_api__WEBPACK_IMPORTED_MODULE_0__.postApi)(props.action).then(_functions__WEBPACK_IMPORTED_MODULE_1__.completeSuccess).catch(_functions__WEBPACK_IMPORTED_MODULE_1__.completeException).finally(r => (0,_functions__WEBPACK_IMPORTED_MODULE_1__.changeStatusBtn)(btn, false, text));
-};
 
 /***/ }),
 
@@ -22638,7 +22631,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../api */ "./resources/js/api.js");
-/* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../functions */ "./resources/js/functions.js");
+/* harmony import */ var _helpers_functions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../helpers/functions */ "./resources/js/helpers/functions.js");
 /* harmony import */ var _vue_reactivity__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @vue/reactivity */ "./node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js");
 
 
@@ -22728,7 +22721,7 @@ const setUserBlock = (link, value) => {
     banned_until: value
   }).then(res => {
     if (res.data.status === 200) {
-      sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire('User ' + (value === null ? 'Activated' : 'Inactivated')).then(_functions__WEBPACK_IMPORTED_MODULE_2__.reloadPage);
+      sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire('User ' + (value === null ? 'Activated' : 'Inactivated')).then(_helpers_functions__WEBPACK_IMPORTED_MODULE_2__.reloadPage);
     } else {
       sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire('Error', res.data.message);
     }
@@ -22754,7 +22747,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _vue_reactivity__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @vue/reactivity */ "./node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js");
 /* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../api */ "./resources/js/api.js");
-/* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../functions */ "./resources/js/functions.js");
+/* harmony import */ var _helpers_functions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../helpers/functions */ "./resources/js/helpers/functions.js");
 
 
 
@@ -22770,7 +22763,7 @@ __webpack_require__.r(__webpack_exports__);
       showSwal.value = true;
       modalUpload(props.maxfilesize).then(result => {
         if (result.isConfirmed && result.value) {
-          (0,_functions__WEBPACK_IMPORTED_MODULE_2__.changeStatusBtn)(btnUpload.value, true, 'Wait...');
+          (0,_helpers_functions__WEBPACK_IMPORTED_MODULE_2__.changeStatusBtn)(btnUpload.value, true, 'Wait...');
           showUploading();
           sendFileToServer(props, result, btnUpload, showSwal);
         }
@@ -22790,8 +22783,8 @@ __webpack_require__.r(__webpack_exports__);
 });
 
 const sendFileToServer = (props, result, btnUpload, showSwal) => {
-  (0,_api__WEBPACK_IMPORTED_MODULE_1__.postFileApi)(props.action, result.value).then(_functions__WEBPACK_IMPORTED_MODULE_2__.completeSuccess).catch(_functions__WEBPACK_IMPORTED_MODULE_2__.completeException).finally(r => {
-    (0,_functions__WEBPACK_IMPORTED_MODULE_2__.changeStatusBtn)(btnUpload.value, false, props.text);
+  (0,_api__WEBPACK_IMPORTED_MODULE_1__.postFileApi)(props.action, result.value).then(_helpers_functions__WEBPACK_IMPORTED_MODULE_2__.completeSuccess).catch(_helpers_functions__WEBPACK_IMPORTED_MODULE_2__.completeException).finally(r => {
+    (0,_helpers_functions__WEBPACK_IMPORTED_MODULE_2__.changeStatusBtn)(btnUpload.value, false, props.text);
     showSwal.value = false;
   });
 };
@@ -23186,14 +23179,14 @@ window.bootstrap = __webpack_require__(/*! bootstrap */ "./node_modules/bootstra
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 window.swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
-window.setTimeout(() => document.querySelector('.alert-auto-close').remove(), 4000);
+window.setTimeout(() => document.querySelector('.alert-auto-close')?.remove(), 4000);
 
 /***/ }),
 
-/***/ "./resources/js/functions.js":
-/*!***********************************!*\
-  !*** ./resources/js/functions.js ***!
-  \***********************************/
+/***/ "./resources/js/helpers/functions.js":
+/*!*******************************************!*\
+  !*** ./resources/js/helpers/functions.js ***!
+  \*******************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -23203,12 +23196,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "changeStatusBtn": () => (/* binding */ changeStatusBtn),
 /* harmony export */   "completeSuccess": () => (/* binding */ completeSuccess),
 /* harmony export */   "completeException": () => (/* binding */ completeException),
-/* harmony export */   "submitForm": () => (/* binding */ submitForm)
+/* harmony export */   "submitForm": () => (/* binding */ submitForm),
+/* harmony export */   "submitAjax": () => (/* binding */ submitAjax)
 /* harmony export */ });
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../api */ "./resources/js/api.js");
+
 
 
 function reloadPage() {
@@ -23226,14 +23222,18 @@ function completeSuccess(resp) {
     sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire('', resp.data.message, 'success');
   }
 }
-function completeException() {
+function completeException(resp) {
   sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire('Operation cancelled');
 }
 function submitForm(btn) {
-  if (btn?.form?.checkValidity()) {
+  if (btn.form.checkValidity()) {
     changeStatusBtn(btn, true, 'Wait...');
     btn.form.submit();
   }
+}
+function submitAjax(btn, props, text) {
+  changeStatusBtn(btn, true, 'Wait...');
+  (0,_api__WEBPACK_IMPORTED_MODULE_2__.postApi)(props.action).then(completeSuccess).catch(completeException).finally(r => changeStatusBtn(btn, false, text));
 }
 
 function transformErrors(errors) {
