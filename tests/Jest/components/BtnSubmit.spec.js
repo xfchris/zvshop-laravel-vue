@@ -19,7 +19,7 @@ describe('button sumit ajax wait', () => {
 
   it('disable button when clicked and request is ajax', () => {
     axios.post.mockResolvedValue({ data: { status: 200 } })
-    wrapper.find('button').trigger('click')
+    wrapper.vm.btn.click()
 
     expect(wrapper.vm.btn.disabled).toBe(true)
     expect(wrapper.vm.btn.innerText).toContain('Wait...')
@@ -27,7 +27,8 @@ describe('button sumit ajax wait', () => {
 
   it('cannot disable button when clicked with a general error', (done) => {
     axios.post.mockResolvedValue({ response: null })
-    wrapper.find('button').trigger('click')
+    wrapper.vm.btn.click()
+
     expect(wrapper.vm.btn.disabled).toBe(true)
     expect(wrapper.vm.btn.innerText).toContain('Wait...')
 
@@ -49,7 +50,8 @@ describe('button sumit ajax wait', () => {
         }
       }
     })
-    wrapper.find('button').trigger('click')
+    wrapper.vm.btn.click()
+
     expect(wrapper.vm.btn.disabled).toBe(true)
     expect(wrapper.vm.btn.innerText).toContain('Wait...')
 
@@ -74,7 +76,7 @@ describe('Button sumit wait', () => {
       }
     })
 
-    wrapper.find('button').trigger('click')
+    wrapper.vm.btn.click()
 
     setTimeout(() => {
       expect(wrapper.vm.btn.disabled).toBe(true)
