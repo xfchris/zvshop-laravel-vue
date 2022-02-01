@@ -5,7 +5,6 @@ namespace Tests\Feature\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use Tests\Traits\CustomAsserts;
 use Tests\Traits\PaymentGatewayFake;
 use Tests\Traits\PaymentManagement;
 
@@ -14,7 +13,6 @@ class AdminReportControllerTest extends TestCase
     use RefreshDatabase;
     use PaymentGatewayFake;
     use PaymentManagement;
-    use CustomAsserts;
 
     public function test_it_show_the_report_lists(): void
     {

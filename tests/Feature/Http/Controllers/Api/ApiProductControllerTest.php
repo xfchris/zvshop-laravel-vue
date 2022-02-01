@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Http\Controllers\Api;
 
-use App\Helpers\ReportHelper;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\User;
@@ -217,14 +216,11 @@ class ApiProductControllerTest extends TestCase
     {
         $admin = $this->userAdminCreate();
         Product::factory(2)->create();
-        $filename = 'products_' . ReportHelper::createReportName() . $admin->id . '.xlsx';
-        $path = config('constants.report_directory') . $filename;
 
         $response = $this->actingAs($admin)->post(route('api.products.export'));
 
         $response->assertStatus(200);
-        Storage::assertExists($path);
-        return $path;
+        return $this->assertFileStorageExists(config('constants.report_directory') . 'products_*' . $admin->id . '.xlsx', false);
     }
 
     public function test_it_show_errors_when_the_file_to_import_is_incorrect(): void
@@ -254,7 +250,7 @@ class ApiProductControllerTest extends TestCase
     {
         $admin = $this->userAdminCreate();
         DB::table('products')->delete();
-        $excel = new UploadedFile(Storage::path($path), basename($path), 'xlsx', null, true);
+        $excel = new UploadedFile($path, basename($path), 'xlsx', null, true);
 
         $response = $this->actingAs($admin)->post(route('api.products.import'), ['file' => $excel]);
 
