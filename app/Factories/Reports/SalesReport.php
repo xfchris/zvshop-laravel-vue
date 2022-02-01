@@ -19,7 +19,7 @@ class SalesReport extends ReportContract
             'updated_at' => $rangeDate,
         ];
         $salesProducts = Payment::filter($filtersApproved)->select('products')->get();
-        $products = ReportHelper::groupHistoryProducts($salesProducts);
+        $products = ReportHelper::groupByProductHistory($salesProducts);
 
         if ($this->filters['category_id']) {
             $products = $products->filter(fn ($item) => ($item['category_id'] == $this->filters['category_id']));

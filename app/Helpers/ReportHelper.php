@@ -7,15 +7,12 @@ use Illuminate\Database\Eloquent\Collection;
 
 class ReportHelper
 {
-    public static function groupHistoryProducts(Collection $salesProducts): Collection
+    public static function groupByProductHistory(Collection $salesProducts): Collection
     {
         $products = [];
         foreach ($salesProducts as $saleProducts) {
             foreach ($saleProducts->products as $product) {
                 $id = $product['pivot']['product_id'];
-
-                $quantity = $product['pivot']['quantity'];
-                $price = $product['price'];
 
                 if (isset($products[$id])) {
                     $products[$id]['quantity'] += $products[$id]['quantity'];
@@ -24,8 +21,8 @@ class ReportHelper
                     $products[$id] = [
                         'id' => $id,
                         'name' => $product['name'],
-                        'quantity' => $quantity,
-                        'totalPrice' => $price,
+                        'quantity' => $product['pivot']['quantity'],
+                        'totalPrice' => $product['price'],
                     ];
                 }
             }
@@ -50,6 +47,6 @@ class ReportHelper
 
     public static function createReportName(): string
     {
-        return now()->format('Y-m-d_H_i_s_');
+        return now()->format('Y-m-d_H_i_' . uniqid() . '_');
     }
 }
